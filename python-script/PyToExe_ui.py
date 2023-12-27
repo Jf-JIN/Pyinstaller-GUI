@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\10_Programm\0002_Python\0100_exe开发\0202_py转exe_v3 - 副本\PyToExe.ui'
+# Form implementation generated from reading ui file 'e:\10_Programm\0002_Python\0100_exe开发\0202_py转exe_v3重构\PyToExe.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #

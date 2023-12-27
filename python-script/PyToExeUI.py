@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt, QUrl
 
 # workspace_path = os.path.dirname(__file__)
 workspace_path = os.getcwd()
-default_icon_path = ''
+default_icon_path = './PyToExe.ico'
 if os.path.exists(default_icon_path):
     WINDOW_ICON_PATH = default_icon_path
 else:
@@ -44,6 +44,8 @@ class PyToExeUI(Ui_MainWindow):
         self.Win.textBrowser_cmd.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.Win.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.Win.pte_OutputPath.setPlainText(os.path.join(workspace_path, 'dist'))
+        # self.Win.cbb_LanguageSelect.clearFocus()
+        self.Win.cbb_LanguageSelect.setFocusPolicy(Qt.NoFocus)
         self.cmd_dict['output_folder_path'][0] = '--distpath="' + os.path.join(workspace_path, 'dist') + '"'
         if py_file_auto_path:
             self.Win.pte_FilePath.setPlainText(
@@ -52,6 +54,7 @@ class PyToExeUI(Ui_MainWindow):
             self.Win.pte_FileName.setPlainText(py_file_auto_path.split('.')[0])
             self.cmd_dict['output_file_name'][0] = '--name="' + py_file_auto_path.split('.')[0] + '"'
             self.launch_flag = True
+
 
     # 参数初始化
     def parameter_init(self):
