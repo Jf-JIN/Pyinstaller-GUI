@@ -9,7 +9,8 @@ from PyQt5.QtCore import Qt, QUrl
 
 # workspace_path = os.path.dirname(__file__)
 workspace_path = os.getcwd()
-default_icon_path = './PyToExe.ico'
+# default_icon_path = './PyToExe.ico'
+default_icon_path = './resource/PyToExe.ico'
 if os.path.exists(default_icon_path):
     WINDOW_ICON_PATH = default_icon_path
 else:
@@ -44,7 +45,6 @@ class PyToExeUI(Ui_MainWindow):
         self.Win.textBrowser_cmd.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.Win.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.Win.pte_OutputPath.setPlainText(os.path.join(workspace_path, 'dist'))
-        # self.Win.cbb_LanguageSelect.clearFocus()
         self.Win.cbb_LanguageSelect.setFocusPolicy(Qt.NoFocus)
         self.cmd_dict['output_folder_path'][0] = '--distpath="' + os.path.join(workspace_path, 'dist') + '"'
         if py_file_auto_path:
@@ -286,24 +286,24 @@ class PyToExeUI(Ui_MainWindow):
         self.temp = self.cmd_dict['output_folder_path'][0].split('"')    
     
     # ****************************************通用文件浏览选择****************************************
-    def select_file(self, item_display:str = '', window_title:str = '', file_discription:str = '') -> str :
+    def select_file(self, display_text:str = '', window_title:str = '', file_discription:str = '') -> str :
         options = QFileDialog.Options()
         try:
             receiver_temp, _ = QFileDialog.getOpenFileName(self, f'{window_title}', '', f'{file_discription}', options=options)
             if receiver_temp:
-                self.append_TB_text(f'__________ 更新设置：{item_display} __________\n{receiver_temp}\n')
+                self.append_TB_text(f'__________ 更新设置：{display_text} __________\n{receiver_temp}\n')
                 return receiver_temp
             return
         except Exception as e:
             self.append_TB_text(f'__________ 错 误 __________\n{e}\n', self.Win.textBrowser_cmd)
             
     
-    def select_folder(self, item_display:str = '', window_title:str = '') -> str :
+    def select_folder(self, display_text:str = '', window_title:str = '') -> str :
         options = QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks
         try:
             receiver_temp = QFileDialog.getExistingDirectory(self, f'{window_title}', '', options=options)
             if receiver_temp:
-                self.append_TB_text(f'__________ 更新设置：{item_display} __________\n{receiver_temp}\n')
+                self.append_TB_text(f'__________ 更新设置：{display_text} __________\n{receiver_temp}\n')
                 return receiver_temp
             return None
         except Exception as e:
@@ -339,17 +339,17 @@ class PyToExeUI(Ui_MainWindow):
         return msg_box.exec_()
     
     # ****************************************询问文件还是文件夹对话窗口****************************************
-    def type_select_dialog(self, file_type = '所有文件(*.*)'):
+    def type_select_dialog(self, display_text, file_type = '所有文件(*.*)'):
         action_reply = self.set_custom_message_box('选择添加数据类型', '添加文件还是文件夹？', ['文件夹', '文件'])
         if action_reply == 1:
-            temp = self.select_folder('添加文件夹资料', '请选择文件夹')
+            temp = self.select_folder(display_text, '请选择文件夹')
         elif action_reply == 2:
-            temp = self.select_file('添加文件资料', '请选择文件', file_type)
+            temp = self.select_file(display_text, '请选择文件', file_type)
         else: return
         return temp
     
     # ****************************************自定义项目显示窗口****************************************
-    def set_custom_list_widget(self, window_title, item_list, type_select_flag = 'file_folder', file_type = '所有文件(*.*)', text_discription = '请输入指定信息', extra_func = None, window_icon_path = WINDOW_ICON_PATH):
+    def set_custom_list_widget(self, display_text, window_title, item_list, type_select_flag = 'file_folder', file_type = '所有文件(*.*)', text_discription = '请输入指定信息', extra_func = None, window_icon_path = WINDOW_ICON_PATH):
         dialog = QDialog()
         dialog.setWindowTitle(window_title)
         dialog.resize(600,500)
@@ -436,13 +436,14 @@ class PyToExeUI(Ui_MainWindow):
         def add_item():
             current_items = [list_widget.item(i).text() for i in range(list_widget.count())]
             if type_select_flag == 'file' or type_select_flag == 'image':
-                temp = self.select_file('添加文件资料', '请选择文件', file_type)
+                temp = self.select_file(display_text, '请选择文件', file_type)
             elif type_select_flag == 'folder':
-                temp = self.select_folder('添加文件夹资料', '请选择文件夹')
+                temp = self.select_folder(display_text, '请选择文件夹')
             elif type_select_flag == 'file_folder':
-                temp = self.type_select_dialog(file_type)
+                temp = self.type_select_dialog(display_text, file_type)
             elif type_select_flag == 'text':
                 temp = line_edit_input()
+                self.append_TB_text(f'__________ 更新设置：{display_text} __________\n{temp}\n')
             elif type_select_flag == 'image':
                 temp = preview_image()
             if temp in current_items:

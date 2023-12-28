@@ -26,7 +26,7 @@ class Launch_py_QThread(QThread):
         self.finished_signal.emit()
 
     def run(self):
-        self.full_command = f'{self.command[0]} && {self.command[1]} && {self.command[2]}'
+        self.full_command = f'{self.command[0]} && {self.command[1]} && echo Y | {self.command[2]}'
         # print(f'Command: {self.full_command}') 
         try:
             self.process = subprocess.Popen(
@@ -60,7 +60,7 @@ class pyinstaller_setup_Qthread(QThread):
     
     def run(self):
         self.py_install_command = 'pip install pyinstaller'
-        self.full_command = f'{self.py_install_command}'
+        self.full_command = f'echo Y | {self.py_install_command}'
         try:
             process = subprocess.Popen(self.full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
             thread = threading.Thread(target=self.read_output(process, '已成功安装pyinstaller'))

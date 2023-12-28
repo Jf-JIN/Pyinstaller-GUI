@@ -152,7 +152,7 @@ class Pyinstaller_function(PyToExeUI):
             elif action_reply == 1:
                 pass
             else: return
-            temp = self.select_folder('指定输出文件夹', '请选择文件夹，用于除.exe外其他文件将全部放入')
+            temp = os.path.basename(QInputDialog.getText(None, '请输入文件夹名称', '请输入文件夹名称，用于放置除.exe外的其他数据<br>')[0])
             if temp:
                 self.cmd_dict['contents_directory'][0] = '--contents-directory="' + temp + '"'
                 self.cmd_dict['contents_directory'][2] = self.cmd_dict['contents_directory'][0]
@@ -175,7 +175,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请选择用于添加到可执行文件中的文件', content_list)
+            temp_command_list= self.set_custom_list_widget('更新用于添加到可执行文件中的文件','请选择用于添加到可执行文件中的文件', content_list)
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -206,7 +206,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请选择用于添加到可执行文件中的二进制文件', content_list, 'file_folder')
+            temp_command_list= self.set_custom_list_widget('更新二进制文件', '请选择用于添加到可执行文件中的二进制文件', content_list, 'file_folder')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -235,7 +235,7 @@ class Pyinstaller_function(PyToExeUI):
             else: content_list = None
             # 调用对话框
             print('d')
-            temp_command_list= self.set_custom_list_widget('请选择指定 Python 模块搜索路径', content_list, 'folder')
+            temp_command_list= self.set_custom_list_widget('更新导入模块时的搜索路径', '请选择指定 Python 模块搜索路径', content_list, 'folder')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -263,7 +263,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入外部import的模块名称', content_list, 'text', text_discription='请输入需要从外部import的模块名称:<br>用于指定需要在生成的可执行文件中包含的未在源代码中显式导入的 Python 模块<br>')
+            temp_command_list= self.set_custom_list_widget('更新显式导入的Python模块', '请输入外部import的模块名称', content_list, 'text', text_discription='请输入需要从外部import的模块名称:<br>用于指定需要在生成的可执行文件中包含的未在源代码中显式导入的 Python 模块<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -291,7 +291,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入模块名称', content_list, 'text', text_discription='请输入模块名称:<br>用于在打包过程中显式地收集指定模块及其所有子模块<br>')
+            temp_command_list= self.set_custom_list_widget('更新打包过程中显式地收集指定模块及其所有子模块', '请输入模块名称', content_list, 'text', text_discription='请输入模块名称:<br>用于在打包过程中显式地收集指定模块及其所有子模块<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -319,7 +319,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入模块名称', content_list, 'text', text_discription='请输入需要打包数据的模块名称:<br>用于在打包过程中收集指定模块的数据文件。<br>这个选项用于确保 PyInstaller 包含指定模块所需的数据文件，这些数据文件可能在运行时由模块动态加载。。<br>')
+            temp_command_list= self.set_custom_list_widget('更新打包过程中收集指定模块的数据文件', '请输入模块名称', content_list, 'text', text_discription='请输入需要打包数据的模块名称:<br>用于在打包过程中收集指定模块的数据文件。<br>这个选项用于确保 PyInstaller 包含指定模块所需的数据文件，这些数据文件可能在运行时由模块动态加载。<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -347,7 +347,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入模块名称', content_list, 'text', text_discription='请输入需要打包二进制文件的模块名称:<br>用于在打包过程中收集指定模块及其依赖的所有二进制文件。<br>这个选项的作用是将模块及其相关的二进制文件包含在生成的可执行文件中。<br>')
+            temp_command_list= self.set_custom_list_widget('更新打包过程中收集指定模块及其依赖的所有二进制文件', '请输入模块名称', content_list, 'text', text_discription='请输入需要打包二进制文件的模块名称:<br>用于在打包过程中收集指定模块及其依赖的所有二进制文件。<br>这个选项的作用是将模块及其相关的二进制文件包含在生成的可执行文件中。<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -375,7 +375,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入模块名称', content_list, 'text', text_discription='请输入需要打包所有数据的模块名称:<br>用于在打包过程中收集指定模块及其依赖的所有数据文件、元数据等。<br>这个选项的作用是尽可能地将指定模块及其相关的所有资源都包含在生成的可执行文件中。<br>')
+            temp_command_list= self.set_custom_list_widget('更新打包过程中收集指定模块及其依赖的所有数据文件、元数据等', '请输入模块名称', content_list, 'text', text_discription='请输入需要打包所有数据的模块名称:<br>用于在打包过程中收集指定模块及其依赖的所有数据文件、元数据等。<br>这个选项的作用是尽可能地将指定模块及其相关的所有资源都包含在生成的可执行文件中。<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -387,8 +387,6 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 self.cmd_dict['collect_all'][0] = None
                 self.cmd_dict['collect_all'][2] = self.cmd_dict['collect_all'][0]
-        except Exception as e:
-            self.append_TB_text(f'__________ 错 误 __________\n{e}\n', self.Win.textBrowser_cmd)
         except Exception as e:
             self.append_TB_text(f'__________ 错 误 __________\n{e}\n', self.Win.textBrowser_cmd)
     
@@ -405,7 +403,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入模块名称', content_list, 'text', text_discription='请输入需要打包元数据的模块名称:<br>用于在打包过程中将指定模块的元数据一起复制到生成的可执行文件中<br>')
+            temp_command_list= self.set_custom_list_widget('更新打包过程中将指定模块的元数据', '请输入模块名称', content_list, 'text', text_discription='请输入需要打包元数据的模块名称:<br>用于在打包过程中将指定模块的元数据一起复制到生成的可执行文件中<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -433,7 +431,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入模块名称', content_list, 'text', text_discription='请输入需要打包元数据及其依赖的模块名称:<br>用于在打包过程中递归地将指定包及其依赖的所有包的元数据一起复制到生成的可执行文件中。<br>这样不仅包本身的元数据会被复制，还会包括其依赖项的元数据。<br>')
+            temp_command_list= self.set_custom_list_widget('更新打包过程中递归地将指定包及其依赖的所有包的元数据', '请输入模块名称', content_list, 'text', text_discription='请输入需要打包元数据及其依赖的模块名称:<br>用于在打包过程中递归地将指定包及其依赖的所有包的元数据一起复制到生成的可执行文件中。<br>这样不仅包本身的元数据会被复制，还会包括其依赖项的元数据。<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -461,7 +459,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请选择钩子脚本所在目录', content_list, 'folder')
+            temp_command_list= self.set_custom_list_widget('更新钩子脚本搜索目录', '请选择钩子脚本所在目录', content_list, 'folder')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -489,7 +487,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请选择钩子脚本', content_list, 'file')
+            temp_command_list= self.set_custom_list_widget('更新运行时的钩子脚本路径', '请选择钩子脚本', content_list, 'file')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -518,7 +516,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请输入模块名称', content_list, 'text', text_discription='请输入需要忽略的可选模块名称:<br>用于指定要在打包过程中排除的模块。<br>这个选项允许你明确指定哪些模块不应该被包含在生成的可执行文件中。<br>')
+            temp_command_list= self.set_custom_list_widget('更新需要忽略的可选模块', '请输入模块名称', content_list, 'text', text_discription='请输入需要忽略的可选模块名称:<br>用于指定要在打包过程中排除的模块。<br>这个选项允许你明确指定哪些模块不应该被包含在生成的可执行文件中。<br>')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -703,7 +701,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请选择用于作为应用图标的icon图标', content_list, 'image', '图标或应用程序(*.ico *.exe);;icon图标(*.ico);;应用程序(*.exe)')
+            temp_command_list= self.set_custom_list_widget('更新应用图标', '请选择用于作为应用图标的icon图标', content_list, 'image', '图标或应用程序(*.ico *.exe);;icon图标(*.ico);;应用程序(*.exe)')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -797,7 +795,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget('请选择输入数据类型，以用于将其嵌入到生成的可执行文件中', content_list, extra_func='edit_info')
+            temp_command_list= self.set_custom_list_widget('更新嵌入到生成的可执行文件中的文件或目录', '请选择输入数据类型，以用于将其嵌入到生成的可执行文件中', content_list, extra_func='edit_info')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []

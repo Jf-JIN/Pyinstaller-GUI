@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\10_Programm\0002_Python\0100_exe开发\0202_py转exe_v3重构\PyToExe.ui'
+# Form implementation generated from reading ui file 'e:\10_Programm\0002_Python\0100_exe开发\0202_py转exe_v3\PyToExe.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1184, 769)
+        MainWindow.resize(1184, 760)
         MainWindow.setMinimumSize(QtCore.QSize(0, 760))
         MainWindow.setStyleSheet("QWidget[objectName = \'centralwidget\']{\n"
 "    background-color: rgb(175, 199, 235);\n"
@@ -195,7 +195,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cbb_LanguageSelect.sizePolicy().hasHeightForWidth())
         self.cbb_LanguageSelect.setSizePolicy(sizePolicy)
-        self.cbb_LanguageSelect.setMinimumSize(QtCore.QSize(55, 0))
+        self.cbb_LanguageSelect.setMinimumSize(QtCore.QSize(70, 0))
         self.cbb_LanguageSelect.setMaximumSize(QtCore.QSize(55, 30))
         self.cbb_LanguageSelect.setObjectName("cbb_LanguageSelect")
         self.cbb_LanguageSelect.addItem("")
@@ -1040,6 +1040,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.pb_Recover, self.cbb_LanguageSelect)
+        MainWindow.setTabOrder(self.cbb_LanguageSelect, self.pb_ClearAll)
+        MainWindow.setTabOrder(self.pb_ClearAll, self.pte_FilePath)
         MainWindow.setTabOrder(self.pte_FilePath, self.pb_FilePath)
         MainWindow.setTabOrder(self.pb_FilePath, self.pte_OutputPath)
         MainWindow.setTabOrder(self.pte_OutputPath, self.cb_PathLock)
@@ -1104,6 +1107,10 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.pb_ShowParameter, self.pb_Print)
         MainWindow.setTabOrder(self.pb_Print, self.pb_OpenDir)
         MainWindow.setTabOrder(self.pb_OpenDir, self.pb_Launch)
+        MainWindow.setTabOrder(self.pb_Launch, self.pb_HideConsole)
+        MainWindow.setTabOrder(self.pb_HideConsole, self.pb_DebugMode)
+        MainWindow.setTabOrder(self.pb_DebugMode, self.pb_PythonOption)
+        MainWindow.setTabOrder(self.pb_PythonOption, self.pb_OsxBundleIdentifier)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
