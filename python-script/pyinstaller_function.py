@@ -1107,8 +1107,11 @@ class Pyinstaller_function(PyToExeUI):
     
     def launch_cmd(self):
         self.plain_text_update()
-        if not self.launch_flag:
-            QMessageBox.information(None, '提示', '不存在指定Python脚本，请选择.py文件')
+        if not self.launch_flag or not os.path.exists(self.Win.pte_FilePath.toPlainText()):
+            QMessageBox.information(None, '提示', '不存在指定Python脚本，请重新选择.py文件')
+            return
+        if not os.path.exists(self.Win.pte_OutputPath.toPlainText()):
+            QMessageBox.information(None, '提示', '不存在输出文件夹，请重新指定输出文件夹')
             return
         self.cmd[2] = self.get_command_from_dict()
         self.Launch_QThread = Launch_py_QThread(self.cmd)
