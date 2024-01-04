@@ -1,4 +1,5 @@
 import os
+import sys
 from copy import deepcopy
 
 from PyToExe_ui import *
@@ -9,8 +10,11 @@ from PyQt5.QtCore import Qt, QUrl
 
 # workspace_path = os.path.dirname(__file__)
 workspace_path = os.getcwd()
-# default_icon_path = './PyToExe.ico'
-default_icon_path = './resource/PyToExe.ico'
+main_window_title = f'Python 打包转换为可执行程序.exe 开发工具\t\t\t\t{workspace_path}'
+exe_folder_path = os.path.dirname(sys.argv[0])
+default_icon_path = os.path.join(exe_folder_path, 'PyToExe.ico')
+# default_icon_path = os.path.join(exe_folder_path, 'resource', 'PyToExe.ico')
+
 if os.path.exists(default_icon_path):
     WINDOW_ICON_PATH = default_icon_path
 else:

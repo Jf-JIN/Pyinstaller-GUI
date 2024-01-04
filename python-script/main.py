@@ -1,6 +1,6 @@
 import sys
 
-
+import SplashModule
 from pyinstaller_function import *
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -11,7 +11,7 @@ class Exe_main_window(QMainWindow, Pyinstaller_function):
     def __init__(self):
         super().__init__()
         self.setWindowIcon(QIcon(WINDOW_ICON_PATH))
-        self.setWindowTitle(f'Python 打包转换为可执行程序.exe 开发工具')
+        self.setWindowTitle(main_window_title)
 
 
 if __name__ == "__main__":
