@@ -81,7 +81,7 @@
 
 ### 注意事项：
 
-
+暂无
 
 ----
 ​																						                          **English Version**
@@ -161,3 +161,5 @@ Next to the title, there is a dropdown menu offering multiple language options. 
 - v1.0: Command Prompt Version. Able to list all Python files in the current directory, select the Python file to package by number, and choose whether to hide the console.
 
 ### Notes:
+
+None
