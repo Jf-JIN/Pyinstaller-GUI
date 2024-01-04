@@ -21,7 +21,7 @@
 
 软件使用前提是已安装Pyinstaller。如未安装，可点击“安装Pyinstaller”进行安装。未安装Pyinstaller而进行操作，控制台将提示“ '*pyinstaller' 不是内部或外部命令，也不是可运行的程序或批处理文件。*”。
 
-<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/Pyinstaller_noset_error.png" alt="image1"> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/Pyinstaller_noset_error.png" alt="image1" height = "200" align=center > </div>
 
 打开软件后，软件将默认寻找工作路径下的main.py文件，如需更改，请手动选择需要打包的.py文件。当勾选“锁定”时，对应的输出文件夹或输出名称将保持当前输入；取消勾选时，将默认与原python文件同名，并输出到当前python文件所在的目录下。
 
@@ -29,7 +29,7 @@
 
 当使用“清空输入”或“全部清空”时，为防止误操作，可以进行一次恢复，数据将恢复至最后一次清空前的状态。当清空后，又进行输入时，部分恢复数据不会恢复至最后一次输入的状态，而是恢复至最后一次清空前的状态。
 
-<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/clear_example.png" alt="image1">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/recover_example.png" alt="image1"> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/clear_example.png" alt="image1" height = "200">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/recover_example.png" alt="image1" height = "200"> </div>
 
 当所有所需参数全部输入完成后，可点击“显示参数”进行检查，或者点击“打印cmd命令”，查看默认输出名为“output_command_of_pyinstaller.txt”文本文件。
 
@@ -39,7 +39,7 @@
 
 点击“打开输出文件夹”，即可查看打包完成的exe文件
 
-<div style="display:inline-block" height:200;>  <img src="https://github.com/JIN-Junfan/test/blob/main/image/add_file_example.png" alt="image1">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example.png" alt="image1">   <img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example_2.png" alt="image2"> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/add_file_example.png" alt="image1" height = "200">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example.png" alt="image1" height = "200"><img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example_2.png" alt="image2" height = "200"> </div>
 
 ##### 3. 语言切换
 
@@ -47,9 +47,9 @@
 
 ![select_language](https://github.com/JIN-Junfan/test/blob/main/image/language_select.png =100x100)
 
- <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.pngg" height = "200" alt="select_language" align=center />
+ <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.png" height = "200" alt="select_language" align=center />
 
-<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.pngg" height = "200" alt="select_language" align=center /> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.png" height = "200" alt="select_language" align=center /> </div>
 
 ### 开发说明：
 
@@ -114,7 +114,7 @@ If you are using the Windows 7 operating system, please download the Win7 versio
 
 To use the software, ensure that Pyinstaller is already installed. If not installed, you can click "Install Pyinstaller" to proceed with the installation. Attempting to operate the software without installing Pyinstaller will prompt the console to display "*'pyinstaller' is not recognized as an internal or external command, operable program, or batch file.*".
 
-<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/Pyinstaller_noset_error.png" alt="image1"> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/Pyinstaller_noset_error.png" alt="image1" height = "200" align=center > </div>
 
 Upon opening the software, it will automatically search for the "main.py" file in the working directory. If you need to change this, please manually select the desired .py file for packaging. When the "Lock" option is checked, the corresponding output folder or output name will retain the current input; when unchecked, it will default to the original Python file's name and output to the directory where the Python file is located.
 
@@ -122,7 +122,7 @@ Once a .py file is input, use the buttons below to enter parameters. When the "T
 
 To prevent accidental data loss, the "Clear Input" or "Clear All" buttons trigger a one-time recovery, restoring data to the state before the last clearing operation. After clearing, if you input again, some recovered data may not return to the last input state but instead revert to the state before the last clearing operation.
 
-<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/clear_example.png" alt="image1">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/recover_example.png" alt="image1"> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/clear_example.png" alt="image1" height = "200">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/recover_example.png" alt="image1" height = "200"> </div>
 
 Once all necessary parameters are entered, you can click "Show Parameters" to review them or click "Print cmd command" to view the default output named "output_command_of_pyinstaller.txt" text file.
 
@@ -132,7 +132,7 @@ If "Keep only the exe after completion" is checked, the .spec file and .dict and
 
 Clicking "Open Output Folder" allows you to view the packaged exe file once the process is finished.
 
-<div style="display:inline-block" height:200;>  <img src="https://github.com/JIN-Junfan/test/blob/main/image/add_file_example.png" alt="image1">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example.png" alt="image1">   <img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example_2.png" alt="image2"> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/add_file_example.png" alt="image1" height = "200">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example.png" alt="image1" height = "200"><img src="https://github.com/JIN-Junfan/test/blob/main/image/dialog_example_2.png" alt="image2" height = "200"> </div>
 
 Next to the title, there is a dropdown menu offering multiple language options. Language packs can also be added manually, with the path being the .Languages\ directory under the software's main directory. After placing a custom language pack in this directory, restart the software, and the new language pack should be available in the dropdown menu for selection. Please ensure the integrity of the language pack to avoid display errors or potential software crashes.
 
