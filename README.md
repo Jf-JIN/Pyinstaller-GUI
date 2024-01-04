@@ -45,10 +45,6 @@
 
 在标题旁边有一个下拉菜单栏，有多种语言可供选择。语言包也可自行添加，路径为该软件的目录下.Languages\中，当自定义的语言包放到该目录后，重新启动软件，新的语言包即可在下拉菜单栏中找到并使用。请注意语言包的完整性，否则将会出现显示错误，甚至软件崩溃。
 
-![select_language](https://github.com/JIN-Junfan/test/blob/main/image/language_select.png =100x100)
-
- <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.png" height = "200" alt="select_language" align=center />
-
 <div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.png" height = "200" alt="select_language" align=center /> </div>
 
 ### 开发说明：
@@ -136,7 +132,7 @@ Clicking "Open Output Folder" allows you to view the packaged exe file once the 
 
 Next to the title, there is a dropdown menu offering multiple language options. Language packs can also be added manually, with the path being the .Languages\ directory under the software's main directory. After placing a custom language pack in this directory, restart the software, and the new language pack should be available in the dropdown menu for selection. Please ensure the integrity of the language pack to avoid display errors or potential software crashes.
 
-<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.pngg" height = "200" alt="select_language" align=center /> </div>
+<div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/language_select.png" height = "200" alt="select_language" align=center /> </div>
 
 ### Development Notes:
 
