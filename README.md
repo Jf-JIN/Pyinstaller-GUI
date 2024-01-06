@@ -2,7 +2,7 @@
 
 
 
-## -----------------------**English version below**-----------------------
+## ----**English version below**----
 
 
 
@@ -99,7 +99,7 @@
 
 
 ----
-## 																						                          							**English Version**
+## 																						                          							----**English Version**----
 
 
 
@@ -122,7 +122,7 @@ If you are using the Windows 7 operating system, please download the Win7 versio
 
 ##### 2. Software Utilization:
 
-To use the software, ensure that Pyinstaller is already installed. If not installed, you can click "Install Pyinstaller" to proceed with the installation. Attempting to operate the software without installing Pyinstaller will prompt the console to display "*'pyinstaller' is not recognized as an internal or external command, operable program, or batch file.*".
+To use the software, please ensure that Pyinstaller is already installed. If not installed, you can click "Install Pyinstaller" to proceed with the installation. Attempting to operate the software without installing Pyinstaller will prompt the console to display "*'pyinstaller' is not recognized as an internal or external command, operable program, or batch file.*".
 
 <div style="display:inline-block">  <img src="https://github.com/JIN-Junfan/test/blob/main/image/Pyinstaller_noset_error.png" alt="image1" height = "150" align=center > </div>
 
@@ -136,7 +136,7 @@ To prevent accidental data loss, the "Clear Input" or "Clear All" buttons trigge
 
 Once all necessary parameters are entered, you can click "Show Parameters" to review them or click "Print cmd command" to view the default output named "output_command_of_pyinstaller.txt" text file.
 
-<u>**After verifying everything is correct, click "Start Conversion" to initiate the packaging process.**</u>
+<u>**After verifying everything is correct, click "Launch" to start the packaging process.**</u>
 
 If "Keep only the exe after completion" is checked, the .spec file and .dict and .build folders will be deleted after packaging is completed.
 
