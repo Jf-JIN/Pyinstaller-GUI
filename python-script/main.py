@@ -11,7 +11,6 @@ class Exe_main_window(QMainWindow, Pyinstaller_function):
     def __init__(self):
         super().__init__()
         self.setWindowIcon(QIcon(WINDOW_ICON_PATH))
-        self.setWindowTitle(main_window_title)
 
 
 if __name__ == "__main__":
