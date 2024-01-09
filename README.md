@@ -80,6 +80,10 @@ Next to the title, there is a dropdown menu offering multiple language options. 
 
 ### 开发说明   |   Development Notes：
 
+使用PyQt5进行的GUI设计
+
+GUI design using PyQt5
+
 ##### 开发进度   |   Development Progress：
 
 * 当前已完成：基本的所有**Pyinstaller*6.0***的功能项41项、运行报错提示、控制台同步输出、信息台信息更新、当前有效参数显示、命令提示符打印功能、语言切换功能
@@ -98,19 +102,8 @@ Next to the title, there is a dropdown menu offering multiple language options. 
 
 ##### 开发所用资源及参考   |   Resources and References：
 
-* Pyinstaller：https://pyinstaller.org/en/stable/
-
-* icon图标：https://www.iconfont.cn/
-
-* 所用语言及主要库：Python，PyQt5，os，subprocess，sys，threading，json
-
-  
-
 * Pyinstaller: https://pyinstaller.org/en/stable/
-
 * Icon Images: https://www.iconfont.cn/
-
-* Programming Languages and Main Libraries Used: Python, PyQt5, os, subprocess, sys, threading, json
 
 ##### 版本说明   |   Version Descriptions：
 
