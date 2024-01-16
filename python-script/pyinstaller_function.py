@@ -130,7 +130,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['specpath'][0] = '--specpath="'+ temp + '"'
                 self.cmd_dict['specpath'][2] = self.cmd_dict['specpath'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [02] 项 pte_FileName 分配给打包应用程序和spec文件的名称
@@ -156,7 +156,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['contents_directory'][0] = '--contents-directory="' + temp + '"'
                 self.cmd_dict['contents_directory'][2] = self.cmd_dict['contents_directory'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [04] 项 [可重复使用] 用于添加数据文件到可执行文件中的选项。它允许将指定的文件或目录复制到生成的可执行文件所在的目录中。这对于包含资源文件（如图像、配置文件等）在可执行文件中是很有用的。
@@ -188,7 +188,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_file_folder_data'][0] = None
                 self.cmd_dict['add_file_folder_data'][2] = self.cmd_dict['add_file_folder_data'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [05] 项 [可重复使用] 用于将二进制文件添加到生成的可执行文件中。该选项允许将外部二进制文件嵌入到生成的可执行文件中，以便在运行时可以访问这些文件。
@@ -220,7 +220,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_binary_data'][0] = None
                 self.cmd_dict['add_binary_data'][2] = self.cmd_dict['add_binary_data'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [06] 项 [可重复使用] 用于指定导入模块时的搜索路径，可多次调用。通过这个选项可以将额外的目录添加到 Python 模块搜索路径中，以确保程序在运行时能够找到需要的模块。这个选项可以帮助解决程序在运行时找不到特定模块的问题，尤其是当输出应用程序依赖于一些不在默认搜索路径中的自定义模块时
@@ -249,7 +249,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['imports_folder'][0] = None
                 self.cmd_dict['imports_folder'][2] = self.cmd_dict['imports_folder'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [07] 项 [可重复使用] 用于指定需要在生成的可执行文件中包含的未在源代码中显式导入的 Python 模块。有时，一些模块可能是在运行时动态导入或被其他模块隐式地导入，而不是在源代码中显式导入。此选项可以使用多次。
@@ -278,7 +278,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['import_module_name'][0] = None
                 self.cmd_dict['import_module_name'][2] = self.cmd_dict['import_module_name'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [08] 项 [可重复使用] 用于在打包过程中显式地收集指定模块及其所有子模块。该选项可用于确保 PyInstaller 包含指定模块及其子模块，即使它们没有在源代码中被显式导入
@@ -307,7 +307,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_submodules'][0] = None
                 self.cmd_dict['collect_submodules'][2] = self.cmd_dict['collect_submodules'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [09] 项 [可重复使用] 用于在打包过程中收集指定模块的数据文件。这个选项用于确保 PyInstaller 包含指定模块所需的数据文件，这些数据文件可能在运行时由模块动态加载。
@@ -336,7 +336,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_data'][0] = None
                 self.cmd_dict['collect_data'][2] = self.cmd_dict['collect_data'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [10] 项 [可重复使用] 用于在打包过程中收集指定模块及其依赖的所有二进制文件。这个选项的作用是将模块及其相关的二进制文件包含在生成的可执行文件中。
@@ -365,7 +365,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_binaries'][0] = None
                 self.cmd_dict['collect_binaries'][2] = self.cmd_dict['collecollect_binaries'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [11] 项 [可重复使用] 用于在打包过程中收集指定模块及其依赖的所有数据文件、元数据等。这个选项的作用是尽可能地将指定模块及其相关的所有资源都包含在生成的可执行文件中。
@@ -394,7 +394,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_all'][0] = None
                 self.cmd_dict['collect_all'][2] = self.cmd_dict['collect_all'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [12] 项 [可重复使用] 用于在打包过程中将指定模块的元数据一起复制到生成的可执行文件中
@@ -423,7 +423,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['copy_metadata'][0] = None
                 self.cmd_dict['copy_metadata'][2] = self.cmd_dict['copy_metadata'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [13] 项 [可重复使用] 用于在打包过程中递归地将指定包及其依赖的所有包的元数据一起复制到生成的可执行文件中。这样不仅包本身的元数据会被复制，还会包括其依赖项的元数据。
@@ -452,7 +452,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['recursive_copy_metadata'][0] = None
                 self.cmd_dict['recursive_copy_metadata'][2] = self.cmd_dict['recursive_copy_metadata'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [14] 项 [可重复使用] 用于指定一个目录，其中包含用户提供的钩子脚本。这些钩子脚本用于告诉 PyInstaller 如何处理特定的模块或库，以确保它们正确地包含在生成的可执行文件中。
@@ -481,7 +481,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['additional_hooks_dir'][0] = None
                 self.cmd_dict['additional_hooks_dir'][2] = self.cmd_dict['additional_hooks_dir'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [15] 项 [可重复使用] 用于指定运行时的钩子脚本。这个选项允许你提供一个脚本，其中包含在生成的可执行文件运行时应该执行的特定操作。
@@ -511,7 +511,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['runtime_hook'][2] = self.cmd_dict['runtime_hook'][0]
             pass
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [16] 项 [可重复使用] 用于指定要在打包过程中排除的模块。这个选项允许你明确指定哪些模块不应该被包含在生成的可执行文件中。（Python 名称，而不是路径名称）
@@ -540,7 +540,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['exclude_module'][0] = None
                 self.cmd_dict['exclude_module'][2] = self.cmd_dict['exclude_module'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [17] 项 将 IMAGE_FILE 图像添加为应用程序的启动画面
@@ -556,12 +556,36 @@ class Pyinstaller_function(PyToExeUI):
                 elif action_reply == 1:
                     pass
                 else: return
-            temp = self.select_file(self.json_widgets['pb_AddSplashScreen']['text_browser_display'], self.json_widgets['pb_AddSplashScreen']['dialog_title'], f'{self.json_general["all_image_file"]}(*.jpg *.jpeg *.png *.webp *.bmp *.tif *.gif *.pcx *.tga *.exif *.fpx *.svg *.psd *.cdr *.pcd *.dxf *.ufo *.eps *.ai *.raw *.WMF *.webp *.avif *.apng')
+            temp = self.select_file(self.json_widgets['pb_AddSplashScreen']['text_browser_display'], self.json_widgets['pb_AddSplashScreen']['dialog_title'],
+                                    f'{self.json_general["all_image_file"]}(*.jpg *.jpeg *.png *.webp *.bmp *.tif *.gif *.pcx *.tga *.exif *.fpx *.svg *.psd *.cdr *.pcd *.dxf *.ufo *.eps *.ai *.raw *.WMF *.webp *.avif *.apng);;\
+                                    jpeg {self.json_general["image_file"]}(*.jpeg);;\
+                                    png {self.json_general["image_file"]}(*.png);;\
+                                    webp {self.json_general["image_file"]}(*.webp);;\
+                                    bmp {self.json_general["image_file"]}(*.bmp);;\
+                                    tif {self.json_general["image_file"]}(*.tif);;\
+                                    gif {self.json_general["image_file"]}(*.gif);;\
+                                    pcx {self.json_general["image_file"]}(*.pcx);;\
+                                    tga {self.json_general["image_file"]}(*.tga);;\
+                                    exif {self.json_general["image_file"]}(*.exif);;\
+                                    fpx {self.json_general["image_file"]}(*.fpx);;\
+                                    svg {self.json_general["image_file"]}(*.svg);;\
+                                    psd {self.json_general["image_file"]}(*.psd);;\
+                                    cdr {self.json_general["image_file"]}(*.cdr);;\
+                                    pcd {self.json_general["image_file"]}(*.pcd);;\
+                                    dxf {self.json_general["image_file"]}(*.dxf);;\
+                                    ufo {self.json_general["image_file"]}(*.ufo);;\
+                                    eps {self.json_general["image_file"]}(*.eps);;\
+                                    ai {self.json_general["image_file"]}(*.ai);;\
+                                    raw {self.json_general["image_file"]}(*.raw);;\
+                                    WMF {self.json_general["image_file"]}(*.WMF);;\
+                                    webp {self.json_general["image_file"]}(*.webp);;\
+                                    avif {self.json_general["image_file"]}(*.avif);;\
+                                    apng {self.json_general["image_file"]}(*.apng)')
             if temp:
                 self.cmd_dict['add_splash_screen'][0] = '--splash="'+ temp + '"'
                 self.cmd_dict['add_splash_screen'][2] = self.cmd_dict['add_splash_screen'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [18] 项 用于设置调试模式，以便在打包过程中生成调试信息 [--debug {all,imports,bootloader,noarchive}]	
@@ -588,7 +612,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['debug_mode'][2] = self.cmd_dict['debug_mode'][0].split()[1]
             else: return
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [19] 项 用于向底层的 Python 解释器传递额外的命令行选项。该选项允许你在 PyInstaller 执行过程中向 Python 解释器传递特定的选项，以影响解释器的行为。目前支持 "v"（相当于 "--debug imports"）、"u" 和 "W <warning control>"
@@ -614,7 +638,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['python_option'][2] = self.cmd_dict['python_option'][0].split()[1]
             else: return
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [20] 项 对可执行文件和共享库应用符号表剥离（不建议在 Windows上使用）。用于在打包过程中去除生成的可执行文件中的调试信息。调试信息包含了与源代码的关联信息，去除它们可以减小生成的可执行文件的大小。
@@ -627,7 +651,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['strip_option'][0] = None
                 self.cmd_dict['strip_option'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [21] 项 [--noupx]	用于在打包过程中禁用 UPX 压缩。UPX是一种用于可执行文件的压缩工具，可以显著减小可执行文件的大小。 即使可用，也不要使用UPX（在 Windows 和 *nix 之间工作方式不同）
@@ -641,7 +665,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['noupx_option'][0] = None
                 self.cmd_dict['noupx_option'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [22] 项 [可重复使用]  UPX 压缩过程中要排除的文件。UPX是一种用于可执行文件的压缩工具，而 --upx-exclude 允许你指定一些文件不要被UPX压缩。
@@ -663,7 +687,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['upx_exclude'][2] = self.cmd_dict['upx_exclude'][0]
             pass
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [23] 项 打开控制台窗口
@@ -705,7 +729,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['hide_console'][2] = self.cmd_dict['hide_console'][0].split('=')[1]
             else: return
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [25] 项 [可重复使用] 添加应用图标
@@ -721,7 +745,7 @@ class Pyinstaller_function(PyToExeUI):
                     content_list.append(content_quotation)
             else: content_list = None
             # 调用对话框
-            temp_command_list= self.set_custom_list_widget(self.json_widgets['pb_AddIcon']['text_browser_display'], self.json_widgets['pb_AddIcon']['dialog_title'], content_list, type_select_flag='image', file_type=f'{self.json_general["icon"]}{self.json_general["or"]}{self.json_general["application"]}(*.ico *.exe);;icon{self.json_general["icon"]}(*.ico);;{self.json_general["application"]}(*.exe)')
+            temp_command_list= self.set_custom_list_widget(self.json_widgets['pb_AddIcon']['text_browser_display'], self.json_widgets['pb_AddIcon']['dialog_title'], content_list, type_select_flag='image', file_type=f'{self.json_general["icon"]}{self.json_general["or"]}{self.json_general["application"]}(*.ico *.exe);;{self.json_general["icon"]}(*.ico);;{self.json_general["application"]}(*.exe)')
             # 数据处理，将对话框的输入内容转换为命令的格式
             if temp_command_list:
                 command_list = []
@@ -734,7 +758,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_icon'][0] = None
                 self.cmd_dict['add_icon'][2] = self.cmd_dict['add_icon'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [26] 项 禁用窗口化。用于在 windowed 模式下禁用异常追踪信息的显示。在默认情况下，如果程序在 windowed 模式下崩溃，PyInstaller 会显示一个包含详细异常追踪信息的窗口。使用该选项后，如果程序崩溃，用户将不再看到详细的异常信息窗口，尤其是在发布产品时，该选项可能有助于提高程序的安全性
@@ -747,7 +771,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['disable_windowed'][0] = None
                 self.cmd_dict['disable_windowed'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [27] 项 用于指定一个包含版本信息的文件。这个版本文件通常包含应用程序的版本号、公司信息等
@@ -767,7 +791,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['version_file'][0] = '--version-file="'+ temp + '"'
                 self.cmd_dict['version_file'][2] = self.cmd_dict['version_file'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [28] 项 将文件FILE或XML的清单添加到exe文件。
@@ -790,7 +814,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_xml_file'][0] = '-m="'+ temp + '"'
                 self.cmd_dict['add_xml_file'][2] = self.cmd_dict['add_xml_file'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [29] 项 [弃用]禁用将应用程序清单嵌入到可执行文件中。Windows 应用程序清单是一个 XML 文件，包含了应用程序的相关信息，如 UAC 请求、DLL 加载策略等。默认情况下，PyInstaller 将应用程序清单嵌入到生成的可执行文件中。但在某些情况下，可能会希望禁用这个嵌入，而是改为使用外部清单文件
@@ -823,7 +847,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_resource'][0] = None
                 self.cmd_dict['add_resource'][2] = self.cmd_dict['add_resource'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [31] 项 用于在生成的可执行文件上启用 User Account Control（UAC）管理员权限。在使用该选项时，用户在运行程序时可能会收到 UAC 提示，需要提供管理员权限，同时强制用户在以管理员身份运行可执行文件时提供管理员凭据，否则程序将无法启动
@@ -836,7 +860,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['uac_admin_apply'][0] = None
                 self.cmd_dict['uac_admin_apply'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [32] 项 用于在生成的可执行文件中启用 UIAccess, 以便程序能够在用户交互桌面(UIAccess Desktop)上运行。但要注意：1.这个选项仅在 Windows 上生效。2.程序需要具有管理员权限（通常需要 UAC 提示）才能启用 UIAccess。3.这个选项可能会导致程序在运行时需要管理员权限。
@@ -849,7 +873,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['uac_uiaccess'][0] = None
                 self.cmd_dict['uac_uiaccess'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [33] 项 [弃用]将任何打包到应用程序中的共享程序集更改为私有程序集, 使用这个选项会导致 PyInstaller 将应用程序依赖的 DLL 文件复制到生成的可执行文件所在的目录，而不是依赖系统中已经存在的 DLL。请注意，使用该选项可能会增加生成的可执行文件的大小，只有在确实存在 DLL 版本兼容性问题时，才建议使用这个选项
@@ -868,7 +892,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['argv_emulation'][0] = None
                 self.cmd_dict['argv_emulation'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [36] 项 用于在 macOS 平台上设置生成的应用程序的 Bundle Identifier。Bundle Identifier 是用于唯一标识 macOS 应用程序的字符串，通常采用逆序域名的形式。
@@ -888,7 +912,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['osx_bundle_identifier'][0] = '--osx-bundle-identifier="' + temp + '"'
                 self.cmd_dict['osx_bundle_identifier'][2] = self.cmd_dict['osx_bundle_identifier'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [37] 项 用于指定生成的可执行文件的目标架构。该选项允许你选择生成 32 位（x86）或 64 位（x86_64）的可执行文件。
@@ -912,7 +936,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['target_architecture'][2] = 'x86_64'
             else: return
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [38] 项 用于在 macOS 平台上对生成的应用程序进行代码签名。代码签名是一种在应用程序上附加数字签名的方法，用于验证应用程序的来源和完整性。使用提供的身份对收集的二进制文件和生成的可执行文件进行签名。如果未提供签名身份，则执行 ad-hoc 签名。
@@ -932,7 +956,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['codesign_identity'][0] = '--codesign-identity="' + temp + '"'
                 self.cmd_dict['codesign_identity'][2] = self.cmd_dict['codesign_identity'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [39] 项 用于指定 macOS 平台上生成的应用程序的 entitlements 文件。Entitlements 文件包含了应用程序运行所需的权限和系统服务的详细信息。
@@ -954,7 +978,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['osx_entitlements_file'][2] = self.cmd_dict['osx_entitlements_file'][0]
             pass
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [40] 项 用于指定运行时临时目录。在运行过程中，PyInstaller 生成的可执行文件可能需要创建临时文件或缓存一些数据。该选项允许用户指定用于存储这些临时文件的目录
@@ -980,7 +1004,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['runtime_tmpdir'][0] = '--runtime-tmpdir="'+ temp + '"'
                 self.cmd_dict['runtime_tmpdir'][2] = self.cmd_dict['runtime_tmpdir'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [41] 项 引导加载程序忽略信号，而不是将它们转发给子进程。在诸如监督进程向引导加载程序和子进程（例如通过进程组）发送信号以避免向子进程发出两次信号的情况下很有用。
@@ -993,7 +1017,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['ignore_signals'][0] = None
                 self.cmd_dict['ignore_signals'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [42] 项 pte_OutputPath 应用程序打包后的输出目录（默认为 ./dist）
@@ -1016,7 +1040,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['workpath_option'][0] = '--workpath="'+ temp + '"'
                 self.cmd_dict['workpath_option'][2] = self.cmd_dict['workpath_option'][0]
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [44] 项 用于在构建可执行文件时默认选择“是”以避免询问用户任何确认问题。该选项可用于自动化构建过程，以防止在构建期间需要手动确认。
@@ -1029,7 +1053,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['noconfirm_option'][0] = None
                 self.cmd_dict['noconfirm_option'][2] = None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [45] 项 用于指定 UPX 压缩工具的目录路径。UPX 是一种可执行文件压缩工具，用于减小生成的可执行文件的大小。
@@ -1050,7 +1074,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['upx_dir'][2] = self.cmd_dict['upx_dir'][0]
             pass
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [46] 项 [弃用]用于设置生成的可执行文件为一个控制台应用程序（命令行应用程序）。这将导致在运行生成的可执行文件时，将打开一个命令行窗口（控制台窗口）。
@@ -1058,7 +1082,7 @@ class Pyinstaller_function(PyToExeUI):
         try:
             pass
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [47] 项 在构建之前清理 PyInstaller 缓存并删除临时文件
@@ -1105,7 +1129,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['log_level'][2] = self.cmd_dict['log_level'][0].split()[1]
             else: return
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # [49] 项 pte_FilePath 被执行打包的python脚本
@@ -1174,5 +1198,5 @@ class Pyinstaller_function(PyToExeUI):
             self.launch_thread.output_to_textbrowser.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser))
             self.launch_thread.start()
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)

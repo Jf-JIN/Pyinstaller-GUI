@@ -10,7 +10,7 @@ from PyQt5.QtGui import QIcon
 class Exe_main_window(QMainWindow, Pyinstaller_function):
     def __init__(self):
         super().__init__()
-        self.setWindowIcon(QIcon(WINDOW_ICON_PATH))
+        self.setWindowIcon(self.WINDOW_ICON)
 
 
 if __name__ == "__main__":

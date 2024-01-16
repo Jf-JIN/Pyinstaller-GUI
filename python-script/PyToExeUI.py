@@ -8,19 +8,18 @@ from PyToExe_ui import *
 
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QWidget, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton
 from PyQt5.QtGui import QTextCursor, QDesktopServices, QIcon, QPixmap
-from PyQt5.QtCore import Qt, QUrl
+from PyQt5.QtCore import Qt, QUrl, QByteArray
 
 
 # workspace_path = os.path.dirname(__file__)
 workspace_path = os.getcwd()
 exe_folder_path = os.path.dirname(sys.argv[0])
-# default_icon_path = os.path.join(exe_folder_path, 'PyToExe.ico')
-default_icon_path = os.path.join(exe_folder_path, 'resource', 'PyToExe.ico')
+icon_data = '''<svg version="1.1" id="svg1" width="400" height="400" viewBox="0 0 400 400" sodipodi:docname="PyToExe.svg" inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)" inkscape:export-filename="PyToExe.png" inkscape:export-xdpi="96" inkscape:export-ydpi="96" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"> <defs id="defs1"> <linearGradient id="swatch6" inkscape:swatch="solid"> <stop style="stop-color:#000000;stop-opacity:1;" offset="0" id="stop6" /> </linearGradient><linearGradient id="swatch35" inkscape:swatch="solid"> <stop style="stop-color:#f54d00;stop-opacity:1;" offset="0" id="stop35" /> </linearGradient> <linearGradient inkscape:collect="always" xlink:href="#swatch35" id="linearGradient35" x1="263.0344" y1="195.86606" x2="400.23287" y2="195.86606" gradientUnits="userSpaceOnUse" /> </defs> <sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="1.5832414" inkscape:cx="154.11421" inkscape:cy="222.01289" inkscape:window-width="1920" inkscape:window-height="1009" inkscape:window-x="2552" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="g1" /> <g inkscape:groupmode="layer" inkscape:label="Image" id="g1"> <path id="path1" style="fill:#ef9e01;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:2;stroke-dasharray:none" d="M 190.73633,27.681641 A 172.93973,172.93973 0 0 0 121.74609,37.525391 172.93973,172.93973 0 0 0 18.384766,259.18359 172.93973,172.93973 0 0 0 240.04492,362.54492 172.93973,172.93973 0 0 0 351.23047,172.44141 l -38.29688,13.9375 A 129.19458,133.82138 70 0 1 224.75391,322.14844 129.19458,133.82138 70 0 1 54.816406,246.51562 129.19458,133.82138 70 0 1 136.37891,79.34375 129.19458,133.82138 70 0 1 281.98633,115.30078 l 0.002,0.002 c 0.0203,0.0114 0.0405,0.0243 0.0606,0.0352 0.0403,0.0238 0.0798,0.046 0.11719,0.0742 0.007,0.005 0.009,0.0125 0.0156,0.0176 0.005,0.002 0.0105,0.004 0.0156,0.006 0.0358,0.009 0.0663,0.0309 0.0976,0.0488 0.004,0.003 0.009,0.005 0.0117,0.006 0.002,0.002 0.008,0.004 0.0176,0.0117 0.006,0.004 0.009,0.0113 0.0137,0.0156 l 0.002,0.002 c 0.002,0.002 0.005,8.5e-4 0.008,0.002 0.0241,0.008 0.0442,0.024 0.0644,0.0391 h 0.002 c 0.0101,10e-4 0.0202,0.003 0.0312,0.006 0.0324,0.0107 0.0592,0.0325 0.0859,0.0527 0.009,0.007 0.0185,0.0141 0.0254,0.0215 0.0153,0.005 0.0291,0.0103 0.0449,0.0137 0.0248,0.008 0.0512,0.0139 0.0762,0.0215 0.0267,0.009 0.0513,0.0202 0.0781,0.0293 0.0301,0.0117 0.0593,0.0269 0.084,0.0469 a 129.19458,133.82138 70 0 0 -0.0293,-0.0332 20.874001,20.874001 0 0 0 18.125,1.92187 20.874001,20.874001 0 0 0 12.47851,-26.755854 20.874001,20.874001 0 0 0 -0.76953,-1.753907 172.93973,172.93973 0 0 0 -121.9082,-61.449218 z" /> <path id="rect23-1" style="fill:#2525ff;fill-opacity:1;stroke-width:2;stroke:url(#linearGradient35);stroke-opacity:1;stroke-dasharray:none" d="m 268.06954,198.3686 0.0123,-0.009 -3.98989,22.17486 0.12876,0.18526 20.18849,3.63248 47.31514,-32.88487 c 3.34059,-2.32178 7.89731,-1.49973 10.21918,1.8404 l 32.8852,47.31337 20.19025,3.6328 0.14362,-0.0998 4.01273,-22.30189 -49.54068,-71.27972 c -2.32181,-3.34063 -6.88069,-4.16091 -10.22126,-1.8391 l -71.33385,49.57833 z" /> <text xml:space="preserve" style="font-size:202.244px;line-height:0px;letter-spacing:0px;fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:5.41662;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" x="-6.7089086" y="363.74023" id="text29-2"><tspan id="tspan29-2" x="-6.7089086" y="363.74023" sodipodi:role="line" style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:202.244px;line-height:0px;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:5.41662;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers">EXE</tspan></text> <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:231.553px;line-height:0px;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:3.4733px;fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:5.78883;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" x="32.131664" y="185.16193" id="text6"><tspan sodipodi:role="line" id="tspan6" x="32.131664" y="185.16193" style="font-size:231.553px;letter-spacing:3.4733px;stroke-width:5.78883">PY</tspan></text> </g> </svg>'''
+# default_icon_path = os.path.join(exe_folder_path, 'PyToExe.ico') 
+# default_icon_path = os.path.join(exe_folder_path, 'resource', 'PyToExe.ico')
 
-if os.path.exists(default_icon_path):
-    WINDOW_ICON_PATH = default_icon_path
-else:
-    WINDOW_ICON_PATH = None
+
+
 
 for i in os.listdir(workspace_path):
     if i == 'main.py':
@@ -63,9 +62,11 @@ class PyToExeUI(Ui_MainWindow):
             self.cmd_dict['output_file_name'][0] = '--name="' + py_file_auto_path.split('.')[0] + '"'
             self.launch_flag = True
 
-
     # 参数初始化
     def parameter_init(self):
+        pixmap_icon = QPixmap()
+        pixmap_icon.loadFromData(QByteArray(icon_data.encode()))
+        self.WINDOW_ICON = QIcon(pixmap_icon)
         self.launch_flag = False
         self.clear_file_flag = True
         # 用于显示参数，Label是项目名，explain是参数含义
@@ -109,7 +110,6 @@ class PyToExeUI(Ui_MainWindow):
         self.recover_rb = []
         self.recover_lock = []
 
-
     # 信号连接初始化
     def py_to_exe_ui_signal_connection(self):
         self.Win.pte_FilePath.textChanged.connect(self.file_path_changed)
@@ -139,8 +139,9 @@ class PyToExeUI(Ui_MainWindow):
             self.json_special = self.language_json['special']
             self.json_general = self.language_json['general']
         except Exception as e:
-            traceback.print_exc()
-            self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
+            # traceback.print_exc()
+            QMessageBox.warning(None, text=e)
+            # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     def combo_list_init(self):
         try:
@@ -156,7 +157,7 @@ class PyToExeUI(Ui_MainWindow):
                     break
             self.load_language_json_file()
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             QMessageBox.warning(None, self.json_general["msg_info"], '语言包(./Language)缺失，可能无法进行正常显示\n\nDas Sprachpaket (./Language) fehlt, möglicherweise können die Inhalte nicht ordnungsgemäß angezeigt werden\n\nThe language pack (./Language) is missing, normal display may not be possible.\n')
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
@@ -169,7 +170,7 @@ class PyToExeUI(Ui_MainWindow):
                     getattr(self.Win, name).setToolTip(value['tooltip'])
             self.setWindowTitle(self.json_special['window_title'] + '\t\t\t\t' + workspace_path)
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     def language_update(self):
@@ -283,7 +284,7 @@ class PyToExeUI(Ui_MainWindow):
                 self.Win.pte_FileName.setPlainText(self.recover_cmd_dict['output_file_name'][0].split('"')[1])
             self.Win.pb_Recover.hide()
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************显示参数****************************************
@@ -296,7 +297,7 @@ class PyToExeUI(Ui_MainWindow):
                     self.append_TB_text(command_display, self.Win.textBrowser)
             self.append_TB_text(f'__________  {self.json_general["all_parameter"]}  __________\n\n')
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             QMessageBox.warning(None, '警告Warning', str(e))
             # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
@@ -313,7 +314,7 @@ class PyToExeUI(Ui_MainWindow):
             QDesktopServices.openUrl(
                             QUrl.fromLocalFile(workspace_path))
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************打开输出文件夹****************************************
@@ -330,7 +331,7 @@ class PyToExeUI(Ui_MainWindow):
             QDesktopServices.openUrl(
                         QUrl.fromLocalFile(folder_path))
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************向Textbrowser添加内容****************************************
@@ -376,9 +377,8 @@ class PyToExeUI(Ui_MainWindow):
                 return receiver_temp
             return
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
-            
     
     def select_folder(self, display_text:str = '', window_title:str = '') -> str :
         options = QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks
@@ -389,14 +389,16 @@ class PyToExeUI(Ui_MainWindow):
                 return receiver_temp
             return None
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************自定义对话窗口****************************************
-    def set_custom_message_box(self, window_title:str, description:str, button_list:list, reset_flag:bool = False, default_button:int = -1, window_icon_path = WINDOW_ICON_PATH, messagebox_content_icon = QMessageBox.Question) :
+    def set_custom_message_box(self, window_title:str, description:str, button_list:list, reset_flag:bool = False, default_button:int = -1, window_icon = None, messagebox_content_icon = QMessageBox.Question) :
+        if not window_icon:
+            window_icon = self.WINDOW_ICON
         msg_box = QMessageBox()
         msg_box.setIcon(messagebox_content_icon)
-        msg_box.setWindowIcon(QIcon(window_icon_path))
+        msg_box.setWindowIcon(window_icon)
         msg_box.setWindowTitle(window_title)
         msg_box.setText(description)
         buttons = []
@@ -416,7 +418,6 @@ class PyToExeUI(Ui_MainWindow):
         button_cancel = QPushButton(self.json_general['pb_cancel'])
         msg_box.addButton(button_cancel, QMessageBox.NoRole)
         buttons.append(button_cancel)
-        
         msg_box.setDefaultButton(buttons[default_button])
         
         return msg_box.exec_()
@@ -434,7 +435,9 @@ class PyToExeUI(Ui_MainWindow):
         return temp
     
     # ****************************************自定义项目显示窗口****************************************
-    def set_custom_list_widget(self, display_text, window_title, item_list, type_select_flag = 'file_folder', file_type = None, text_discription = None, extra_func = None, window_icon_path = WINDOW_ICON_PATH):
+    def set_custom_list_widget(self, display_text, window_title, item_list, type_select_flag = 'file_folder', file_type = None, text_discription = None, extra_func = None, window_icon = None):
+        if not window_icon:
+            window_icon = self.WINDOW_ICON
         if not file_type:
             file_type = f'{self.json_general["type_all_files"]}(*.*)'
         if not text_discription:
@@ -442,23 +445,17 @@ class PyToExeUI(Ui_MainWindow):
         dialog = QDialog()
         dialog.setWindowTitle(window_title)
         dialog.resize(600,500)
-        if window_icon_path:
-            dialog.setWindowIcon(QIcon(window_icon_path))
+        dialog.setWindowIcon(window_icon)
         dialog.setStyleSheet(
             "QDialog{min-width:600px; min-height:500px;}"
             "QFrame[objectName = 'frame_add_remove']{margin:0; padding:0; max-height:50px;}"
             "QFrame[objectName = 'frame_finish_cancel']{margin:0; padding:0; max-height:35px;}"
             "QPushButton{min-height: 30px; max-height: 30px;}"
         )
-        
         list_widget = QListWidget()
         
         if item_list:
             list_widget.addItems(item_list)
-        
-        
-            
-        
         pb_add = QPushButton(self.json_general['pb_add'])
         pb_remove = QPushButton(self.json_general['pb_remove'])
         pb_finish = QPushButton(self.json_general['pb_certain'])
@@ -547,18 +544,15 @@ class PyToExeUI(Ui_MainWindow):
             elif list_widget.count == 0:
                 list_widget.clear()
         
-        
-        
         pb_add.clicked.connect(add_item)
         pb_remove.clicked.connect(remove_item)
         pb_finish.clicked.connect(dialog.accept)
         pb_cancel.clicked.connect(dialog.reject)
+        
         if type_select_flag == 'image':
             list_widget.currentRowChanged.connect(preview_image)
-        
-
         result = dialog.exec_()
-
+        
         if result == QDialog.Accepted:
             selected_items = [list_widget.item(i).text() for i in range(list_widget.count())]
             return selected_items
