@@ -9,9 +9,10 @@ class Launch_py_QThread(QThread):
     output_to_textbrowser = pyqtSignal(str)
     finished_signal = pyqtSignal()
 
-    def __init__(self, command):
+    def __init__(self, parent, command):
         super().__init__()
         self.command = deepcopy(command)
+        parent.launch_flag = False
 
     def read_output(self, content: str):
         while True:

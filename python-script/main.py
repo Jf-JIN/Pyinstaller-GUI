@@ -1,6 +1,5 @@
 import sys
 
-import SplashModule
 from pyinstaller_function import *
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -18,3 +17,4 @@ if __name__ == "__main__":
     mainWindow = Exe_main_window()
     mainWindow.show()
     sys.exit(app.exec_())
+
