@@ -5,6 +5,8 @@ from copy import deepcopy
 import traceback
 
 from PyToExe_ui import *
+from Language_init_Chinese import *
+from Language_init_English import *
 
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QWidget, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton
 from PyQt5.QtGui import QTextCursor, QDesktopServices, QIcon, QPixmap
@@ -61,6 +63,7 @@ class PyToExeUI(Ui_MainWindow):
             self.Win.pte_FileName.setPlainText(py_file_auto_path.split('.')[0])
             self.cmd_dict['output_file_name'][0] = '--name="' + py_file_auto_path.split('.')[0] + '"'
             self.launch_flag = True
+        self.plain_text_update()
 
     # 参数初始化
     def parameter_init(self):
@@ -132,9 +135,14 @@ class PyToExeUI(Ui_MainWindow):
 # 界面文字初始化及更改
     def load_language_json_file(self):
         try:
-            json_file_name = self.Win.cbb_LanguageSelect.currentText() + '.json'
-            with open(os.path.join(exe_folder_path, 'Languages', json_file_name), 'r',encoding = 'utf-8') as file:
-                self.language_json = json.load(file)
+            if self.Win.cbb_LanguageSelect.currentText() == '简体中文(内置)':
+                self.language_json = LANGUAGE_INIT_CHINESE
+            elif self.Win.cbb_LanguageSelect.currentText() == 'English(build-in)':
+                self.language_json = LANGUAGE_INIT_ENGLISH
+            else:
+                json_file_name = self.Win.cbb_LanguageSelect.currentText() + '.json'
+                with open(os.path.join(exe_folder_path, 'Languages', json_file_name), 'r',encoding = 'utf-8') as file:
+                    self.language_json = json.load(file)
             self.json_widgets = self.language_json['widgets']
             self.json_special = self.language_json['special']
             self.json_general = self.language_json['general']
@@ -145,21 +153,25 @@ class PyToExeUI(Ui_MainWindow):
     
     def combo_list_init(self):
         try:
-            file_list = os.listdir(os.path.join(exe_folder_path, 'Languages'))
-            self.language_list = []
-            for file in file_list:
-                if file.endswith('.json'):
-                    self.language_list.append(os.path.splitext(file)[0])
-                    self.Win.cbb_LanguageSelect.addItem(os.path.splitext(file)[0])
-            for perfer_language in ['Chinese_S','Chinese_simplified','ChineseSimplified', 'Chinese','中文简体','简体中文','中文']:
-                if perfer_language in self.language_list:
-                    self.Win.cbb_LanguageSelect.setCurrentText(perfer_language)
-                    break
+            if os.path.exists(os.path.join(exe_folder_path, 'Languages')):
+                file_list = os.listdir(os.path.join(exe_folder_path, 'Languages'))
+                self.language_list = []
+                for file in file_list:
+                    if file.endswith('.json'):
+                        self.language_list.append(os.path.splitext(file)[0])
+                        self.Win.cbb_LanguageSelect.addItem(os.path.splitext(file)[0])
+            self.Win.cbb_LanguageSelect.setCurrentText('简体中文(内置)')
+            # for perfer_language in ['Chinese_S','Chinese_simplified','ChineseSimplified', 'Chinese','中文简体','简体中文','中文']:
+            #     if perfer_language in self.language_list:
+            #         self.Win.cbb_LanguageSelect.setCurrentText(perfer_language)
+            #         break
             self.load_language_json_file()
         except Exception as e:
             # traceback.print_exc()
-            QMessageBox.warning(None, self.json_general["msg_info"], '语言包(./Language)缺失，可能无法进行正常显示\n\nDas Sprachpaket (./Language) fehlt, möglicherweise können die Inhalte nicht ordnungsgemäß angezeigt werden\n\nThe language pack (./Language) is missing, normal display may not be possible.\n')
-            self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
+            traceback.format_exc()
+            QMessageBox.warning(None, 'PyToExe', traceback.format_exc())
+            # QMessageBox.warning(None, self.json_general["msg_info"], '语言包(./Languages)缺失，可能无法进行正常显示\n\nDas Sprachpaket (./Language) fehlt, möglicherweise können die Inhalte nicht ordnungsgemäß angezeigt werden\n\nThe language pack (./Language) is missing, normal display may not be possible.\n')
+            # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     def set_text_init(self):
         try:
@@ -287,6 +299,11 @@ class PyToExeUI(Ui_MainWindow):
     def parameter_display(self):
         try:
             self.append_TB_text(f'__________  {self.json_general["display_command_parameter"]}  __________\n')
+            # 更新显示参数的参数解释
+            for item in self.cmd_dict.values():
+                if item[0] and 'dict_explain' in self.json_widgets[item[1]]:
+                    item[2] = self.json_widgets[item[1]]['dict_explain']
+            # 显示参数内容
             for value in self.cmd_dict.values():
                 if value[0]:
                     command_display = str(self.json_widgets[value[1]]["dict"] + value[2])

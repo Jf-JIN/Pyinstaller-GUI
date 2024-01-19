@@ -632,31 +632,43 @@ class Pyinstaller_function(PyToExeUI):
                     pass
                 else:
                     return
+            # temp = self.select_file(self.json_widgets['pb_AddSplashScreen']['text_browser_display'], self.json_widgets['pb_AddSplashScreen']['dialog_title'],
+            #                         f'{self.json_general["all_image_file"]}(*.jpg *.jpeg *.png *.webp *.bmp *.tif *.gif *.pcx *.tga *.exif *.fpx *.svg *.psd *.cdr *.pcd *.dxf *.ufo *.eps *.ai *.raw *.WMF *.webp *.avif *.apng);;\
+            #                         jpeg {self.json_general["image_file"]}(*.jpeg);;\
+            #                         png {self.json_general["image_file"]}(*.png);;\
+            #                         webp {self.json_general["image_file"]}(*.webp);;\
+            #                         bmp {self.json_general["image_file"]}(*.bmp);;\
+            #                         tif {self.json_general["image_file"]}(*.tif);;\
+            #                         gif {self.json_general["image_file"]}(*.gif);;\
+            #                         pcx {self.json_general["image_file"]}(*.pcx);;\
+            #                         tga {self.json_general["image_file"]}(*.tga);;\
+            #                         exif {self.json_general["image_file"]}(*.exif);;\
+            #                         fpx {self.json_general["image_file"]}(*.fpx);;\
+            #                         svg {self.json_general["image_file"]}(*.svg);;\
+            #                         psd {self.json_general["image_file"]}(*.psd);;\
+            #                         cdr {self.json_general["image_file"]}(*.cdr);;\
+            #                         pcd {self.json_general["image_file"]}(*.pcd);;\
+            #                         dxf {self.json_general["image_file"]}(*.dxf);;\
+            #                         ufo {self.json_general["image_file"]}(*.ufo);;\
+            #                         eps {self.json_general["image_file"]}(*.eps);;\
+            #                         ai {self.json_general["image_file"]}(*.ai);;\
+            #                         raw {self.json_general["image_file"]}(*.raw);;\
+            #                         WMF {self.json_general["image_file"]}(*.WMF);;\
+            #                         webp {self.json_general["image_file"]}(*.webp);;\
+            #                         avif {self.json_general["image_file"]}(*.avif);;\
+            #                         apng {self.json_general["image_file"]}(*.apng)')
+            # jpeg,png,webp,bmp,tif,gif,pcx,tga,exif,fpx,psd,cdr,pcd,dxf,ufo,eps,ai,raw,WMF,avif,apng
             temp = self.select_file(self.json_widgets['pb_AddSplashScreen']['text_browser_display'], self.json_widgets['pb_AddSplashScreen']['dialog_title'],
-                                    f'{self.json_general["all_image_file"]}(*.jpg *.jpeg *.png *.webp *.bmp *.tif *.gif *.pcx *.tga *.exif *.fpx *.svg *.psd *.cdr *.pcd *.dxf *.ufo *.eps *.ai *.raw *.WMF *.webp *.avif *.apng);;\
+                                    f'{self.json_general["all_image_file"]}(*.jpg *.jpeg *.png *.webp *.bmp *.tif *.tiff *.gif *.tga);;\
+                                    jpg {self.json_general["image_file"]}(*.jpg);;\
                                     jpeg {self.json_general["image_file"]}(*.jpeg);;\
                                     png {self.json_general["image_file"]}(*.png);;\
                                     webp {self.json_general["image_file"]}(*.webp);;\
                                     bmp {self.json_general["image_file"]}(*.bmp);;\
                                     tif {self.json_general["image_file"]}(*.tif);;\
+                                    tiff {self.json_general["image_file"]}(*.tiff);;\
                                     gif {self.json_general["image_file"]}(*.gif);;\
-                                    pcx {self.json_general["image_file"]}(*.pcx);;\
-                                    tga {self.json_general["image_file"]}(*.tga);;\
-                                    exif {self.json_general["image_file"]}(*.exif);;\
-                                    fpx {self.json_general["image_file"]}(*.fpx);;\
-                                    svg {self.json_general["image_file"]}(*.svg);;\
-                                    psd {self.json_general["image_file"]}(*.psd);;\
-                                    cdr {self.json_general["image_file"]}(*.cdr);;\
-                                    pcd {self.json_general["image_file"]}(*.pcd);;\
-                                    dxf {self.json_general["image_file"]}(*.dxf);;\
-                                    ufo {self.json_general["image_file"]}(*.ufo);;\
-                                    eps {self.json_general["image_file"]}(*.eps);;\
-                                    ai {self.json_general["image_file"]}(*.ai);;\
-                                    raw {self.json_general["image_file"]}(*.raw);;\
-                                    WMF {self.json_general["image_file"]}(*.WMF);;\
-                                    webp {self.json_general["image_file"]}(*.webp);;\
-                                    avif {self.json_general["image_file"]}(*.avif);;\
-                                    apng {self.json_general["image_file"]}(*.apng)')
+                                    tga {self.json_general["image_file"]}(*.tga);;')
             if temp:
                 self.cmd_dict['add_splash_screen'][0] = '--splash="' + temp + '"'
                 self.cmd_dict['add_splash_screen'][2] = self.cmd_dict['add_splash_screen'][0]

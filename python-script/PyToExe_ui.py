@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1184, 801)
+        MainWindow.resize(1184, 800)
         MainWindow.setMinimumSize(QtCore.QSize(0, 800))
         MainWindow.setStyleSheet("QWidget[objectName = \'centralwidget\']{\n"
 "    background-color: rgb(175, 199, 235);\n"
@@ -262,10 +262,12 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cbb_LanguageSelect.sizePolicy().hasHeightForWidth())
         self.cbb_LanguageSelect.setSizePolicy(sizePolicy)
-        self.cbb_LanguageSelect.setMinimumSize(QtCore.QSize(140, 0))
+        self.cbb_LanguageSelect.setMinimumSize(QtCore.QSize(180, 0))
         self.cbb_LanguageSelect.setMaximumSize(QtCore.QSize(16777215, 30))
         self.cbb_LanguageSelect.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.cbb_LanguageSelect.setObjectName("cbb_LanguageSelect")
+        self.cbb_LanguageSelect.addItem("")
+        self.cbb_LanguageSelect.addItem("")
         self.horizontalLayout_11.addWidget(self.cbb_LanguageSelect)
         self.verticalLayout_6.addWidget(self.frame_pre)
         self.frame_FileInfo = QtWidgets.QFrame(self.frame_Left)
@@ -1189,6 +1191,8 @@ class Ui_MainWindow(object):
         self.pb_Enviroment.setText(_translate("MainWindow", "环境变量"))
         self.pb_PipUpdate.setText(_translate("MainWindow", "pip更新"))
         self.cb_Tooltips.setText(_translate("MainWindow", "工具提示"))
+        self.cbb_LanguageSelect.setItemText(0, _translate("MainWindow", "简体中文(内置)"))
+        self.cbb_LanguageSelect.setItemText(1, _translate("MainWindow", "English(build-in)"))
         self.lb_FilePath.setText(_translate("MainWindow", "文件路径:"))
         self.pb_FilePath.setText(_translate("MainWindow", "浏览"))
         self.lb_OutputPath.setText(_translate("MainWindow", "输出路径:"))
