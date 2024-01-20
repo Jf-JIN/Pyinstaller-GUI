@@ -86,7 +86,7 @@ class PyToExeUI(Ui_MainWindow):
         #     'upx_dir': [None, '\nupx工具路径：\t', None], 'ascii': [None, '\n编码支持：\t', None], 'clear_cache': [None, '\n清理缓存：\t', None], 'log_level': [None, '\n控制台消息详细程度：\t', None], 'python_file_path': [None, '\nPython脚本：\t', None]
         # }
         self.cmd_dict = {
-                            'output_methode': [None, 'rb_OutputMethod_F', None], 'specpath': [None, 'pb_Specpath', None], 'output_file_name': [None, 'pte_FileName', None], 'contents_directory': [None, 'rb_OutputMethod_D', None], 'add_file_folder_data': [None, 'pb_AddFileFolderData', None], 
+                            'python_file_path': [None, 'pte_FilePath', None], 'output_methode': [None, 'rb_OutputMethod_F', None], 'specpath': [None, 'pb_Specpath', None], 'output_file_name': [None, 'pte_FileName', None], 'contents_directory': [None, 'contents_directory', None], 'add_file_folder_data': [None, 'pb_AddFileFolderData', None], 
                             'add_binary_data': [None, 'pb_AddBinaryData', None], 'imports_folder': [None, 'pb_ImportsFolder', None], 'import_module_name': [None, 'pb_ImportModuleName', None], 'collect_submodules': [None, 'pb_CollectSubmodules', None], 'collect_data': [None, 'pb_CollectData', None],
                             'collect_binaries': [None, 'pb_CollectBinaries', None], 'collect_all': [None, 'pb_CollectAll', None], 'copy_metadata': [None, 'pb_CopyMetadata', None], 'recursive_copy_metadata': [None, 'pb_RecursiveCopyMetadata', None], 'additional_hooks_dir': [None, 'pb_AdditionalHooksDir', None],
                             'runtime_hook': [None, 'pb_RuntimeHook', None], 'exclude_module': [None, 'pb_ExcludeModule', None], 'add_splash_screen': [None, 'pb_AddSplashScreen', None], 'debug_mode': [None, 'pb_DebugMode', None], 'python_option': [None, 'pb_PythonOption', None],
@@ -95,16 +95,18 @@ class PyToExeUI(Ui_MainWindow):
                             'add_resource': [None, 'pb_AddResource', None], 'uac_admin_apply': [None, 'cb_UacAdminApply', None], 'uac_uiaccess': [None, 'cb_UacUiaccess', None],
                             'argv_emulation': [None, 'cb_ArgvEmulation', None], 'osx_bundle_identifier': [None, 'pb_OsxBundleIdentifier', None], 'target_architecture': [None, 'pb_TargetArchitecture', None], 'codesign_identity': [None, 'pb_CodesignIdentity', None], 'osx_entitlements_file': [None, 'pb_OsxEntitlementsFile', None],
                             'runtime_tmpdir': [None, 'pb_RuntimeTmpdir', None], 'ignore_signals': [None, 'cb_IgnoreSignals', None], 'output_folder_path': [None, 'pte_OutputPath', None], 'workpath_option': [None, 'pb_WorkpathOption', None], 'noconfirm_option': [None, 'cb_NoconfirmOption', None],
-                            'upx_dir': [None, 'pb_UpxDir', None], 'clear_cache': [None, 'cb_ClearCache', None], 'log_level': [None, 'pb_LogLevel', None], 'python_file_path': [None, 'pte_FilePath', None]
+                            'upx_dir': [None, 'pb_UpxDir', None], 'clear_cache': [None, 'cb_ClearCache', None], 'log_level': [None, 'pb_LogLevel', None]
                         }
         self.cmd = [None]*3
         self.cmd[0] = os.path.splitdrive(workspace_path)[0]
         self.cmd[1] = 'cd '+ workspace_path
-        self.cmd_dict['output_methode'][0] = 'pyinstaller -F'
+        self.cmd_dict['output_methode'][0] = '--onefile'
+        self.cmd_dict['output_methode'][1] = 'rb_OutputMethod_F'
         self.cmd_dict['output_methode'][2] = self.json_widgets['rb_OutputMethod_F']['dict_explain']
         self.cmd_dict['clear_cache'][0] = '--clean'
         self.cmd_dict['clear_cache'][2] = self.json_widgets['cb_ClearCache']['dict_explain']
         self.cmd_dict['console_window_control'][0] = '--console'
+        self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_C'
         self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_C']['dict_explain']
         # 用作恢复控制台参数的缓存
         self.recover_cmd_dict = deepcopy(self.cmd_dict)
@@ -217,6 +219,7 @@ class PyToExeUI(Ui_MainWindow):
         temp_command = []
         for value in self.cmd_dict.values():
             temp_command.append(value[0])
+        temp_command.insert(0, 'pyinstaller')
         temp_command_final = ' '.join(filter(None, temp_command))
         return(temp_command_final)
 
@@ -256,11 +259,17 @@ class PyToExeUI(Ui_MainWindow):
         self.Win.rb_OutputMethod_F.setChecked(True)
         self.Win.rb_ConsoleWindowControl_C.setChecked(True)
         # 重置参数
-        reset_py_file_path = self.recover_cmd_dict['python_file_path'][0].split('"')[1]
-        self.Win.pte_FilePath.setPlainText(reset_py_file_path)
-        self.Win.pte_OutputPath.setPlainText(os.path.dirname(reset_py_file_path))
-        self.Win.pte_FileName.setPlainText(os.path.splitext(os.path.basename(reset_py_file_path))[0])
-        self.cmd_dict['output_methode'][0] = 'pyinstaller -F'
+        if self.recover_cmd_dict['python_file_path'][0] and os.path.exists(self.recover_cmd_dict['python_file_path'][0].split('"')[1]):
+            reset_py_file_path = self.recover_cmd_dict['python_file_path'][0].split('"')[1]
+            self.Win.pte_FilePath.setPlainText(reset_py_file_path)
+            self.Win.pte_OutputPath.setPlainText(os.path.dirname(reset_py_file_path))
+            self.Win.pte_FileName.setPlainText(os.path.splitext(os.path.basename(reset_py_file_path))[0])
+        else:
+            self.Win.pte_FilePath.clear()
+            self.Win.pte_OutputPath.clear()
+            self.Win.pte_FileName.clear()
+        self.cmd_dict['output_methode'][0] = '--onefile'
+        self.cmd_dict['output_methode'][1] = 'rb_OutputMethod_F'
         self.cmd_dict['output_methode'][2] = self.json_widgets['rb_OutputMethod_F']['dict_explain']
         self.cmd_dict['clear_cache'][0] = '--clean'
         self.cmd_dict['clear_cache'][2] = self.json_widgets['cb_ClearCache']['dict_explain']
@@ -298,7 +307,7 @@ class PyToExeUI(Ui_MainWindow):
     # ****************************************显示参数****************************************
     def parameter_display(self):
         try:
-            self.append_TB_text(f'__________  {self.json_general["display_command_parameter"]}  __________\n')
+            self.append_TB_text(f'__________  {self.json_general["display_command_parameter"]}  __________')
             # 更新显示参数的参数解释
             for item in self.cmd_dict.values():
                 if item[0] and 'dict_explain' in self.json_widgets[item[1]]:
@@ -369,16 +378,18 @@ class PyToExeUI(Ui_MainWindow):
     # ****************************************文件浏览选择****************************************
     def select_py_file(self):
         temp = self.select_file(self.json_special['select_py_file']['text_browser_display'], self.json_special['select_py_file']['dialog_title'], self.json_special['select_py_file']['type_discription'])
-        self.Win.pte_FilePath.setPlainText(temp)
-        self.cmd_dict['python_file_path'][0].split('"')[1] = temp
-        self.cmd_dict['python_file_path'][0] = ''.join(self.cmd_dict['python_file_path'][0])          
+        if temp:
+            self.Win.pte_FilePath.setPlainText(temp)
+            self.cmd_dict['python_file_path'][0].split('"')[1] = temp
+            self.cmd_dict['python_file_path'][0] = ''.join(self.cmd_dict['python_file_path'][0])          
     
     def select_ourput_folder(self):
         temp = self.select_folder(self.json_special['select_ourput_folder']['text_browser_display'], self.json_special['select_ourput_folder']['dialog_title'])
-        self.Win.pte_OutputPath.setPlainText(temp)
-        self.cmd_dict['output_folder_path'][0].split('"')[1] = temp
-        self.cmd_dict['output_folder_path'][0] = ''.join(self.cmd_dict['output_folder_path'][0])  
-        self.temp = self.cmd_dict['output_folder_path'][0].split('"')    
+        if temp:
+            self.Win.pte_OutputPath.setPlainText(temp)
+            self.cmd_dict['output_folder_path'][0].split('"')[1] = temp
+            self.cmd_dict['output_folder_path'][0] = ''.join(self.cmd_dict['output_folder_path'][0])  
+            self.temp = self.cmd_dict['output_folder_path'][0].split('"')    
     
     # ****************************************通用文件浏览选择****************************************
     def select_file(self, display_text:str = '', window_title:str = '', file_discription:str = '') -> str :
@@ -388,7 +399,7 @@ class PyToExeUI(Ui_MainWindow):
             if receiver_temp:
                 self.append_TB_text(f'__________ {self.json_general["setting_update"]}{display_text} __________\n{receiver_temp}\n')
                 return receiver_temp
-            return
+            return None
         except Exception as e:
             # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)

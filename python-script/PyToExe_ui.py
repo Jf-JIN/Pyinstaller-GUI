@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(210, 210, 210);\n"
 "    border: 1px solid rgba(110, 110, 110, 200);\n"
 "    border-radius:10px;\n"
-"    font: 12pt \'幼圆\';\n"
+"    font: 16px \'幼圆\';\n"
 "}\n"
 "\n"
 "QPushButton[objectName = \'pb_SetupPyinstaller\'],[objectName = \'pb_VersionDisplay\'],[objectName = \'pb_HelpDisplay\']{\n"
@@ -58,15 +58,15 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QLabel{\n"
-"    font: 12pt \'幼圆\';\n"
+"    font: 16px \'幼圆\';\n"
 "}\n"
 "\n"
 "QCheckBox{\n"
-"    font: 12pt \'幼圆\';\n"
+"    font: 16px \'幼圆\';\n"
 "}\n"
 "\n"
 "QRadioButton{\n"
-"    font: 12pt \'幼圆\';\n"
+"    font: 16px \'幼圆\';\n"
 "}\n"
 "\n"
 "QScrollArea{\n"
@@ -77,10 +77,10 @@ class Ui_MainWindow(object):
 "    background-color: rgb(200, 239, 167);\n"
 "    border:1px solid rgba(70, 70, 70, 200);\n"
 "    border-radius: 10px;\n"
+"    font: 13px;\n"
 "}\n"
 "\n"
 "QTextBrowser[objectName = \'textBrowser_cmd\']{\n"
-"    font: 10pt;\n"
 "    color: rgb(255, 255, 255);\n"
 "    background-color:rgb(60, 60, 60);\n"
 "}\n"
@@ -90,7 +90,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QPlainTextEdit{\n"
-"    font: 10pt \'幼圆\';\n"
+"    font: 13px \'幼圆\';\n"
 "}\n"
 "\n"
 "QScrollBar::handle:vertical{\n"
@@ -111,7 +111,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QComboBox{\n"
-"    font: 14pt \'楷体\';\n"
+"    font: 18px \'楷体\';\n"
 "    background-color: transparent;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -229,7 +229,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
         self.pb_Enviroment = QtWidgets.QPushButton(self.frame_pre)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setHorizontalStretch(50)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pb_Enviroment.sizePolicy().hasHeightForWidth())
         self.pb_Enviroment.setSizePolicy(sizePolicy)
@@ -238,7 +238,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.addWidget(self.pb_Enviroment)
         self.pb_PipUpdate = QtWidgets.QPushButton(self.frame_pre)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setHorizontalStretch(50)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pb_PipUpdate.sizePolicy().hasHeightForWidth())
         self.pb_PipUpdate.setSizePolicy(sizePolicy)
@@ -247,7 +247,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.addWidget(self.pb_PipUpdate)
         self.cb_Tooltips = QtWidgets.QCheckBox(self.frame_pre)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setHorizontalStretch(40)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cb_Tooltips.sizePolicy().hasHeightForWidth())
         self.cb_Tooltips.setSizePolicy(sizePolicy)
@@ -258,7 +258,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.addWidget(self.cb_Tooltips)
         self.cbb_LanguageSelect = QtWidgets.QComboBox(self.frame_pre)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setHorizontalStretch(100)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cbb_LanguageSelect.sizePolicy().hasHeightForWidth())
         self.cbb_LanguageSelect.setSizePolicy(sizePolicy)

@@ -407,8 +407,14 @@ LANGUAGE_INIT_CHINESE = {
     "rb_OutputMethod_D": {
       "tooltip": "创建包含可执行文件的一个文件夹束",
       "text": "输 出 文 件 夹",
-      "dict": "\n除exe外，输出的其他数据的存入路径：\n",
+      "dict": "\n输出方式：\t",
       "dict_explain": "生成文件夹"
+    },
+    "contents_directory": {
+      "dict": "\n除exe外，输出的其他数据的存入路径：\t",
+      "msg_content": "是否指定输出文件夹<br>除了可执行文件本身之外的所有内容都将被放入其中",
+      "dialog_title": "请输入文件夹名称",
+      "dialog_content": "请输入文件夹名称，用于放置除.exe外的其他数据"
     },
     "rb_ConsoleWindowControl_C": {
       "tooltip": "打开控制台窗口",
@@ -419,16 +425,19 @@ LANGUAGE_INIT_CHINESE = {
     "rb_ConsoleWindowControl_NW": {
       "tooltip": "打开控制台窗口",
       "text": "打开控制台",
+      "dict": "\n控制台窗口：\t",
       "dict_explain": "打开控制台窗口(nowindowed)"
     },
     "rb_ConsoleWindowControl_W": {
       "tooltip": "隐藏控制台窗口",
       "text": "隐藏控制台(标准)",
+      "dict": "\n控制台窗口：\t",
       "dict_explain": "关闭控制台窗口(windowed)"
     },
     "rb_ConsoleWindowControl_NC": {
       "tooltip": "隐藏控制台窗口",
       "text": "隐藏控制台",
+      "dict": "\n控制台窗口：\t",
       "dict_explain": "关闭控制台窗口(console)"
     },
     "lb_Title": { "text": "Python 转 exe" },
@@ -458,11 +467,6 @@ LANGUAGE_INIT_CHINESE = {
     "type_select_dialog": {
       "msg_title": "选择添加数据类型",
       "msg_content": "添加文件还是文件夹？"
-    },
-    "contents_directory": {
-      "msg_content": "是否指定输出文件夹<br>除了可执行文件本身之外的所有内容都将被放入其中",
-      "dialog_title": "请输入文件夹名称",
-      "dialog_content": "请输入文件夹名称，用于放置除.exe外的其他数据"
     },
     "launch_cmd": {
       "msg_content_no_file": "不存在指定Python脚本，请重新选择.py文件",

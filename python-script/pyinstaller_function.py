@@ -121,11 +121,13 @@ class Pyinstaller_function(PyToExeUI):
     # [00] 项 创建一个单文件的可执行文件 或 创建包含可执行文件的一个文件夹束
     def output_methode(self):
         if self.Win.rb_OutputMethod_F.isChecked():
-            self.cmd_dict['output_methode'][0] = 'pyinstaller -F'
+            self.cmd_dict['output_methode'][0] = '--onefile'
+            self.cmd_dict['output_methode'][1] = 'rb_OutputMethod_F'
             self.cmd_dict['output_methode'][2] = self.json_widgets['rb_OutputMethod_F']['dict_explain']
             self.cmd_dict['contents_directory'][0] = None
         else:
-            self.cmd_dict['output_methode'][0] = 'pyinstaller -D'
+            self.cmd_dict['output_methode'][0] = '--onedir'
+            self.cmd_dict['output_methode'][1] = 'rb_OutputMethod_D'
             self.cmd_dict['output_methode'][2] = self.json_widgets['rb_OutputMethod_D']['dict_explain']
             self.contents_directory()
 
@@ -163,7 +165,7 @@ class Pyinstaller_function(PyToExeUI):
             if not self.Win.rb_OutputMethod_D.isChecked():
                 return
             action_reply = self.set_custom_message_box(
-                self.json_general['optional_option'], f'{self.json_special["contents_directory"]["msg_content"]}<br>', [self.json_general['pb_set']], True)
+                self.json_general['optional_option'], f'{self.json_widgets["contents_directory"]["msg_content"]}<br>', [self.json_general['pb_set']], True)
             # 重置键
             if action_reply == 0:
                 self.cmd_dict['contents_directory'][0] = None
@@ -175,7 +177,7 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 return
             temp = QInputDialog.getText(
-                None, self.json_special['contents_directory']['dialog_title'], f'{self.json_special["contents_directory"]["dialog_content"]}<br>')[0]
+                None, self.json_widgets['contents_directory']['dialog_title'], f'{self.json_widgets["contents_directory"]["dialog_content"]}<br>')[0]
             if temp:
                 self.cmd_dict['contents_directory'][0] = '--contents-directory="' + temp + '"'
                 self.cmd_dict['contents_directory'][2] = self.cmd_dict['contents_directory'][0]
@@ -809,15 +811,19 @@ class Pyinstaller_function(PyToExeUI):
     def console_window_control(self):
         if self.Win.rb_ConsoleWindowControl_C.isChecked():
             self.cmd_dict['console_window_control'][0] = '--console'
+            self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_C'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_C']['dict_explain']
         elif self.Win.rb_ConsoleWindowControl_NW.isChecked():
             self.cmd_dict['console_window_control'][0] = '--nowindowed'
+            self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_NW'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_NW']['dict_explain']
         elif self.Win.rb_ConsoleWindowControl_W.isChecked():
             self.cmd_dict['console_window_control'][0] = '--windowed'
+            self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_W'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_W']['dict_explain']
         else:
             self.cmd_dict['console_window_control'][0] = '--noconsole'
+            self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_NC'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_NC']['dict_explain']
 
     # [24] 项 [--hide-console {minimize-late,hide-early,minimize-early,hide-late}] 用于设置生成的可执行文件的控制台窗口的显示方式。这个选项接受以下参数 仅限 Windows：在启用控制台的可执行文件中，让引导加载程序自动隐藏或最小化，控制台窗口，如果程序拥有控制台窗口（即不是从，现有控制台窗口）。
@@ -1149,9 +1155,7 @@ class Pyinstaller_function(PyToExeUI):
     #         注意：1. 这个选项通常在需要修改临时文件存储位置的特殊情况下使用。 2. 在某些环境下，默认的临时目录可能不适用，或者希望将临时文件保存在特定的目录中时，可以考虑使用这个选项。 3. 如果没有特殊要求，通常情况下无需手动设置。 PyInstaller 会在运行时使用系统默认的临时目录
     def runtime_tmpdir(self):
         try:
-            if self.cmd_dict['output_methode'][0] == 'pyinstaller -D':
-                pass
-            else:
+            if self.cmd_dict['output_methode'][0] != '--onedir':
                 QMessageBox.information(
                     None, self.json_general["msg_info"], self.json_widgets['pb_RuntimeTmpdir']['msg_info'])
                 return
@@ -1409,8 +1413,9 @@ class Pyinstaller_function(PyToExeUI):
                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
                 subprocess.run('rd /s /q .\\dist > nul', shell=True,
                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-                subprocess.run('rd /s /q .\\build > nul', shell=True,
-                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+                while os.path.exists('./build'):
+                    subprocess.run('rd /s /q .\\build > nul', shell=True,
+                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
                 self.append_TB_text(
                     f'__________ {self.json_general["deleted_file"]} __________\n', self.Win.textBrowser)
         except subprocess.CalledProcessError as e:

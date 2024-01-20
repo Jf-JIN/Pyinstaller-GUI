@@ -413,8 +413,14 @@ LANGUAGE_INIT_ENGLISH = {
     "rb_OutputMethod_D": {
       "tooltip": "Create a one-folder bundle containing an executable",
       "text": "Output as Folder",
-      "dict": "\nThe path for storing other data, apart from the .exe file:\t",
+      "dict": "\nOutput methode: \t",
       "dict_explain": "Create a one-folder bundle containing an executable"
+    },
+    "contents_directory": {
+      "dict": "\nThe path for storing other data, apart from the .exe file:\t",
+      "msg_content": "Is an output folder specified?<br>All content, except for the executable file itself, will be placed there.",
+      "dialog_title": "Please input the name of the folder",
+      "dialog_content": "Please enter the folder name to place other data besides the .exe file."
     },
     "rb_ConsoleWindowControl_C": {
       "tooltip": "Display Console",
@@ -425,16 +431,19 @@ LANGUAGE_INIT_ENGLISH = {
     "rb_ConsoleWindowControl_NW": {
       "tooltip": "Display Console",
       "text": "Console On",
+      "dict": "\nConsole display: \t",
       "dict_explain": "Display Console (nowindowed)"
     },
     "rb_ConsoleWindowControl_W": {
       "tooltip": "Hide Console",
       "text": "Console Off(standard)",
+      "dict": "\nConsole display: \t",
       "dict_explain": "Hide Console (windowed)"
     },
     "rb_ConsoleWindowControl_NC": {
       "tooltip": "Hide Console",
       "text": "Console Off",
+      "dict": "\nConsole display: \t",
       "dict_explain": "Hide Console (console)"
     },
     "lb_Title": { "text": "Python To exe" },
@@ -464,11 +473,6 @@ LANGUAGE_INIT_ENGLISH = {
     "type_select_dialog": {
       "msg_title": "Choose the data type to add",
       "msg_content": "Add file or folder? "
-    },
-    "contents_directory": {
-      "msg_content": "Is an output folder specified?<br>All content, except for the executable file itself, will be placed there.",
-      "dialog_title": "Please input the name of the folder",
-      "dialog_content": "Please enter the folder name to place other data besides the .exe file."
     },
     "launch_cmd": {
       "msg_content_no_file": "Specified Python script not found. Please select a .py file again.",
