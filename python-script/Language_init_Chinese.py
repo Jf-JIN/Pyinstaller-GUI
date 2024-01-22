@@ -4,7 +4,10 @@ LANGUAGE_INIT_CHINESE = {
       "tooltip": "该选项可直接打开环境变量，\n用于确定进行打包操作的python解释器版本",
       "text": "环境变量"
     },
-    "pb_PipUpdate": { "tooltip": "更新pip", "text": "更新pip" },
+    "pb_CondaSetting": {
+      "tooltip": "可通过该控件设置打包使用Conda环境\n，注意：如果未安装Conda或未将Conda添加进环境变量，\n则无法使用该按钮，请检查Conda的安装",
+      "text": "Conda设置"
+    },
     "pb_FilePath": {
       "tooltip": "浏览Python脚本路径，默认为当前目录下的main.py文件路径",
       "text": "浏览"
@@ -51,7 +54,8 @@ LANGUAGE_INIT_CHINESE = {
     "pb_Launch": { "tooltip": "开始进行打包操作", "text": "开始执行转换" },
     "pb_SetupPyinstaller": {
       "tooltip": "安装Pyinstaller",
-      "text": "安装Pyinstaller"
+      "text": "安装Pyinstaller",
+      "text_browser_display":"已成功安装pyinstaller"
     },
     "pb_VersionDisplay": {
       "tooltip": "在控制台中显示Pyinstaller版本信息",
@@ -323,6 +327,10 @@ LANGUAGE_INIT_CHINESE = {
       "select_folder_text_browser": "添加spec文件的保存路径",
       "select_folder_win_title": "请选择spec文件的保存路径"
     },
+    "cb_CondaUse": {
+      "tooltip": "当已经设置了Conda设置后，该项会自动勾选，\n取消勾选即可使用系统中python解释器环境",
+      "text": "使用Conda环境"
+    },
     "cb_Tooltips": {
       "tooltip": "该选项勾选后，当鼠标悬停时，会出现工具提示",
       "text": "显示工具提示"
@@ -444,6 +452,7 @@ LANGUAGE_INIT_CHINESE = {
     "lb_FilePath": { "text": "文件路径:" },
     "lb_OutputPath": { "text": "输出路径:" },
     "lb_FileName": { "text": "输出文件名：" },
+    "lb_CondaTitle": { "text": "当前为："},
     "pte_FilePath": { "dict": "\nPython脚本：\t" },
     "pte_OutputPath": { "dict": "\n输出目录：\t" },
     "pte_FileName": { "dict": "\n输出名称：\t" }
@@ -471,9 +480,21 @@ LANGUAGE_INIT_CHINESE = {
     "launch_cmd": {
       "msg_content_no_file": "不存在指定Python脚本，请重新选择.py文件",
       "msg_content_no_folder": "不存在输出文件夹，请重新指定输出文件夹",
-      "msg_content_nolaunch":"不可进行转换\n\n当前已有文件正在被执行转换\n\n请稍后"
+      "msg_content_nolaunch":"不可进行转换\n\n当前已有文件正在被执行转换\n\n请稍后",
+      "text_browser_display":"已完成Python脚本的打包"
     },
-    "pip_upgrade": { "no_python": "未找到Python解释器" }
+    "pb_package_view":{
+        "text":"查看环境中已安装包列表",
+        "tooltip":"可查看当前选中的Conda环境中\n已经安装的python库的列表"
+        },
+    "lb_env_name": { 
+        "text_init": "请选择Conda环境",
+        "text":"Conda环境：\t"
+        },
+    "lb_env_path": { 
+        "text_init": "当前Conda环境的路径",
+        "text":"环境路径：\t"
+        }
   },
   "general": {
     "error": "错 误",

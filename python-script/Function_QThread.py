@@ -5,46 +5,41 @@ from PyQt5.QtCore import pyqtSignal, QThread
 from copy import deepcopy
 
 class Launch_py_QThread(QThread):
-    output_to_textbrowser_cmd = pyqtSignal(str)
-    output_to_textbrowser = pyqtSignal(str)
     finished_signal = pyqtSignal()
-
-    def __init__(self, parent, command):
+    
+    def __init__(self, parent, command_list):
         super().__init__()
-        self.command = deepcopy(command)
-        parent.launch_flag = False
-
+        self.command_list = deepcopy(command_list)
+        self.parent_class = parent
+    
     def read_output(self, content: str):
         while True:
             output_line = self.process.stdout.readline()
             if output_line == '' and self.process.poll() is not None:
                 break
             if output_line:
-                self.output_to_textbrowser_cmd.emit(output_line.strip())
-        self.output_to_textbrowser_cmd.emit(f'__________ {content} __________\n')
-        self.output_to_textbrowser.emit(f'__________ {content} __________\n')
+                self.parent_class.append_TB_text(output_line.strip(), self.parent_class.Win.textBrowser_cmd)
+        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser_cmd)
+        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser)
         self.finished_signal.emit()
-
+    
     def run(self):
-        self.full_command = f'{self.command[0]} && {self.command[1]} && echo Y | {self.command[2]}'
+        # self.full_command = f'{self.command[0]} && {self.command[1]} && echo Y | {self.command[2]}'
+        self.command_list[-1] = 'echo Y | ' + self.command_list[-1]
+        self.full_command = ' && '.join(self.command_list)
         try:
-            self.process = subprocess.Popen(
-                self.full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-            self.thread = threading.Thread(
-                target=self.read_output, args=('已完成Python脚本的打包',))
+            finish_text = self.parent_class.json_special['launch_cmd']['text_browser_display']
+            self.process = subprocess.Popen(self.full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            self.thread = threading.Thread(target=self.read_output, args=(finish_text,))
             self.thread.start()
         except subprocess.CalledProcessError as e:
-            self.output_to_textbrowser_cmd.emit(
-                f'__________ 错 误 __________\n{e}\n')
+            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
 
 
 class pyinstaller_setup_Qthread(QThread):
-    output_to_textbrowser_cmd = pyqtSignal(str)
-    output_to_textbrowser = pyqtSignal(str)
-    finished_signal = pyqtSignal()
-
-    def __init__(self):
+    def __init__(self, parent):
         super().__init__()
+        self.parent_class = parent
     
     def read_output(self, object:object, content:str):
         while True:
@@ -52,56 +47,57 @@ class pyinstaller_setup_Qthread(QThread):
             if output_line == '' and object.poll() is not None:
                 break
             if output_line:
-                self.output_to_textbrowser_cmd.emit(output_line.strip())
-        self.output_to_textbrowser_cmd.emit(f'__________ {content} __________\n')
-        self.output_to_textbrowser.emit(f'\n__________ {content} __________\n')
-        self.finished_signal.emit()
+                self.parent_class.append_TB_text(output_line.strip(), self.parent_class.Win.textBrowser_cmd)
+        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser_cmd)
+        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser)
     
     def run(self):
         self.py_install_command = 'pip install pyinstaller'
         self.full_command = f'echo Y | {self.py_install_command}'
         try:
             process = subprocess.Popen(self.full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-            thread = threading.Thread(target=self.read_output(process, '已成功安装pyinstaller'))
+            thread = threading.Thread(target=self.read_output(process, self.parent_class.json_widgets['pb_SetupPyinstaller']['text_browser_display']))
             thread.start()
         except subprocess.CalledProcessError as e:
-                self.output_to_textbrowser_cmd.emit(
-                    f'\n__________ 错 误 __________\n{e}\n')
+            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
 
-class Pip_Upgrade_Thread(QThread):
-    output_to_textbrowser_cmd = pyqtSignal(str)
-    output_to_textbrowser = pyqtSignal(str)
-
-    def __init__(self, python_path):
-        super().__init__()
-        self.python_path = python_path
-    
-    def read_output(self):
-        while True:
-            output_line = self.process.stdout.readline()
-            if output_line == '' and self.process.poll() is not None:
-                break
-            if output_line:
-                self.output_to_textbrowser_cmd.emit(output_line.strip())
-        self.output_to_textbrowser_cmd.emit(f"__________  已完成 pip 更新 __________\n")
-        self.output_to_textbrowser.emit(f"__________  已完成 pip 更新 __________\n")
-    
-    def run(self):
-        command = [self.python_path, '-m', 'pip', 'install', '--upgrade', 'pip']
-        command_str = ' '.join(command)
-        full_command = f'echo Y | {command_str}'
-        try:
-            self.process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-            self.thread = threading.Thread(target=self.read_output())
-            self.thread.start()
-        except subprocess.CalledProcessError as e:
-            self.output_to_textbrowser_cmd.emit(f"\n__________ pip 更新失败 __________\n{e}\n")
-            self.output_to_textbrowser.emit(f"\n__________  pip 更新失败  __________\n")
 
 class Environment_Variant_Thread(QThread):
-    finished = pyqtSignal()
     def __init__(self):
         super().__init__()
     
     def run(self):
         subprocess.run('rundll32 sysdm.cpl,EditEnvironmentVariables')
+
+
+class Conda_Get_Env_List_Thread(QThread):
+    signal_conda_env_list = pyqtSignal(list)
+    def __init__(self):
+        super().__init__()
+    
+    def run(self):
+        result = subprocess.run('conda env list', capture_output=True, text=True, check=True)
+        # 获取命令输出的标准输出部分
+        output = result.stdout.strip()
+        # print(output)
+        # 分割输出成行
+        lines = output.split('\n')
+        # 获取环境列表,[0]是环境名，[1]是环境地址
+        conda_env_list = [line.split() for line in lines if not line.startswith('#')]
+        self.signal_conda_env_list.emit(conda_env_list)
+    # def __del__(self):
+    #     print("Conda_Get_Env_List_Thread object is being destroyed.")
+
+
+class Conda_Get_Detail_Thread(QThread):
+    signal_conda_detail_list = pyqtSignal(str)
+    def __init__(self, conda_env):
+        super().__init__()
+        self.conda_env = conda_env
+    
+    def run(self):
+        result = subprocess.run(f'conda list --name="{self.conda_env}"', capture_output=True, text=True, check=True)
+        output = result.stdout
+        self.signal_conda_detail_list.emit(output)
+    # def __del__(self):
+    #     print("Conda_Get_Env_List_Thread object is being destroyed.")

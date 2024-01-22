@@ -1,10 +1,6 @@
-import sys
-
 from pyinstaller_function import *
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtGui import QIcon
-
 
 class Exe_main_window(QMainWindow, Pyinstaller_function):
     def __init__(self):

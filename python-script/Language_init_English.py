@@ -4,7 +4,10 @@ LANGUAGE_INIT_ENGLISH = {
       "tooltip": "This option directly opens the environment variables and \nis used to determine the Python interpreter version for the packaging operation",
       "text": "Environment Variables"
     },
-    "pb_PipUpdate": { "tooltip": "pip Update", "text": "pip Update" },
+    "pb_CondaSetting": {
+      "tooltip": "This control can be used to set up the use of the Conda environment for packaging.\nNote: If Conda is not installed or not added to the environment variable, this button cannot be used.\nPlease check the installation of Conda",
+      "text": "Conda settings"
+    },
     "pb_FilePath": {
       "tooltip": "Browse the Python script path, \nwhich defaults to the main.py file path in the current directory",
       "text": "Open"
@@ -57,7 +60,8 @@ LANGUAGE_INIT_ENGLISH = {
     },
     "pb_SetupPyinstaller": {
       "tooltip": "Install PyInstaller",
-      "text": "Install PyInstaller"
+      "text": "Install PyInstaller",
+      "text_browser_display":"已成功安装pyinstaller"
     },
     "pb_VersionDisplay": {
       "tooltip": "Display PyInstaller version information in the console",
@@ -329,6 +333,10 @@ LANGUAGE_INIT_ENGLISH = {
       "select_folder_text_browser": "Add the save path for the .spec file",
       "select_folder_win_title": "Please select the save path for the .spec file"
     },
+    "cb_CondaUse": {
+      "tooltip": "After Conda settings have been configured, this option will be automatically selected.\nDeselect to use the system's Python interpreter environment",
+      "text": "Using the Conda environment"
+    },
     "cb_Tooltips": {
       "tooltip": "After selecting this option, a tooltip will appear when hovering the mouse",
       "text": "Tooltips"
@@ -450,6 +458,7 @@ LANGUAGE_INIT_ENGLISH = {
     "lb_FilePath": { "text": "File path:" },
     "lb_OutputPath": { "text": "Output path:" },
     "lb_FileName": { "text": "Output file name: " },
+    "lb_CondaTitle": { "text": "Conda Current："},
     "pte_FilePath": { "dict": "\nPython script: \t" },
     "pte_OutputPath": { "dict": "\nOutput directory\t" },
     "pte_FileName": { "dict": "\nOutput file name: \t" }
@@ -477,9 +486,21 @@ LANGUAGE_INIT_ENGLISH = {
     "launch_cmd": {
       "msg_content_no_file": "Specified Python script not found. Please select a .py file again.",
       "msg_content_no_folder": "Output folder does not exist. Please specify a valid output folder.",
-      "msg_content_nolaunch":"Conversion not possible\n\nCurrently a file is already being converted.\n\nPlease wait a moment"
+      "msg_content_nolaunch":"Conversion not possible\n\nCurrently a file is already being converted.\n\nPlease wait a moment",
+      "text_browser_display":"Successfully packaged Python script"
     },
-    "pip_upgrade": { "no_python": "Python interpreter not found" }
+    "pb_package_view":{
+        "text":"view the installed packages",
+        "tooltip":"Viewing the list of Python libraries installed in the currently selected Conda environment."
+        },
+    "lb_env_name": { 
+        "text_init": "Please select the Conda environment",
+        "text":"Conda environment：\t"
+        },
+    "lb_env_path": { 
+        "text_init": "Path to the current Conda environment",
+        "text":"Environment path：\t"
+        }
   },
   "general": {
     "error": "Error",

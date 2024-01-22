@@ -1,10 +1,10 @@
-import os
-import subprocess
-import threading
+# import threading  在Function_QThread引入过
+
 import time
 
+
 from PyToExeUI import *
-from Function_QThread import *
+
 
 from PyQt5.QtWidgets import QMessageBox, QInputDialog
 
@@ -20,9 +20,8 @@ class Pyinstaller_function(PyToExeUI):
         self.Win.pb_SetupPyinstaller.clicked.connect(self.setup_pyinstaller)
         self.Win.pb_VersionDisplay.clicked.connect(self.version_display)
         self.Win.pb_HelpDisplay.clicked.connect(self.help_display)
-        self.Win.pb_Enviroment.clicked.connect(
-            self.open_environment_variant_setting)
-        self.Win.pb_PipUpdate.clicked.connect(self.pip_upgrade)
+        self.Win.pb_Enviroment.clicked.connect(self.open_environment_variant_setting)
+        self.Win.pb_CondaSetting.clicked.connect(self.conda_setting)
 
         self.Win.pb_AddBinaryData.clicked.connect(self.add_binary_data)
         self.Win.pb_AddFileFolderData.clicked.connect(
@@ -95,11 +94,7 @@ class Pyinstaller_function(PyToExeUI):
     # 安装pyinstaller项
 
     def setup_pyinstaller(self):
-        self.pyinstaller_Qthread = pyinstaller_setup_Qthread()
-        self.pyinstaller_Qthread.output_to_textbrowser_cmd.connect(
-            lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
-        self.pyinstaller_Qthread.output_to_textbrowser.connect(
-            lambda content: self.append_TB_text(content, self.Win.textBrowser))
+        self.pyinstaller_Qthread = pyinstaller_setup_Qthread(self)
         self.pyinstaller_Qthread.start()
 
     # 版本项
@@ -1370,12 +1365,8 @@ class Pyinstaller_function(PyToExeUI):
             return
         
         # 获取Pyinstaller命令
-        self.cmd[2] = self.get_command_from_dict()
-        self.Launch_QThread = Launch_py_QThread(self, self.cmd)
-        self.Launch_QThread.output_to_textbrowser_cmd.connect(
-            lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
-        self.Launch_QThread.output_to_textbrowser.connect(
-            lambda content: self.append_TB_text(content, self.Win.textBrowser))
+        command_list = self.command_summary()
+        self.Launch_QThread = Launch_py_QThread(self, command_list)
         self.Launch_QThread.finished_signal.connect(
             self.thread_finished_file_del)
         self.Launch_QThread.start()
@@ -1386,8 +1377,7 @@ class Pyinstaller_function(PyToExeUI):
             if output_line == '' and object.poll() is not None:
                 break
             if output_line:
-                self.append_TB_text(output_line.strip(),
-                                    self.Win.textBrowser_cmd)
+                self.append_TB_text(output_line.strip(),self.Win.textBrowser_cmd)
         self.append_TB_text(
             f'__________ {content_cmd} __________\n', self.Win.textBrowser_cmd)
         self.append_TB_text(
@@ -1425,32 +1415,18 @@ class Pyinstaller_function(PyToExeUI):
     # 打开环境变量
     def open_environment_variant_setting(self):
         open_envir_setting = Environment_Variant_Thread()
-        open_envir_setting.finished.connect(open_envir_setting.quit)
+        # open_envir_setting.finished.connect(open_envir_setting.quit)
         open_envir_setting.start()
         time.sleep(0.1)
         open_envir_setting.quit()
-
-    # pip更新
-    def pip_upgrade(self):
+    
+    def conda_setting(self):
         try:
-            python_path = ''
-            enviro_path_list = os.environ.get('PATH').split(os.pathsep)
-            for path_item in enviro_path_list:
-                if 'Python' in os.path.basename(os.path.dirname(path_item)):
-                    python_path = os.path.join(path_item, 'python.exe')
-                    break
-                else:
-                    python_path = None
-            if not python_path:
-                QMessageBox.information(
-                    None, self.json_general["msg_info"], self.json_special['pip_upgrade']['no_python'])
-                return
-            self.launch_thread = Pip_Upgrade_Thread(python_path)
-            self.launch_thread.output_to_textbrowser_cmd.connect(
-                lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
-            self.launch_thread.output_to_textbrowser.connect(
-                lambda content: self.append_TB_text(content, self.Win.textBrowser))
-            self.launch_thread.start()
+            conda_env = self.conda_widget_ui()
+            if conda_env:
+                self.Win.lb_CondaInfo.setText(conda_env)
+                self.Win.cb_CondaUse.setEnabled(True)
+                self.Win.cb_CondaUse.setChecked(True)
         except Exception as e:
             # traceback.print_exc()
             self.append_TB_text(

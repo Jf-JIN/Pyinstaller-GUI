@@ -1,36 +1,33 @@
 import os
 import sys
 import json
-from copy import deepcopy
 import traceback
+import shutil
 
-from PyToExe_ui import *
+from Function_QThread import *
 from Language_init_Chinese import *
 from Language_init_English import *
 
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QWidget, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QWidget, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton, QListWidgetItem, QTextBrowser
 from PyQt5.QtGui import QTextCursor, QDesktopServices, QIcon, QPixmap
 from PyQt5.QtCore import Qt, QUrl, QByteArray
 
 
-# workspace_path = os.path.dirname(__file__)
 workspace_path = os.getcwd()
 exe_folder_path = os.path.dirname(sys.argv[0])
 icon_data = '''<svg version="1.1" id="svg1" width="400" height="400" viewBox="0 0 400 400" sodipodi:docname="PyToExe.svg" inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)" inkscape:export-filename="PyToExe.png" inkscape:export-xdpi="96" inkscape:export-ydpi="96" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"> <defs id="defs1"> <linearGradient id="swatch6" inkscape:swatch="solid"> <stop style="stop-color:#000000;stop-opacity:1;" offset="0" id="stop6" /> </linearGradient><linearGradient id="swatch35" inkscape:swatch="solid"> <stop style="stop-color:#f54d00;stop-opacity:1;" offset="0" id="stop35" /> </linearGradient> <linearGradient inkscape:collect="always" xlink:href="#swatch35" id="linearGradient35" x1="263.0344" y1="195.86606" x2="400.23287" y2="195.86606" gradientUnits="userSpaceOnUse" /> </defs> <sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="1.5832414" inkscape:cx="154.11421" inkscape:cy="222.01289" inkscape:window-width="1920" inkscape:window-height="1009" inkscape:window-x="2552" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="g1" /> <g inkscape:groupmode="layer" inkscape:label="Image" id="g1"> <path id="path1" style="fill:#ef9e01;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:2;stroke-dasharray:none" d="M 190.73633,27.681641 A 172.93973,172.93973 0 0 0 121.74609,37.525391 172.93973,172.93973 0 0 0 18.384766,259.18359 172.93973,172.93973 0 0 0 240.04492,362.54492 172.93973,172.93973 0 0 0 351.23047,172.44141 l -38.29688,13.9375 A 129.19458,133.82138 70 0 1 224.75391,322.14844 129.19458,133.82138 70 0 1 54.816406,246.51562 129.19458,133.82138 70 0 1 136.37891,79.34375 129.19458,133.82138 70 0 1 281.98633,115.30078 l 0.002,0.002 c 0.0203,0.0114 0.0405,0.0243 0.0606,0.0352 0.0403,0.0238 0.0798,0.046 0.11719,0.0742 0.007,0.005 0.009,0.0125 0.0156,0.0176 0.005,0.002 0.0105,0.004 0.0156,0.006 0.0358,0.009 0.0663,0.0309 0.0976,0.0488 0.004,0.003 0.009,0.005 0.0117,0.006 0.002,0.002 0.008,0.004 0.0176,0.0117 0.006,0.004 0.009,0.0113 0.0137,0.0156 l 0.002,0.002 c 0.002,0.002 0.005,8.5e-4 0.008,0.002 0.0241,0.008 0.0442,0.024 0.0644,0.0391 h 0.002 c 0.0101,10e-4 0.0202,0.003 0.0312,0.006 0.0324,0.0107 0.0592,0.0325 0.0859,0.0527 0.009,0.007 0.0185,0.0141 0.0254,0.0215 0.0153,0.005 0.0291,0.0103 0.0449,0.0137 0.0248,0.008 0.0512,0.0139 0.0762,0.0215 0.0267,0.009 0.0513,0.0202 0.0781,0.0293 0.0301,0.0117 0.0593,0.0269 0.084,0.0469 a 129.19458,133.82138 70 0 0 -0.0293,-0.0332 20.874001,20.874001 0 0 0 18.125,1.92187 20.874001,20.874001 0 0 0 12.47851,-26.755854 20.874001,20.874001 0 0 0 -0.76953,-1.753907 172.93973,172.93973 0 0 0 -121.9082,-61.449218 z" /> <path id="rect23-1" style="fill:#2525ff;fill-opacity:1;stroke-width:2;stroke:url(#linearGradient35);stroke-opacity:1;stroke-dasharray:none" d="m 268.06954,198.3686 0.0123,-0.009 -3.98989,22.17486 0.12876,0.18526 20.18849,3.63248 47.31514,-32.88487 c 3.34059,-2.32178 7.89731,-1.49973 10.21918,1.8404 l 32.8852,47.31337 20.19025,3.6328 0.14362,-0.0998 4.01273,-22.30189 -49.54068,-71.27972 c -2.32181,-3.34063 -6.88069,-4.16091 -10.22126,-1.8391 l -71.33385,49.57833 z" /> <text xml:space="preserve" style="font-size:202.244px;line-height:0px;letter-spacing:0px;fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:5.41662;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" x="-6.7089086" y="363.74023" id="text29-2"><tspan id="tspan29-2" x="-6.7089086" y="363.74023" sodipodi:role="line" style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:202.244px;line-height:0px;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:5.41662;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers">EXE</tspan></text> <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:231.553px;line-height:0px;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:3.4733px;fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:5.78883;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" x="32.131664" y="185.16193" id="text6"><tspan sodipodi:role="line" id="tspan6" x="32.131664" y="185.16193" style="font-size:231.553px;letter-spacing:3.4733px;stroke-width:5.78883">PY</tspan></text> </g> </svg>'''
 # default_icon_path = os.path.join(exe_folder_path, 'PyToExe.ico') 
 # default_icon_path = os.path.join(exe_folder_path, 'resource', 'PyToExe.ico')
 
-
-
-
+py_file_auto_path_main = ''
+py_file_auto_path = ''
 for i in os.listdir(workspace_path):
     if i == 'main.py':
+        py_file_auto_path_main = i
+    elif not py_file_auto_path and '.py' in i and not 'ui' in i:
         py_file_auto_path = i
-        break
-    elif '.py' in i and not 'ui' in i:
-        py_file_auto_path = i
-    else:
-        py_file_auto_path = None
+if py_file_auto_path_main:
+    py_file_auto_path = py_file_auto_path_main
 
 
 class PyToExeUI(Ui_MainWindow):
@@ -42,7 +39,7 @@ class PyToExeUI(Ui_MainWindow):
         self.parameter_init()
         self.ui_init()
         self.py_to_exe_ui_signal_connection()
-
+    
     # ****************************************初始化****************************************
     # UI界面的初始化
     def ui_init(self):
@@ -55,6 +52,15 @@ class PyToExeUI(Ui_MainWindow):
         self.Win.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.Win.pte_OutputPath.setPlainText(os.path.join(workspace_path))
         self.Win.cbb_LanguageSelect.setFocusPolicy(Qt.NoFocus)
+        self.Win.frame_CondaDisplay.hide()
+        self.Win.cb_CondaUse.setEnabled(False)
+        # 检查系统是否安装Conda，如果安装了，将Conda按钮置为可用
+        if shutil.which("conda"):
+            self.Win.pb_CondaSetting.setEnabled(True)
+            self.Win.frame_CondaDisplay.show()
+        else:
+            self.Win.pb_CondaSetting.setEnabled(False)
+        # 填写输入文件及输出文件夹的LineEdit栏
         self.cmd_dict['output_folder_path'][0] = '--distpath="' + os.path.join(workspace_path) + '"'
         if py_file_auto_path:
             self.Win.pte_FilePath.setPlainText(
@@ -64,7 +70,7 @@ class PyToExeUI(Ui_MainWindow):
             self.cmd_dict['output_file_name'][0] = '--name="' + py_file_auto_path.split('.')[0] + '"'
             self.launch_flag = True
         self.plain_text_update()
-
+    
     # 参数初始化
     def parameter_init(self):
         pixmap_icon = QPixmap()
@@ -114,7 +120,9 @@ class PyToExeUI(Ui_MainWindow):
         self.recover_cb = []
         self.recover_rb = []
         self.recover_lock = []
-
+        # 用于存储Conda环境
+        self.conda_env_list = []
+    
     # 信号连接初始化
     def py_to_exe_ui_signal_connection(self):
         self.Win.pte_FilePath.textChanged.connect(self.file_path_changed)
@@ -133,8 +141,8 @@ class PyToExeUI(Ui_MainWindow):
         self.Win.pb_Print.clicked.connect(self.print_cmd)
         self.Win.cbb_LanguageSelect.currentTextChanged.connect(self.language_update)
         self.Win.cb_Tooltips.stateChanged.connect(self.language_update)
-
-# 界面文字初始化及更改
+    
+    # 界面文字初始化及更改
     def load_language_json_file(self):
         try:
             if self.Win.cbb_LanguageSelect.currentText() == '简体中文(内置)':
@@ -190,7 +198,7 @@ class PyToExeUI(Ui_MainWindow):
     def language_update(self):
         self.load_language_json_file()
         self.set_text_init()
-
+    
     # ****************************************PLE有输入变化时，数据更新****************************************
     def file_path_changed(self):
         
@@ -213,16 +221,7 @@ class PyToExeUI(Ui_MainWindow):
         if self.Win.pte_FileName.toPlainText():
             self.cmd_dict['output_file_name'][0] = '--name="' + self.Win.pte_FileName.toPlainText() + '"'
             self.cmd_dict['output_file_name'][2] = self.Win.pte_FileName.toPlainText()
-
-    # ****************************************从字典中获取实际command执行命令函数****************************************
-    def get_command_from_dict(self):
-        temp_command = []
-        for value in self.cmd_dict.values():
-            temp_command.append(value[0])
-        temp_command.insert(0, 'pyinstaller')
-        temp_command_final = ' '.join(filter(None, temp_command))
-        return(temp_command_final)
-
+    
     # ****************************************清空函数****************************************
     # 清空控制台显示
     def clear_console_display(self):
@@ -304,6 +303,25 @@ class PyToExeUI(Ui_MainWindow):
             # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
+    # ****************************************从字典中获取实际command执行命令函数****************************************
+    def get_command_from_dict(self):
+        temp_command = []
+        for value in self.cmd_dict.values():
+            temp_command.append(value[0])
+        temp_command.insert(0, 'pyinstaller')
+        temp_command_final = ' '.join(filter(None, temp_command))
+        return(temp_command_final)
+    
+    def command_summary(self) -> list:
+        self.cmd[2] = self.get_command_from_dict()
+        command = [None] * 3
+        command[0] = deepcopy(self.cmd[0])
+        command[1] = deepcopy(self.cmd[1])
+        command[2] = deepcopy(self.cmd[2])
+        if self.Win.cb_CondaUse.isChecked():
+            command.insert(0, f'conda activate {self.Win.lb_CondaInfo.text()}')
+        return command
+    
     # ****************************************显示参数****************************************
     def parameter_display(self):
         try:
@@ -320,18 +338,16 @@ class PyToExeUI(Ui_MainWindow):
             self.append_TB_text(f'__________  {self.json_general["all_parameter"]}  __________\n\n')
         except Exception as e:
             # traceback.print_exc()
-            QMessageBox.warning(None, '警告Warning', str(e))
+            QMessageBox.warning(None, self.json_general['msg_warning'], str(e))
             # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************打印参数到txt****************************************
     def print_cmd(self):
         print_command_path = os.path.join(workspace_path, 'output_command_of_pyinstaller.txt')
-        self.cmd[2] = self.get_command_from_dict()
+        command_list = self.command_summary()
         try:
             with open(print_command_path, 'w', encoding='utf-8') as file:
-                file.write(self.cmd[0] + '\n')
-                file.write(self.cmd[1] + '\n')
-                file.write(self.cmd[2] + '\n')
+                file.write('\n'.join(command_list))
             QMessageBox.information(None, self.json_general["msg_info"], f'{self.json_special["print_cmd"]}<br>{print_command_path}')
             QDesktopServices.openUrl(
                             QUrl.fromLocalFile(workspace_path))
@@ -466,6 +482,7 @@ class PyToExeUI(Ui_MainWindow):
             file_type = f'{self.json_general["type_all_files"]}(*.*)'
         if not text_discription:
             text_discription = self.json_general['input_specified_data']
+        
         dialog = QDialog()
         dialog.setWindowTitle(window_title)
         dialog.resize(600,500)
@@ -511,7 +528,7 @@ class PyToExeUI(Ui_MainWindow):
         finish_cancel_layout.setSpacing(10)
         finish_cancel_layout.addWidget(pb_finish)
         finish_cancel_layout.addWidget(pb_cancel)
-
+        
         main_layout = QVBoxLayout(dialog)
         main_layout.addWidget(list_widget)
         main_layout.addWidget(frame_add_remove)
@@ -579,4 +596,118 @@ class PyToExeUI(Ui_MainWindow):
         
         if result == QDialog.Accepted:
             selected_items = [list_widget.item(i).text() for i in range(list_widget.count())]
+            return selected_items
+    
+    # ****************************************Conda环境选择显示窗口****************************************
+    def conda_widget_ui(self):
+        
+        # 新建对话窗口及控件
+        conda_dialog = QDialog()
+        conda_dialog.setWindowTitle('window_title')
+        conda_dialog.resize(600,500)
+        conda_dialog.setWindowIcon(self.WINDOW_ICON)
+        conda_dialog.setStyleSheet(
+            "QDialog{min-width:600px; min-height:500px;}"
+            "QLabel{margin:0; padding:0; max-height:30px;}"
+            "QFrame[objectName = 'frame_pb_view']{margin:0; padding:0; max-height:35px;}"
+            "QFrame[objectName = 'frame_pb_finish']{margin:0; padding:0; max-height:50px;}"
+            "QPushButton{min-height: 30px; max-height: 30px;}"
+        )
+        lb_env_name = QLabel()
+        lb_env_path = QLabel()
+        list_widget = QListWidget()
+        pb_package_view = QPushButton(self.json_special['pb_package_view']['text'])
+        pb_package_view.setToolTip(self.json_special['pb_package_view']['tooltip'])
+        pb_package_view.setEnabled(False)
+        pb_finish = QPushButton(self.json_general['pb_certain'])
+        pb_finish.setEnabled(False)
+        pb_cancel = QPushButton(self.json_general['pb_cancel'])
+        frame_pb_view = QFrame()
+        frame_pb_view.setObjectName('frame_pb_view')
+        frame_pb_finish = QFrame()
+        frame_pb_finish.setObjectName('frame_pb_finish')
+        spacer_item = QSpacerItem(20, 40, QSizePolicy.Expanding, QSizePolicy.Expanding)
+        
+        def get_env_list(data_list):
+            add_flag = True
+            while add_flag:
+                if data_list:
+                    self.conda_env_list = data_list
+                    for i in data_list:
+                        item = QListWidgetItem(i[0])
+                        list_widget.addItem(item)
+                        item.setToolTip(i[1])
+                    add_flag = False
+            goal_items = list_widget.findItems(self.Win.lb_CondaInfo.text(), Qt.MatchExactly)
+            if goal_items:
+                list_widget.setCurrentItem(goal_items[0])
+        Conda_Get_Env_List = Conda_Get_Env_List_Thread()
+        Conda_Get_Env_List.signal_conda_env_list.connect(get_env_list)
+        Conda_Get_Env_List.start()
+        
+        lb_env_name.setText(self.json_special['lb_env_name']['text_init'])
+        lb_env_path.setText(self.json_special['lb_env_path']['text_init'])
+        
+        layout_pb_view = QHBoxLayout(frame_pb_view)
+        layout_pb_view.setContentsMargins(0, 0, 0, 0)
+        layout_pb_view.setSpacing(10)
+        layout_pb_view.addItem(spacer_item)
+        layout_pb_view.addWidget(pb_package_view)
+        
+        layout_pb_finish = QHBoxLayout(frame_pb_finish)
+        layout_pb_finish.setContentsMargins(0, 0, 0, 0)
+        layout_pb_finish.setSpacing(10)
+        layout_pb_finish.addWidget(pb_finish)
+        layout_pb_finish.addWidget(pb_cancel)
+        
+        layout_dialog = QVBoxLayout(conda_dialog)
+        layout_dialog.addWidget(lb_env_name)
+        layout_dialog.addWidget(lb_env_path)
+        layout_dialog.addWidget(list_widget)
+        layout_dialog.addWidget(frame_pb_view)
+        layout_dialog.addWidget(frame_pb_finish)
+        
+        def pb_state_update():
+            current_row = list_widget.currentRow()
+            if current_row != -1:
+                pb_finish.setEnabled(True)
+                pb_package_view.setEnabled(True)
+                lb_env_name.setText(self.json_special['lb_env_path']['text'] + self.conda_env_list[current_row][0])
+                lb_env_path.setText(self.json_special['lb_env_path']['text'] + self.conda_env_list[current_row][1])
+        
+        def show_detail(current_item_text:str):
+            packages_dialog = QDialog()
+            packages_dialog.resize(500,300)
+            packages_dialog.setMinimumWidth(500)
+            text_browser_conda_packages = QTextBrowser()
+            text_browser_conda_packages.setStyleSheet(
+                "background-color: transparent;"
+            )
+            layout_packages_dialog = QHBoxLayout(packages_dialog)
+            layout_packages_dialog.addWidget(text_browser_conda_packages)
+            text_browser_conda_packages.setFocusPolicy(Qt.NoFocus)
+            
+            Conda_Get_Detail = Conda_Get_Detail_Thread(current_item_text)
+            Conda_Get_Detail.signal_conda_detail_list.connect(lambda x: display_detail(x, text_browser_conda_packages))
+            Conda_Get_Detail.start()
+            packages_dialog.exec_()
+        
+        # 处理线程信号，显示输出结果
+        def display_detail(detail_text:str, text_browser_obj:object):
+            add_flag = True
+            while add_flag:
+                if detail_text:
+                    self.append_TB_text(detail_text, text_browser_obj)
+                    add_flag = False
+        # 信号连接
+        list_widget.itemSelectionChanged.connect(pb_state_update)
+        list_widget.doubleClicked.connect(conda_dialog.accept)
+        pb_package_view.clicked.connect(lambda: show_detail(list_widget.currentItem().text()))
+        pb_finish.clicked.connect(conda_dialog.accept)
+        pb_cancel.clicked.connect(conda_dialog.reject)
+        
+        result = conda_dialog.exec_()
+        
+        if result == QDialog.Accepted:
+            selected_items = list_widget.currentItem().text()
             return selected_items
