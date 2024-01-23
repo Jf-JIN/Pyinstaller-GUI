@@ -2,11 +2,7 @@
 
 import time
 
-
 from PyToExeUI import *
-
-
-from PyQt5.QtWidgets import QMessageBox, QInputDialog
 
 
 class Pyinstaller_function(PyToExeUI):
@@ -99,16 +95,24 @@ class Pyinstaller_function(PyToExeUI):
 
     # 版本项
     def version_display(self):
+        version_command = 'pyinstaller -v'
+        if self.Win.cb_CondaUse.isEnabled() and self.Win.cb_CondaUse.isChecked():
+            conda_env = self.Win.lb_CondaInfo.text()
+            version_command = f'conda activate {conda_env} && pyinstaller -v'
         process = subprocess.Popen(
-            'pyinstaller -v', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            version_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         display_threading = threading.Thread(target=self.read_output, args=(
             process, self.json_widgets['pb_VersionDisplay']['text_browser_display'], self.json_widgets['pb_VersionDisplay']['text_browser_cmd_display'],))
         display_threading.start()
 
     # 帮助项
     def help_display(self):
+        help_command = 'pyinstaller -h'
+        if self.Win.cb_CondaUse.isEnabled() and self.Win.cb_CondaUse.isChecked():
+            conda_env = self.Win.lb_CondaInfo.text()
+            help_command = f'conda activate {conda_env} && pyinstaller -h'
         process = subprocess.Popen(
-            'pyinstaller -h', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            help_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         display_threading = threading.Thread(target=self.read_output, args=(
             process, self.json_widgets['pb_HelpDisplay']['text_browser_display'], self.json_widgets['pb_HelpDisplay']['text_browser_cmd_display'],))
         display_threading.start()
@@ -409,10 +413,10 @@ class Pyinstaller_function(PyToExeUI):
                     command = '--collect-binaries="' + i + '"'
                     command_list.append(command)
                 self.cmd_dict['collect_binaries'][0] = ' '.join(command_list)
-                self.cmd_dict['collect_binaries'][2] = self.cmd_dict['collecollect_binaries'][0]
+                self.cmd_dict['collect_binaries'][2] = self.cmd_dict['collect_binaries'][0]
             else:
                 self.cmd_dict['collect_binaries'][0] = None
-                self.cmd_dict['collect_binaries'][2] = self.cmd_dict['collecollect_binaries'][0]
+                self.cmd_dict['collect_binaries'][2] = self.cmd_dict['collect_binaries'][0]
         except Exception as e:
             # traceback.print_exc()
             self.append_TB_text(
@@ -723,7 +727,7 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 current_data = None
             action_reply = self.set_custom_message_box(self.json_widgets['pb_PythonOption']['text_browser_display'], f'{self.json_widgets["pb_PythonOption"]["current_level"]}<br>{current_data}<br><br>{self.json_widgets["pb_PythonOption"]["dialog_title"]}<br>{self.json_widgets["pb_PythonOption"]["dialog_content"]}<br><br>',
-                                                       [f'{self.json_widgetsp["pb_PythonOption"]["parameter"]} v', f'{self.json_widgetsp["pb_PythonOption"]["parameter"]} u', f'{self.json_widgetsp["pb_PythonOption"]["parameter"]} w'], True)
+                                                       [f'{self.json_widgets["pb_PythonOption"]["parameter"]} v', f'{self.json_widgets["pb_PythonOption"]["parameter"]} u', f'{self.json_widgets["pb_PythonOption"]["parameter"]} w'], True)
             if action_reply == 0:
                 self.cmd_dict['python_option'][0] = None
                 self.cmd_dict['python_option'][2] = None

@@ -4,11 +4,12 @@ import json
 import traceback
 import shutil
 
+from PyToExe_ui import *
 from Function_QThread import *
 from Language_init_Chinese import *
 from Language_init_English import *
 
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QWidget, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton, QListWidgetItem, QTextBrowser
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton, QListWidgetItem, QTextBrowser
 from PyQt5.QtGui import QTextCursor, QDesktopServices, QIcon, QPixmap
 from PyQt5.QtCore import Qt, QUrl, QByteArray
 

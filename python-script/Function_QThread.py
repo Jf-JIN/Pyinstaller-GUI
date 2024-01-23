@@ -1,6 +1,5 @@
 import subprocess
 import threading
-from PyToExe_ui import *
 from PyQt5.QtCore import pyqtSignal, QThread
 from copy import deepcopy
 
@@ -52,10 +51,12 @@ class pyinstaller_setup_Qthread(QThread):
         self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser)
     
     def run(self):
-        self.py_install_command = 'pip install pyinstaller'
-        self.full_command = f'echo Y | {self.py_install_command}'
+        self.py_install_command = 'echo Y | pip install pyinstaller'
+        if self.parent_class.Win.cb_CondaUse.isEnabled() and self.parent_class.Win.cb_CondaUse.isChecked():
+            conda_env = self.parent_class.Win.lb_CondaInfo.text()
+            self.py_install_command = f'conda activate {conda_env} && echo Y | conda install pyinstaller'
         try:
-            process = subprocess.Popen(self.full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            process = subprocess.Popen(self.py_install_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
             thread = threading.Thread(target=self.read_output(process, self.parent_class.json_widgets['pb_SetupPyinstaller']['text_browser_display']))
             thread.start()
         except subprocess.CalledProcessError as e:
