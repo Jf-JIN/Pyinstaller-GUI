@@ -72,32 +72,39 @@ class Environment_Variant_Thread(QThread):
 
 class Conda_Get_Env_List_Thread(QThread):
     signal_conda_env_list = pyqtSignal(list)
-    def __init__(self):
+    def __init__(self, parent):
         super().__init__()
+        self.parent_class = parent
     
     def run(self):
-        result = subprocess.run('conda env list', capture_output=True, text=True, check=True)
-        # 获取命令输出的标准输出部分
-        output = result.stdout.strip()
-        # print(output)
-        # 分割输出成行
-        lines = output.split('\n')
-        # 获取环境列表,[0]是环境名，[1]是环境地址
-        conda_env_list = [line.split() for line in lines if not line.startswith('#')]
-        self.signal_conda_env_list.emit(conda_env_list)
+        try:
+            result = subprocess.Popen('conda env list', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            output = result.stdout.read().strip()
+            # print(output)
+            # 分割输出成行
+            lines = output.split('\n')
+            # 获取环境列表,[0]是环境名，[1]是环境地址
+            conda_env_list = [line.split() for line in lines if not line.startswith('#')]
+            self.signal_conda_env_list.emit(conda_env_list)
+        except subprocess.CalledProcessError as e:
+            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
     # def __del__(self):
     #     print("Conda_Get_Env_List_Thread object is being destroyed.")
 
 
 class Conda_Get_Detail_Thread(QThread):
     signal_conda_detail_list = pyqtSignal(str)
-    def __init__(self, conda_env):
+    def __init__(self, parent, conda_env):
         super().__init__()
         self.conda_env = conda_env
+        self.parent_class = parent
     
     def run(self):
-        result = subprocess.run(f'conda list --name="{self.conda_env}"', capture_output=True, text=True, check=True)
-        output = result.stdout
-        self.signal_conda_detail_list.emit(output)
+        try:
+            result = subprocess.Popen(f'conda list --name="{self.conda_env}"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            output = result.stdout.read().strip()
+            self.signal_conda_detail_list.emit(output)
+        except subprocess.CalledProcessError as e:
+            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
     # def __del__(self):
     #     print("Conda_Get_Env_List_Thread object is being destroyed.")

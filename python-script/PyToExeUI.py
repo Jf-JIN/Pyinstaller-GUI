@@ -603,7 +603,7 @@ class PyToExeUI(Ui_MainWindow):
         
         # 新建对话窗口及控件
         conda_dialog = QDialog()
-        conda_dialog.setWindowTitle('window_title')
+        conda_dialog.setWindowTitle('Conda')
         conda_dialog.resize(600,500)
         conda_dialog.setWindowIcon(self.WINDOW_ICON)
         conda_dialog.setStyleSheet(
@@ -641,7 +641,7 @@ class PyToExeUI(Ui_MainWindow):
             goal_items = list_widget.findItems(self.Win.lb_CondaInfo.text(), Qt.MatchExactly)
             if goal_items:
                 list_widget.setCurrentItem(goal_items[0])
-        Conda_Get_Env_List = Conda_Get_Env_List_Thread()
+        Conda_Get_Env_List = Conda_Get_Env_List_Thread(self)
         Conda_Get_Env_List.signal_conda_env_list.connect(get_env_list)
         Conda_Get_Env_List.start()
         
@@ -679,6 +679,8 @@ class PyToExeUI(Ui_MainWindow):
             packages_dialog = QDialog()
             packages_dialog.resize(500,300)
             packages_dialog.setMinimumWidth(500)
+            packages_dialog.setWindowTitle('Packages')
+            packages_dialog.setWindowIcon(self.WINDOW_ICON)
             text_browser_conda_packages = QTextBrowser()
             text_browser_conda_packages.setStyleSheet(
                 "background-color: transparent;"
@@ -687,7 +689,7 @@ class PyToExeUI(Ui_MainWindow):
             layout_packages_dialog.addWidget(text_browser_conda_packages)
             text_browser_conda_packages.setFocusPolicy(Qt.NoFocus)
             
-            Conda_Get_Detail = Conda_Get_Detail_Thread(current_item_text)
+            Conda_Get_Detail = Conda_Get_Detail_Thread(self, current_item_text)
             Conda_Get_Detail.signal_conda_detail_list.connect(lambda x: display_detail(x, text_browser_conda_packages))
             Conda_Get_Detail.start()
             packages_dialog.exec_()

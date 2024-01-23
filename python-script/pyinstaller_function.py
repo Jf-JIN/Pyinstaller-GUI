@@ -1329,13 +1329,18 @@ class Pyinstaller_function(PyToExeUI):
 
     def launch_cmd(self):
         self.plain_text_update()
+        # 固定参数，避免运行时，为下次打包动作输入参数而改变
+        file_path = self.Win.pte_FilePath.toPlainText()
+        output_path = self.Win.pte_OutputPath.toPlainText()
+        # 获取Pyinstaller命令
+        command_list = self.command_summary()
         # 判断文件是否为空，为空，则直接返回
-        if not os.path.exists(self.Win.pte_FilePath.toPlainText()):
+        if not os.path.exists(file_path):
             QMessageBox.information(
                 None, self.json_general["msg_info"], self.json_special['launch_cmd']['msg_content_no_file'])
             return
         # 判断输出路径是否为空，为空，则直接返回
-        if not os.path.exists(self.Win.pte_OutputPath.toPlainText()):
+        if not os.path.exists(output_path):
             QMessageBox.information(
                 None, self.json_general["msg_info"], self.json_special['launch_cmd']['msg_content_no_folder'])
             return
@@ -1343,14 +1348,14 @@ class Pyinstaller_function(PyToExeUI):
         if self.cmd_dict['add_splash_screen'][0] and self.Win.cb_SplashAutoFile.isChecked() and not os.path.exists(os.path.join(workspace_path, 'SplashModule.py')):
             # 在主文件中添加import SplashModule
             # 读取原主文件内容
-            with open(self.Win.pte_FilePath.toPlainText(), 'r', encoding='utf-8') as file:
+            with open(file_path, 'r', encoding='utf-8') as file:
                 original = file.readlines()
                 # 判断是否已写过import SplashModule
                 if 'import SplashModule\n' not in original:
                     # 添加import SplashModule
                     original.insert(0,'import SplashModule\n')
             # 在主文件中插入'import SplashModule\n'
-            with open(self.Win.pte_FilePath.toPlainText(), 'w', encoding='utf-8') as file:
+            with open(file_path, 'w', encoding='utf-8') as file:
                 for i in original:
                     file.write(i)
             # SplahModule的文件位置
@@ -1364,11 +1369,8 @@ class Pyinstaller_function(PyToExeUI):
                 None, self.json_general["msg_info"], self.json_special['launch_cmd']['msg_content_nolaunch'])
             return
         
-        # 获取Pyinstaller命令
-        command_list = self.command_summary()
         self.Launch_QThread = Launch_py_QThread(self, command_list)
-        self.Launch_QThread.finished_signal.connect(
-            self.thread_finished_file_del)
+        self.Launch_QThread.finished_signal.connect(self.thread_finished_file_del)
         self.Launch_QThread.start()
 
     def read_output(self, object: object, content: str = None, content_cmd: str = None):

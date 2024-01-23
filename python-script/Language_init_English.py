@@ -471,7 +471,7 @@ LANGUAGE_INIT_ENGLISH = {
       "no_folder": "The specified output folder does not exist. Please make a new selection."
     },
     "select_py_file": {
-      "text_browser_display": "Python script path:\t",
+      "text_browser_display": "Python script path:",
       "dialog_title": "Please select Python script",
       "type_discription": "Python script (*.py)"
     },

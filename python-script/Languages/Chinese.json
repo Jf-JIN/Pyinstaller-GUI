@@ -1,4 +1,4 @@
-LANGUAGE_INIT_CHINESE = {
+{
   "widgets": {
     "pb_Enviroment": {
       "tooltip": "该选项可直接打开环境变量，\n用于确定进行打包操作的python解释器版本",
@@ -55,7 +55,7 @@ LANGUAGE_INIT_CHINESE = {
     "pb_SetupPyinstaller": {
       "tooltip": "安装Pyinstaller",
       "text": "安装Pyinstaller",
-      "text_browser_display":"已成功安装pyinstaller"
+      "text_browser_display": "已成功安装pyinstaller"
     },
     "pb_VersionDisplay": {
       "tooltip": "在控制台中显示Pyinstaller版本信息",
@@ -402,9 +402,9 @@ LANGUAGE_INIT_CHINESE = {
       "dict": "\n对可执行文件和共享库应用符号表剥离：\t",
       "dict_explain": "剥离共享应用符号表"
     },
-    "cb_SplashAutoFile":{
-        "tooltip":"勾选后将自动生成SplashModule.py文件，\n并在在主函数中加入导入，避免启动画面在启动后不自动关闭",
-        "text": "自动配置启动画面配置"
+    "cb_SplashAutoFile": {
+      "tooltip": "勾选后将自动生成SplashModule.py文件，\n并在在主函数中加入导入，避免启动画面在启动后不自动关闭",
+      "text": "自动配置启动画面配置"
     },
     "rb_OutputMethod_F": {
       "tooltip": "创建一个单文件的可执行文件",
@@ -452,7 +452,7 @@ LANGUAGE_INIT_CHINESE = {
     "lb_FilePath": { "text": "文件路径:" },
     "lb_OutputPath": { "text": "输出路径:" },
     "lb_FileName": { "text": "输出文件名：" },
-    "lb_CondaTitle": { "text": "当前为："},
+    "lb_CondaTitle": { "text": "当前为：" },
     "pte_FilePath": { "dict": "\nPython脚本：\t" },
     "pte_OutputPath": { "dict": "\n输出目录：\t" },
     "pte_FileName": { "dict": "\n输出名称：\t" }
@@ -465,7 +465,7 @@ LANGUAGE_INIT_CHINESE = {
       "no_folder": "不存在指定输出文件夹，请重新选择"
     },
     "select_py_file": {
-      "text_browser_display": "Python文件路径:",
+      "text_browser_display": "Python文件路径:\t",
       "dialog_title": "请选择Python文件",
       "type_discription": "Python文件 (*.py)"
     },
@@ -480,21 +480,21 @@ LANGUAGE_INIT_CHINESE = {
     "launch_cmd": {
       "msg_content_no_file": "不存在指定Python脚本，请重新选择.py文件",
       "msg_content_no_folder": "不存在输出文件夹，请重新指定输出文件夹",
-      "msg_content_nolaunch":"不可进行转换\n\n当前已有文件正在被执行转换\n\n请稍后",
-      "text_browser_display":"已完成Python脚本的打包"
+      "msg_content_nolaunch": "不可进行转换\n\n当前已有文件正在被执行转换\n\n请稍后",
+      "text_browser_display": "已完成Python脚本的打包"
     },
-    "pb_package_view":{
-        "text":"查看环境中已安装包列表",
-        "tooltip":"可查看当前选中的Conda环境中\n已经安装的python库的列表"
-        },
-    "lb_env_name": { 
-        "text_init": "请选择Conda环境",
-        "text":"Conda环境：\t"
-        },
-    "lb_env_path": { 
-        "text_init": "当前Conda环境的路径",
-        "text":"环境路径：\t"
-        }
+    "pb_package_view": {
+      "text": "查看环境中已安装包列表",
+      "tooltip": "可查看当前选中的Conda环境中\n已经安装的python库的列表"
+    },
+    "lb_env_name": {
+      "text_init": "请选择Conda环境",
+      "text": "Conda环境：\t"
+    },
+    "lb_env_path": {
+      "text_init": "当前Conda环境的路径",
+      "text": "环境路径：\t"
+    }
   },
   "general": {
     "error": "错 误",
