@@ -20,15 +20,17 @@ icon_data = '''<svg version="1.1" id="svg1" width="400" height="400" viewBox="0 
 # default_icon_path = os.path.join(exe_folder_path, 'PyToExe.ico') 
 # default_icon_path = os.path.join(exe_folder_path, 'resource', 'PyToExe.ico')
 
-py_file_auto_path_main = ''
-py_file_auto_path = ''
-for i in os.listdir(workspace_path):
-    if i == 'main.py':
-        py_file_auto_path_main = i
-    elif not py_file_auto_path and '.py' in i and not 'ui' in i:
-        py_file_auto_path = i
-if py_file_auto_path_main:
-    py_file_auto_path = py_file_auto_path_main
+py_file_name_auto = ''
+
+if len(sys.argv) > 1 and sys.argv[1].endswith('.py'):
+    py_file_path_auto = sys.argv[1]
+    py_file_name_auto = os.path.basename(py_file_path_auto)
+else:
+    for name in os.listdir(workspace_path):
+        if name == 'main.py':
+            py_file_name_auto  = name
+        elif not py_file_name_auto and '.py' in name:
+            py_file_name_auto = name
 
 
 class PyToExeUI(Ui_MainWindow):
@@ -63,12 +65,12 @@ class PyToExeUI(Ui_MainWindow):
             self.Win.pb_CondaSetting.setEnabled(False)
         # 填写输入文件及输出文件夹的LineEdit栏
         self.cmd_dict['output_folder_path'][0] = '--distpath="' + os.path.join(workspace_path) + '"'
-        if py_file_auto_path:
+        if py_file_name_auto:
             self.Win.pte_FilePath.setPlainText(
-                os.path.join(workspace_path, py_file_auto_path))
-            self.cmd_dict['python_file_path'][0] = '"' + os.path.join(workspace_path, py_file_auto_path) + '"'
-            self.Win.pte_FileName.setPlainText(py_file_auto_path.split('.')[0])
-            self.cmd_dict['output_file_name'][0] = '--name="' + py_file_auto_path.split('.')[0] + '"'
+                os.path.join(workspace_path, py_file_name_auto))
+            self.cmd_dict['python_file_path'][0] = '"' + os.path.join(workspace_path, py_file_name_auto) + '"'
+            self.Win.pte_FileName.setPlainText(py_file_name_auto.split('.')[0])
+            self.cmd_dict['output_file_name'][0] = '--name="' + py_file_name_auto.split('.')[0] + '"'
             self.launch_flag = True
         self.plain_text_update()
     
@@ -642,7 +644,8 @@ class PyToExeUI(Ui_MainWindow):
             goal_items = list_widget.findItems(self.Win.lb_CondaInfo.text(), Qt.MatchExactly)
             if goal_items:
                 list_widget.setCurrentItem(goal_items[0])
-        Conda_Get_Env_List = Conda_Get_Env_List_Thread(self)
+        Conda_Get_Env_List = Conda_Get_Env_List_QThread(self)
+        Conda_Get_Env_List.text_to_textBrowser_cmd.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
         Conda_Get_Env_List.signal_conda_env_list.connect(get_env_list)
         Conda_Get_Env_List.start()
         
@@ -690,7 +693,8 @@ class PyToExeUI(Ui_MainWindow):
             layout_packages_dialog.addWidget(text_browser_conda_packages)
             text_browser_conda_packages.setFocusPolicy(Qt.NoFocus)
             
-            Conda_Get_Detail = Conda_Get_Detail_Thread(self, current_item_text)
+            Conda_Get_Detail = Conda_Get_Detail_QThread(self, current_item_text)
+            Conda_Get_Detail.text_to_textBrowser_cmd.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
             Conda_Get_Detail.signal_conda_detail_list.connect(lambda x: display_detail(x, text_browser_conda_packages))
             Conda_Get_Detail.start()
             packages_dialog.exec_()

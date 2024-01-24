@@ -5,7 +5,8 @@ from copy import deepcopy
 
 class Launch_py_QThread(QThread):
     finished_signal = pyqtSignal()
-    
+    text_to_textBrowser_cmd = pyqtSignal(str)
+    text_to_textBrowser = pyqtSignal(str)
     def __init__(self, parent, command_list):
         super().__init__()
         self.command_list = deepcopy(command_list)
@@ -17,9 +18,9 @@ class Launch_py_QThread(QThread):
             if output_line == '' and self.process.poll() is not None:
                 break
             if output_line:
-                self.parent_class.append_TB_text(output_line.strip(), self.parent_class.Win.textBrowser_cmd)
-        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser_cmd)
-        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser)
+                self.text_to_textBrowser_cmd.emit(output_line.strip())
+        self.text_to_textBrowser_cmd.emit(f'__________ {content} __________\n')
+        self.text_to_textBrowser.emit(f'__________ {content} __________\n')
         self.finished_signal.emit()
     
     def run(self):
@@ -32,10 +33,12 @@ class Launch_py_QThread(QThread):
             self.thread = threading.Thread(target=self.read_output, args=(finish_text,))
             self.thread.start()
         except subprocess.CalledProcessError as e:
-            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
+            self.text_to_textBrowser_cmd.emit(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n')
 
 
-class pyinstaller_setup_Qthread(QThread):
+class pyinstaller_setup_QThread(QThread):
+    text_to_textBrowser_cmd = pyqtSignal(str)
+    text_to_textBrowser = pyqtSignal(str)
     def __init__(self, parent):
         super().__init__()
         self.parent_class = parent
@@ -46,9 +49,9 @@ class pyinstaller_setup_Qthread(QThread):
             if output_line == '' and object.poll() is not None:
                 break
             if output_line:
-                self.parent_class.append_TB_text(output_line.strip(), self.parent_class.Win.textBrowser_cmd)
-        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser_cmd)
-        self.parent_class.append_TB_text(f'__________ {content} __________\n', self.parent_class.Win.textBrowser)
+                self.text_to_textBrowser_cmd.emit(output_line.strip())
+        self.text_to_textBrowser_cmd.emit(f'__________ {content} __________\n')
+        self.text_to_textBrowser.emit(f'__________ {content} __________\n')
     
     def run(self):
         self.py_install_command = 'echo Y | pip install pyinstaller'
@@ -60,10 +63,10 @@ class pyinstaller_setup_Qthread(QThread):
             thread = threading.Thread(target=self.read_output(process, self.parent_class.json_widgets['pb_SetupPyinstaller']['text_browser_display']))
             thread.start()
         except subprocess.CalledProcessError as e:
-            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
+            self.text_to_textBrowser_cmd.emit(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n')
 
 
-class Environment_Variant_Thread(QThread):
+class Environment_Variant_QThread(QThread):
     def __init__(self):
         super().__init__()
     
@@ -71,8 +74,9 @@ class Environment_Variant_Thread(QThread):
         subprocess.run('rundll32 sysdm.cpl,EditEnvironmentVariables')
 
 
-class Conda_Get_Env_List_Thread(QThread):
+class Conda_Get_Env_List_QThread(QThread):
     signal_conda_env_list = pyqtSignal(list)
+    text_to_textBrowser_cmd = pyqtSignal(str)
     def __init__(self, parent):
         super().__init__()
         self.parent_class = parent
@@ -88,13 +92,14 @@ class Conda_Get_Env_List_Thread(QThread):
             conda_env_list = [line.split() for line in lines if not line.startswith('#')]
             self.signal_conda_env_list.emit(conda_env_list)
         except subprocess.CalledProcessError as e:
-            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
+            self.text_to_textBrowser_cmd.emit(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n')
     # def __del__(self):
     #     print("Conda_Get_Env_List_Thread object is being destroyed.")
 
 
-class Conda_Get_Detail_Thread(QThread):
+class Conda_Get_Detail_QThread(QThread):
     signal_conda_detail_list = pyqtSignal(str)
+    text_to_textBrowser_cmd = pyqtSignal(str)
     def __init__(self, parent, conda_env):
         super().__init__()
         self.conda_env = conda_env
@@ -106,6 +111,6 @@ class Conda_Get_Detail_Thread(QThread):
             output = result.stdout.read().strip()
             self.signal_conda_detail_list.emit(output)
         except subprocess.CalledProcessError as e:
-            self.parent_class.append_TB_text(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n', self.parent_class.Win.textBrowser_cmd)
+            self.text_to_textBrowser_cmd.emit(f'__________ {self.parent_class.json_general["error"]} __________\n{e}\n')
     # def __del__(self):
     #     print("Conda_Get_Env_List_Thread object is being destroyed.")

@@ -90,7 +90,9 @@ class Pyinstaller_function(PyToExeUI):
     # 安装pyinstaller项
 
     def setup_pyinstaller(self):
-        self.pyinstaller_Qthread = pyinstaller_setup_Qthread(self)
+        self.pyinstaller_Qthread = pyinstaller_setup_QThread(self)
+        self.pyinstaller_Qthread.text_to_textBrowser_cmd.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
+        self.pyinstaller_Qthread.text_to_textBrowser.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser))
         self.pyinstaller_Qthread.start()
 
     # 版本项
@@ -1334,17 +1336,18 @@ class Pyinstaller_function(PyToExeUI):
     def launch_cmd(self):
         self.plain_text_update()
         # 固定参数，避免运行时，为下次打包动作输入参数而改变
-        file_path = self.Win.pte_FilePath.toPlainText()
-        output_path = self.Win.pte_OutputPath.toPlainText()
+        self.file_path = self.Win.pte_FilePath.toPlainText()
+        self.output_path = self.Win.pte_OutputPath.toPlainText()
+        self.output_name = self.Win.pte_FileName.toPlainText()
         # 获取Pyinstaller命令
         command_list = self.command_summary()
         # 判断文件是否为空，为空，则直接返回
-        if not os.path.exists(file_path):
+        if not os.path.exists(self.file_path):
             QMessageBox.information(
                 None, self.json_general["msg_info"], self.json_special['launch_cmd']['msg_content_no_file'])
             return
         # 判断输出路径是否为空，为空，则直接返回
-        if not os.path.exists(output_path):
+        if not os.path.exists(self.output_path):
             QMessageBox.information(
                 None, self.json_general["msg_info"], self.json_special['launch_cmd']['msg_content_no_folder'])
             return
@@ -1352,14 +1355,14 @@ class Pyinstaller_function(PyToExeUI):
         if self.cmd_dict['add_splash_screen'][0] and self.Win.cb_SplashAutoFile.isChecked() and not os.path.exists(os.path.join(workspace_path, 'SplashModule.py')):
             # 在主文件中添加import SplashModule
             # 读取原主文件内容
-            with open(file_path, 'r', encoding='utf-8') as file:
+            with open(self.file_path, 'r', encoding='utf-8') as file:
                 original = file.readlines()
                 # 判断是否已写过import SplashModule
                 if 'import SplashModule\n' not in original:
                     # 添加import SplashModule
                     original.insert(0,'import SplashModule\n')
             # 在主文件中插入'import SplashModule\n'
-            with open(file_path, 'w', encoding='utf-8') as file:
+            with open(self.file_path, 'w', encoding='utf-8') as file:
                 for i in original:
                     file.write(i)
             # SplahModule的文件位置
@@ -1374,6 +1377,8 @@ class Pyinstaller_function(PyToExeUI):
             return
         
         self.Launch_QThread = Launch_py_QThread(self, command_list)
+        self.Launch_QThread.text_to_textBrowser_cmd.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
+        self.Launch_QThread.text_to_textBrowser.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser))
         self.Launch_QThread.finished_signal.connect(self.thread_finished_file_del)
         self.Launch_QThread.start()
 
@@ -1403,14 +1408,16 @@ class Pyinstaller_function(PyToExeUI):
                         if i != 'import SplashModule\n':
                             file.write(i)
             if self.clear_file_flag:
-                subprocess.run('copy .\\dist\\*.exe .\\ > nul', shell=True,
+                # 这里os.path.normpath非常重要，用于正则路径，避免命令行不执行
+                temp = os.path.normpath(os.path.join(os.path.dirname(self.file_path), f'{self.output_name}.spec'))
+                subprocess.run(f'del {temp} > nul', shell=True,
                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-                subprocess.run('del *.spec > nul', shell=True,
+                temp = os.path.normpath(os.path.join(os.path.dirname(self.file_path), 'dist'))
+                subprocess.run(f'rd /s /q {temp} > nul', shell=True,
                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-                subprocess.run('rd /s /q .\\dist > nul', shell=True,
-                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-                while os.path.exists('./build'):
-                    subprocess.run('rd /s /q .\\build > nul', shell=True,
+                temp = os.path.normpath(os.path.join(os.path.dirname(self.file_path), 'build'))
+                while os.path.exists(temp):
+                    subprocess.run(f'rd /s /q {temp} > nul', shell=True,
                                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
                 self.append_TB_text(
                     f'__________ {self.json_general["deleted_file"]} __________\n', self.Win.textBrowser)
@@ -1420,12 +1427,13 @@ class Pyinstaller_function(PyToExeUI):
 
     # 打开环境变量
     def open_environment_variant_setting(self):
-        open_envir_setting = Environment_Variant_Thread()
+        open_envir_setting = Environment_Variant_QThread()
         # open_envir_setting.finished.connect(open_envir_setting.quit)
         open_envir_setting.start()
         time.sleep(0.1)
         open_envir_setting.quit()
     
+    # Conda环境选择
     def conda_setting(self):
         try:
             conda_env = self.conda_widget_ui()
