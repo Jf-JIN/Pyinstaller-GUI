@@ -1,7 +1,9 @@
 import subprocess
 import threading
-from PyQt5.QtCore import pyqtSignal, QThread
+from datetime import datetime
 from copy import deepcopy
+
+from PyQt5.QtCore import pyqtSignal, QThread
 
 class Launch_py_QThread(QThread):
     finished_signal = pyqtSignal()
@@ -19,8 +21,8 @@ class Launch_py_QThread(QThread):
                 break
             if output_line:
                 self.text_to_textBrowser_cmd.emit(output_line.strip())
-        self.text_to_textBrowser_cmd.emit(f'__________ {content} __________\n')
-        self.text_to_textBrowser.emit(f'__________ {content} __________\n')
+        self.text_to_textBrowser_cmd.emit(f'__________ {content} __________')
+        self.text_to_textBrowser.emit(f'__________ {content} __________')
         self.finished_signal.emit()
     
     def run(self):

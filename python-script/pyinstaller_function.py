@@ -1077,7 +1077,7 @@ class Pyinstaller_function(PyToExeUI):
             if self.cmd_dict['target_architecture'][0]:
                 current_data = self.cmd_dict['target_architecture'][0]
                 action_reply = self.set_custom_message_box(
-                    self.json_general['data_exist'], f'{self.json_general["current_data"]}{current_data}<br>{self.json_general["msg_if_replace"]}<br>', ['x86', 'x86_64'], reset_flag=True)
+                    self.json_general['data_exist'], f'{self.json_general["current_data"]}{current_data}<br>{self.json_general["msg_if_replace"]}<br>', ['x86_64', 'arm64', 'universal2'], reset_flag=True)
                 if action_reply == 0:
                     self.cmd_dict['target_architecture'][0] = None
                     self.cmd_dict['target_architecture'][2] = None
@@ -1087,13 +1087,16 @@ class Pyinstaller_function(PyToExeUI):
                 else:
                     return
             action_reply = self.set_custom_message_box(
-                self.json_widgets['pb_TargetArchitecture']['text_browser_display'], f'{self.json_widgets["pb_TargetArchitecture"]["dialog_title"]}<br>', ['x86', 'x86_64'])
+                self.json_widgets['pb_TargetArchitecture']['text_browser_display'], f'{self.json_widgets["pb_TargetArchitecture"]["dialog_title"]}<br>', ['x86_64', 'arm64', 'universal2'])
             if action_reply == 1:
-                self.cmd_dict['target_architecture'][0] = '--target-architecture x86'
-                self.cmd_dict['target_architecture'][2] = 'x86'
-            elif action_reply == 2:
-                self.cmd_dict['target_architecture'][0] = '--target-architecture x86_64'
+                self.cmd_dict['target_architecture'][0] = '--target-architecture="x86"'
                 self.cmd_dict['target_architecture'][2] = 'x86_64'
+            elif action_reply == 2:
+                self.cmd_dict['target_architecture'][0] = '--target-architecture="arm64"'
+                self.cmd_dict['target_architecture'][2] = 'arm64'
+            elif action_reply == 3:
+                self.cmd_dict['target_architecture'][0] = '--target-architecture="universal2"'
+                self.cmd_dict['target_architecture'][2] = 'universal2'
             else:
                 return
         except Exception as e:
@@ -1397,6 +1400,11 @@ class Pyinstaller_function(PyToExeUI):
     def thread_finished_file_del(self):
         self.Launch_QThread.wait()
         try:
+            # 获取当前时间
+            current_time = datetime.now()
+            formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+            self.append_TB_text(f'__________ {formatted_time} __________\n', self.Win.textBrowser_cmd)
+            self.append_TB_text(f'__________ {formatted_time} __________\n', self.Win.textBrowser)
             self.launch_flag = True
             if self.cmd_dict['add_splash_screen'][0] and self.Win.cb_SplashAutoFile.isChecked() and os.path.exists(os.path.join(workspace_path, 'SplashModule.py')):
                 subprocess.run('del SplashModule.py > nul', shell=True,

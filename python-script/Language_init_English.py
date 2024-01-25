@@ -210,7 +210,7 @@ LANGUAGE_INIT_ENGLISH = {
       "dialog_title": "Please select the hook script"
     },
     "pb_TargetArchitecture": {
-      "tooltip": "Target architecture (macOS only; valid values: x86_64, arm64, universal2). Enables switching between universal2 and single-arch version of frozen application (provided python installation supports the target architecture). If not target architecture is not specified, the current running architecture is targeted.",
+      "tooltip": "Target architecture (macOS only; valid values: x86_64, arm64, universal2). Enables switching between universal2 and single-arch version of frozen application (provided python installation supports the target architecture). If not target architecture is not specified, the current running architecture is targeted. Only MacOs",
       "text": "Target Architecture",
       "dict": "\nTarget architecture: \t",
       "text_browser_display": "Please select the target architecture.",

@@ -204,7 +204,7 @@ LANGUAGE_INIT_CHINESE = {
       "dialog_title": "请选择钩子脚本"
     },
     "pb_TargetArchitecture": {
-      "tooltip": "用于指定生成的可执行文件的目标架构。\n该选项允许你选择生成 32 位（x86）或 64 位（x86_64）的可执行文件。",
+      "tooltip": "用于指定生成的可执行文件的目标架构。\n该选项允许你选择生成 32 位（x86）或 64 位（x86_64）的可执行文件。仅MacOs",
       "text": "指定架构",
       "dict": "\n目标架构：\t",
       "text_browser_display": "请选择目标架构",
