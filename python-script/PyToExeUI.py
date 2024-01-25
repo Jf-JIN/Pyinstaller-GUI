@@ -41,6 +41,7 @@ else:
     setting_file = {'Language':'简体中文(内置)'}
     with open (setting_path, 'w', encoding='utf-8') as file:
         json.dump(setting_file, file, ensure_ascii=False, indent=None)
+
 # if os.path.exists(setting_path):
 #     with open (setting_path, 'r', encoding='utf-8') as file:
 #         line = file.readline()
@@ -179,10 +180,12 @@ class PyToExeUI(Ui_MainWindow):
             # 设置显示语言
             # 检查是否存在setting文件，若不存在，则置为默认('简体中文(内置)')
             # 检查setting文件里Language参数，并检查ini的配置是否正确(存在语言包文件)，若不正确，则置为默认('简体中文(内置)')
-            if setting_file and setting_file['Language'] and os.path.exists(os.path.join(exe_folder_path, 'Languages',setting_file['Language']+'.json')):
-                self.Win.cbb_LanguageSelect.setCurrentText(setting_file['Language'])
-            else:
-                self.Win.cbb_LanguageSelect.setCurrentText('简体中文(内置)')
+            self.Win.cbb_LanguageSelect.setCurrentText('简体中文(内置)')
+            if setting_file and setting_file['Language']:
+                if os.path.exists(os.path.join(exe_folder_path, 'Languages',setting_file['Language']+'.json')):
+                    self.Win.cbb_LanguageSelect.setCurrentText(setting_file['Language'])
+                elif setting_file['Language'] == 'English(build-in)':
+                    self.Win.cbb_LanguageSelect.setCurrentText('English(build-in)')
             self.load_language_json_file()
         except Exception as e:
             # traceback.print_exc()
