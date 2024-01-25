@@ -20,8 +20,8 @@ icon_data = '''<svg version="1.1" id="svg1" width="400" height="400" viewBox="0 
 # default_icon_path = os.path.join(exe_folder_path, 'PyToExe.ico') 
 # default_icon_path = os.path.join(exe_folder_path, 'resource', 'PyToExe.ico')
 
+# 自寻py文件路径
 py_file_name_auto = ''
-
 if len(sys.argv) > 1 and sys.argv[1].endswith('.py'):
     py_file_path_auto = sys.argv[1]
     py_file_name_auto = os.path.basename(py_file_path_auto)
@@ -32,6 +32,27 @@ else:
         elif not py_file_name_auto and '.py' in name:
             py_file_name_auto = name
 
+# 读取setting文件
+setting_path = os.path.join(exe_folder_path, 'setting')
+if os.path.exists(setting_path):
+    with open (setting_path, 'r', encoding='utf-8') as file:
+        setting_file = json.load(file)
+else:
+    setting_file = {'Language':'简体中文(内置)'}
+    with open (setting_path, 'w', encoding='utf-8') as file:
+        json.dump(setting_file, file, ensure_ascii=False, indent=None)
+# if os.path.exists(setting_path):
+#     with open (setting_path, 'r', encoding='utf-8') as file:
+#         line = file.readline()
+#         setting_file = {}
+#         while line:
+#             key = line.split('=')[0].strip()
+#             value = line.split('=')[1].strip()
+#             setting_file[key] = value
+#             line = file.readline()
+# else:
+#     with open (setting_path, 'w', encoding='utf-8') as file:
+#         file.write('Language=简体中文(内置)')
 
 class PyToExeUI(Ui_MainWindow):
     def __init__(self):
@@ -142,10 +163,33 @@ class PyToExeUI(Ui_MainWindow):
         self.Win.pb_ShowParameter.clicked.connect(self.parameter_display)
         self.Win.pb_OpenDir.clicked.connect(self.open_output_folder)
         self.Win.pb_Print.clicked.connect(self.print_cmd)
-        self.Win.cbb_LanguageSelect.currentTextChanged.connect(self.language_update)
+        self.Win.cbb_LanguageSelect.currentTextChanged.connect(self.language_changed)
         self.Win.cb_Tooltips.stateChanged.connect(self.language_update)
     
     # 界面文字初始化及更改
+    def combo_list_init(self):
+        try:
+            if os.path.exists(os.path.join(exe_folder_path, 'Languages')):
+                file_list = os.listdir(os.path.join(exe_folder_path, 'Languages'))
+                self.language_list = []
+                for file in file_list:
+                    if file.endswith('.json'):
+                        self.language_list.append(os.path.splitext(file)[0])
+                        self.Win.cbb_LanguageSelect.addItem(os.path.splitext(file)[0])
+            # 设置显示语言
+            # 检查是否存在setting文件，若不存在，则置为默认('简体中文(内置)')
+            # 检查setting文件里Language参数，并检查ini的配置是否正确(存在语言包文件)，若不正确，则置为默认('简体中文(内置)')
+            if setting_file and setting_file['Language'] and os.path.exists(os.path.join(exe_folder_path, 'Languages',setting_file['Language']+'.json')):
+                self.Win.cbb_LanguageSelect.setCurrentText(setting_file['Language'])
+            else:
+                self.Win.cbb_LanguageSelect.setCurrentText('简体中文(内置)')
+            self.load_language_json_file()
+        except Exception as e:
+            # traceback.print_exc()
+            traceback.format_exc()
+            QMessageBox.warning(None, 'PyToExe', traceback.format_exc())
+    
+    # 加载语言包
     def load_language_json_file(self):
         try:
             if self.Win.cbb_LanguageSelect.currentText() == '简体中文(内置)':
@@ -164,28 +208,7 @@ class PyToExeUI(Ui_MainWindow):
             QMessageBox.warning(None, text=e)
             # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
-    def combo_list_init(self):
-        try:
-            if os.path.exists(os.path.join(exe_folder_path, 'Languages')):
-                file_list = os.listdir(os.path.join(exe_folder_path, 'Languages'))
-                self.language_list = []
-                for file in file_list:
-                    if file.endswith('.json'):
-                        self.language_list.append(os.path.splitext(file)[0])
-                        self.Win.cbb_LanguageSelect.addItem(os.path.splitext(file)[0])
-            self.Win.cbb_LanguageSelect.setCurrentText('简体中文(内置)')
-            # for perfer_language in ['Chinese_S','Chinese_simplified','ChineseSimplified', 'Chinese','中文简体','简体中文','中文']:
-            #     if perfer_language in self.language_list:
-            #         self.Win.cbb_LanguageSelect.setCurrentText(perfer_language)
-            #         break
-            self.load_language_json_file()
-        except Exception as e:
-            # traceback.print_exc()
-            traceback.format_exc()
-            QMessageBox.warning(None, 'PyToExe', traceback.format_exc())
-            # QMessageBox.warning(None, self.json_general["msg_info"], '语言包(./Languages)缺失，可能无法进行正常显示\n\nDas Sprachpaket (./Language) fehlt, möglicherweise können die Inhalte nicht ordnungsgemäß angezeigt werden\n\nThe language pack (./Language) is missing, normal display may not be possible.\n')
-            # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
-    
+    # 加载界面语言和工具提示语言
     def set_text_init(self):
         try:
             for name, value in self.json_widgets.items():
@@ -198,6 +221,14 @@ class PyToExeUI(Ui_MainWindow):
             # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
+    # 当语言项更改
+    def language_changed(self):
+        self.language_update()
+        setting_file['Language'] = self.Win.cbb_LanguageSelect.currentText()
+        with open (setting_path, 'w', encoding='utf-8') as file:
+            json.dump(setting_file, file, ensure_ascii=False, indent=None)
+    
+    # 更新语言显示
     def language_update(self):
         self.load_language_json_file()
         self.set_text_init()
