@@ -2,6 +2,7 @@ from pyinstaller_function import *
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
+
 class Exe_main_window(QMainWindow, Pyinstaller_function):
     def __init__(self):
         super().__init__()
