@@ -406,6 +406,10 @@ LANGUAGE_INIT_CHINESE = {
         "tooltip":"勾选后将自动生成SplashModule.py文件，\n并在在主函数中加入导入，避免启动画面在启动后不自动关闭",
         "text": "自动配置启动画面配置"
     },
+    "cb_MultiWin":{
+        "tooltip":"勾选后，当处理多个py文件转换时，使用多个窗口。未勾选则是每次只可处理一个py文件，可通过右键打开文件自动定位",
+        "text": "多窗口"
+    },
     "rb_OutputMethod_F": {
       "tooltip": "创建一个单文件的可执行文件",
       "text": "输 出 文 件",
