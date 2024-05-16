@@ -814,18 +814,24 @@ class Pyinstaller_function(PyToExeUI):
             self.cmd_dict['console_window_control'][0] = '--console'
             self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_C'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_C']['dict_explain']
+            self.Win.cb_DisableWindowed.setEnabled(False)
+            self.Win.cb_DisableWindowed.setChecked(False)
         elif self.Win.rb_ConsoleWindowControl_NW.isChecked():
             self.cmd_dict['console_window_control'][0] = '--nowindowed'
             self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_NW'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_NW']['dict_explain']
+            self.Win.cb_DisableWindowed.setEnabled(False)
+            self.Win.cb_DisableWindowed.setChecked(False)
         elif self.Win.rb_ConsoleWindowControl_W.isChecked():
             self.cmd_dict['console_window_control'][0] = '--windowed'
             self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_W'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_W']['dict_explain']
+            self.Win.cb_DisableWindowed.setEnabled(True)
         else:
             self.cmd_dict['console_window_control'][0] = '--noconsole'
             self.cmd_dict['console_window_control'][1] = 'rb_ConsoleWindowControl_NC'
             self.cmd_dict['console_window_control'][2] = self.json_widgets['rb_ConsoleWindowControl_NC']['dict_explain']
+            self.Win.cb_DisableWindowed.setEnabled(True)
 
     # [24] 项 [--hide-console {minimize-late,hide-early,minimize-early,hide-late}] 用于设置生成的可执行文件的控制台窗口的显示方式。这个选项接受以下参数 仅限 Windows：在启用控制台的可执行文件中，让引导加载程序自动隐藏或最小化，控制台窗口，如果程序拥有控制台窗口（即不是从，现有控制台窗口）。
     def hide_console(self):
@@ -1381,10 +1387,48 @@ class Pyinstaller_function(PyToExeUI):
         
         self.Launch_QThread = Launch_py_QThread(self, command_list)
         self.Launch_QThread.text_to_textBrowser_cmd.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
+        self.Launch_QThread.text_to_textBrowser_cmd.connect(self.check)
         self.Launch_QThread.text_to_textBrowser.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser))
         self.Launch_QThread.finished_signal.connect(self.thread_finished_file_del)
+        self.Launch_QThread.finished_signal.connect(self.change_progressBar_pushbutton)
         self.Launch_QThread.start()
-
+        self.Win.pb_Launch.hide()
+        self.Win.progressBar.setValue(0)
+        self.progressBar_value = 0
+        self.Win.progressBar.show()
+    
+    def check(self, content):
+        if not content.startswith('__'):
+            if content.split(":")[1].startswith(' checking Analysis'):
+                self.progressBar_value = 10
+            elif content.split(":")[1].startswith(' Initializing module'):
+                self.progressBar_value = 20
+            elif content.split(":")[1].startswith(' Loading module'):
+                if self.progressBar_value <= 53: 
+                    self.progressBar_value += 1
+            elif content.split(":")[1].startswith(' checking PYZ'):
+                self.progressBar_value = 55
+            elif content.split(":")[1].startswith(' checking Tree'):
+                self.progressBar_value = 60
+            elif content.split(":")[1].startswith(' checking Splash'):
+                self.progressBar_value = 70
+            elif content.split(":")[1].startswith(' checking PKG'):
+                self.progressBar_value = 75
+            elif content.split(":")[1].startswith(' checking EXE'):
+                self.progressBar_value = 80
+            elif content.split(":")[1].startswith(' Copying bootloader'):
+                self.progressBar_value = 85
+            elif content.split(":")[1].startswith(' Fixing EXE'):
+                self.progressBar_value = 95
+            elif 'successfully' in content and 'Building EXE' in content:
+                self.Win.progressBar.hide()
+                self.Win.pb_Launch.show()
+            self.Win.progressBar.setValue(self.progressBar_value)
+    
+    def change_progressBar_pushbutton(self):
+        self.Win.progressBar.hide()
+        self.Win.pb_Launch.show()
+    
     def read_output(self, object: object, content: str = None, content_cmd: str = None):
         while True:
             output_line = object.stdout.readline()
