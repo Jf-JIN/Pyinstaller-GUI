@@ -412,6 +412,10 @@ LANGUAGE_INIT_ENGLISH = {
         "tooltip":"After selecting, the file SplashModule.py will be automatically generated, \nand the import will be added in the main function \nto avoid the splash screen not closing automatically after launch",
         "text": "Auto-splash-screen\nconfiguration"
     },
+    "cb_MultiWin":{
+        "tooltip":"After selecting this option, when processing multiple .py files, multiple windows will be used. \nIf not selected, only one .py file can be processed at a time, but you can open files automatically through right-click.",
+        "text": "Multi-Wins"
+    },
     "rb_OutputMethod_F": {
       "tooltip": "Create a one-file bundled executable.",
       "text": "Output as File",
