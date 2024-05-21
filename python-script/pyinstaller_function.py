@@ -153,7 +153,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['specpath'][0] = '--specpath="' + temp + '"'
                 self.cmd_dict['specpath'][2] = self.cmd_dict['specpath'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -183,7 +184,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['contents_directory'][0] = '--contents-directory="' + temp + '"'
                 self.cmd_dict['contents_directory'][2] = self.cmd_dict['contents_directory'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -222,7 +224,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_file_folder_data'][0] = None
                 self.cmd_dict['add_file_folder_data'][2] = self.cmd_dict['add_file_folder_data'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -260,7 +263,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_binary_data'][0] = None
                 self.cmd_dict['add_binary_data'][2] = self.cmd_dict['add_binary_data'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -292,7 +296,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['imports_folder'][0] = None
                 self.cmd_dict['imports_folder'][2] = self.cmd_dict['imports_folder'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -324,7 +329,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['import_module_name'][0] = None
                 self.cmd_dict['import_module_name'][2] = self.cmd_dict['import_module_name'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -356,7 +362,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_submodules'][0] = None
                 self.cmd_dict['collect_submodules'][2] = self.cmd_dict['collect_submodules'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -388,7 +395,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_data'][0] = None
                 self.cmd_dict['collect_data'][2] = self.cmd_dict['collect_data'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -420,7 +428,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_binaries'][0] = None
                 self.cmd_dict['collect_binaries'][2] = self.cmd_dict['collect_binaries'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -452,7 +461,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['collect_all'][0] = None
                 self.cmd_dict['collect_all'][2] = self.cmd_dict['collect_all'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -484,7 +494,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['copy_metadata'][0] = None
                 self.cmd_dict['copy_metadata'][2] = self.cmd_dict['copy_metadata'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -517,7 +528,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['recursive_copy_metadata'][0] = None
                 self.cmd_dict['recursive_copy_metadata'][2] = self.cmd_dict['recursive_copy_metadata'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -550,7 +562,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['additional_hooks_dir'][0] = None
                 self.cmd_dict['additional_hooks_dir'][2] = self.cmd_dict['additional_hooks_dir'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -583,7 +596,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['runtime_hook'][2] = self.cmd_dict['runtime_hook'][0]
             pass
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -615,7 +629,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['exclude_module'][0] = None
                 self.cmd_dict['exclude_module'][2] = self.cmd_dict['exclude_module'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -677,7 +692,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_splash_screen'][2] = self.cmd_dict['add_splash_screen'][0]
                 self.Win.cb_SplashAutoFile.setChecked(True)
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
@@ -716,7 +732,8 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 return
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -748,7 +765,8 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 return
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -762,7 +780,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['strip_option'][0] = None
                 self.cmd_dict['strip_option'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -778,7 +797,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['noupx_option'][0] = None
                 self.cmd_dict['noupx_option'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -804,7 +824,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['upx_exclude'][2] = self.cmd_dict['upx_exclude'][0]
             pass
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -864,7 +885,8 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 return
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -896,7 +918,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_icon'][0] = None
                 self.cmd_dict['add_icon'][2] = self.cmd_dict['add_icon'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -910,7 +933,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['disable_windowed'][0] = None
                 self.cmd_dict['disable_windowed'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -935,7 +959,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['version_file'][0] = '--version-file="' + temp + '"'
                 self.cmd_dict['version_file'][2] = self.cmd_dict['version_file'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -963,7 +988,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_xml_file'][0] = '-m="' + temp + '"'
                 self.cmd_dict['add_xml_file'][2] = self.cmd_dict['add_xml_file'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1000,7 +1026,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['add_resource'][0] = None
                 self.cmd_dict['add_resource'][2] = self.cmd_dict['add_resource'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1014,7 +1041,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['uac_admin_apply'][0] = None
                 self.cmd_dict['uac_admin_apply'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1028,7 +1056,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['uac_uiaccess'][0] = None
                 self.cmd_dict['uac_uiaccess'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1048,7 +1077,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['argv_emulation'][0] = None
                 self.cmd_dict['argv_emulation'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1073,7 +1103,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['osx_bundle_identifier'][0] = '--osx-bundle-identifier="' + temp + '"'
                 self.cmd_dict['osx_bundle_identifier'][2] = self.cmd_dict['osx_bundle_identifier'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1106,7 +1137,8 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 return
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1131,7 +1163,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['codesign_identity'][0] = '--codesign-identity="' + temp + '"'
                 self.cmd_dict['codesign_identity'][2] = self.cmd_dict['codesign_identity'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1157,7 +1190,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['osx_entitlements_file'][2] = self.cmd_dict['osx_entitlements_file'][0]
             pass
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1187,7 +1221,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['runtime_tmpdir'][0] = '--runtime-tmpdir="' + temp + '"'
                 self.cmd_dict['runtime_tmpdir'][2] = self.cmd_dict['runtime_tmpdir'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1201,7 +1236,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['ignore_signals'][0] = None
                 self.cmd_dict['ignore_signals'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1229,7 +1265,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['workpath_option'][0] = '--workpath="' + temp + '"'
                 self.cmd_dict['workpath_option'][2] = self.cmd_dict['workpath_option'][0]
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1243,7 +1280,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['noconfirm_option'][0] = None
                 self.cmd_dict['noconfirm_option'][2] = None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1269,7 +1307,8 @@ class Pyinstaller_function(PyToExeUI):
                 self.cmd_dict['upx_dir'][2] = self.cmd_dict['upx_dir'][0]
             pass
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1278,7 +1317,8 @@ class Pyinstaller_function(PyToExeUI):
         try:
             pass
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1335,7 +1375,8 @@ class Pyinstaller_function(PyToExeUI):
             else:
                 return
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
 
@@ -1379,51 +1420,65 @@ class Pyinstaller_function(PyToExeUI):
             # 写入SplashModule
             with open(splash_module_file_path, 'w', encoding='utf-8') as file:
                 file.write('''from contextlib import suppress\nwith suppress(ModuleNotFoundError):\n\timport pyi_splash\n\tpyi_splash.close()''')
-        # 判断是否已有线程进行，launch_flag为False，证明有线程，则直接返回
-        if not self.launch_flag:
+        # 判断是否已有线程进行，launch_flag为True，证明有线程，则直接返回
+        if self.launch_flag:
             QMessageBox.information(
                 None, self.json_general["msg_info"], self.json_special['launch_cmd']['msg_content_nolaunch'])
             return
-        
-        self.Launch_QThread = Launch_py_QThread(self, command_list)
-        self.Launch_QThread.text_to_textBrowser_cmd.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
-        self.Launch_QThread.text_to_textBrowser_cmd.connect(self.check)
-        self.Launch_QThread.text_to_textBrowser.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser))
-        self.Launch_QThread.finished_signal.connect(self.thread_finished_file_del)
-        self.Launch_QThread.finished_signal.connect(self.change_progressBar_pushbutton)
-        self.Launch_QThread.start()
-        self.Win.pb_Launch.hide()
-        self.Win.progressBar.setValue(0)
-        self.progressBar_value = 0
-        self.Win.progressBar.show()
+        try:
+            self.launch_flag = True
+            self.launch_error_count = 0
+            self.Launch_QThread = Launch_py_QThread(self, command_list)
+            self.Launch_QThread.text_to_textBrowser_cmd.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser_cmd))
+            self.Launch_QThread.text_to_textBrowser_cmd.connect(self.check)
+            self.Launch_QThread.text_to_textBrowser.connect(lambda content: self.append_TB_text(content, self.Win.textBrowser))
+            self.Launch_QThread.finished_signal.connect(self.thread_finished_file_del)
+            self.Launch_QThread.finished_signal.connect(self.change_progressBar_pushbutton)
+            self.Launch_QThread.start()
+            self.Win.pb_Launch.hide()
+            self.Win.progressBar.setValue(0)
+            self.progressBar_value = 0
+            self.Win.progressBar.show()
+        except Exception as e:
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
+            self.append_TB_text(
+                f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
+            self.launch_flag = False
     
     def check(self, content):
-        if not content.startswith('__'):
-            if content.split(":")[1].startswith(' checking Analysis'):
-                self.progressBar_value = 10
-            elif content.split(":")[1].startswith(' Initializing module'):
-                self.progressBar_value = 20
-            elif content.split(":")[1].startswith(' Loading module'):
-                if self.progressBar_value <= 53: 
-                    self.progressBar_value += 1
-            elif content.split(":")[1].startswith(' checking PYZ'):
-                self.progressBar_value = 55
-            elif content.split(":")[1].startswith(' checking Tree'):
-                self.progressBar_value = 60
-            elif content.split(":")[1].startswith(' checking Splash'):
-                self.progressBar_value = 70
-            elif content.split(":")[1].startswith(' checking PKG'):
-                self.progressBar_value = 75
-            elif content.split(":")[1].startswith(' checking EXE'):
-                self.progressBar_value = 80
-            elif content.split(":")[1].startswith(' Copying bootloader'):
-                self.progressBar_value = 85
-            elif content.split(":")[1].startswith(' Fixing EXE'):
-                self.progressBar_value = 95
-            elif 'successfully' in content and 'Building EXE' in content:
-                self.Win.progressBar.hide()
-                self.Win.pb_Launch.show()
-            self.Win.progressBar.setValue(self.progressBar_value)
+        try:
+            if 'INFO' in content:
+                if content.split(":")[1].startswith(' checking Analysis'):
+                    self.progressBar_value = 10
+                elif content.split(":")[1].startswith(' Initializing module'):
+                    self.progressBar_value = 20
+                elif content.split(":")[1].startswith(' Loading module'):
+                    if self.progressBar_value <= 53: 
+                        self.progressBar_value += 1
+                elif content.split(":")[1].startswith(' checking PYZ'):
+                    self.progressBar_value = 55
+                elif content.split(":")[1].startswith(' checking Tree'):
+                    self.progressBar_value = 60
+                elif content.split(":")[1].startswith(' checking Splash'):
+                    self.progressBar_value = 70
+                elif content.split(":")[1].startswith(' checking PKG'):
+                    self.progressBar_value = 75
+                elif content.split(":")[1].startswith(' checking EXE'):
+                    self.progressBar_value = 80
+                elif content.split(":")[1].startswith(' Copying bootloader'):
+                    self.progressBar_value = 85
+                elif content.split(":")[1].startswith(' Fixing EXE'):
+                    self.progressBar_value = 95
+                elif 'successfully' in content and 'Building EXE' in content:
+                    self.Win.progressBar.hide()
+                    self.Win.pb_Launch.show()
+                self.Win.progressBar.setValue(self.progressBar_value)
+        except Exception as e:
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
+            self.append_TB_text(
+                f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     def change_progressBar_pushbutton(self):
         self.Win.progressBar.hide()
@@ -1444,12 +1499,14 @@ class Pyinstaller_function(PyToExeUI):
     def thread_finished_file_del(self):
         self.Launch_QThread.wait()
         try:
+            # if self.launch_error_count:
+            #     self.append_TB_text(f'[! ! ! {self.json_general["error"]} ! ! !]\n', self.Win.textBrowser_cmd)
+            #     self.append_TB_text(f'[! ! ! {self.json_general["error"]} ! ! !]\n', self.Win.textBrowser)
             # 获取当前时间
             current_time = datetime.now()
             formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
             self.append_TB_text(f'__________ {formatted_time} __________\n', self.Win.textBrowser_cmd)
             self.append_TB_text(f'__________ {formatted_time} __________\n', self.Win.textBrowser)
-            self.launch_flag = True
             if self.cmd_dict['add_splash_screen'][0] and self.Win.cb_SplashAutoFile.isChecked() and os.path.exists(os.path.join(workspace_path, 'SplashModule.py')):
                 subprocess.run('del SplashModule.py > nul', shell=True,
                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -1476,6 +1533,8 @@ class Pyinstaller_function(PyToExeUI):
         except subprocess.CalledProcessError as e:
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
+        self.launch_flag = False
+        self.launch_error_count = 0
 
     # 打开环境变量
     def open_environment_variant_setting(self):
@@ -1494,6 +1553,7 @@ class Pyinstaller_function(PyToExeUI):
                 self.Win.cb_CondaUse.setEnabled(True)
                 self.Win.cb_CondaUse.setChecked(True)
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(
                 f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
