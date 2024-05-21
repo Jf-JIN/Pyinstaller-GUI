@@ -19,6 +19,17 @@ class Ui_MainWindow(object):
 "    background-color: rgb(175, 199, 235);\n"
 "}\n"
 "\n"
+"QFrame#frame_Title QLabel{\n"
+"    font-size: 18px;\n"
+"    font-weight:bold;\n"
+"}\n"
+"\n"
+"QFrame#frame_Title QPushButton{\n"
+"    font:18px \'幼圆\';\n"
+"    font-weight:bold;\n"
+"    margin:5px;\n"
+"}\n"
+"\n"
 "QPushButton{\n"
 "    background-color: rgb(210, 210, 210);\n"
 "    border: 1px solid rgba(110, 110, 110, 200);\n"
@@ -41,7 +52,7 @@ class Ui_MainWindow(object):
 "QPushButton[objectName = \'pb_Launch\']:hover{\n"
 "    background-color: rgb(255, 0, 0);\n"
 "    color: rgb(255, 255, 150);\n"
-"    font-size:13pt;\n"
+"    font-size:18px;\n"
 "    font-weight:bold;\n"
 "}\n"
 "\n"
@@ -142,16 +153,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.frame_Title.sizePolicy().hasHeightForWidth())
         self.frame_Title.setSizePolicy(sizePolicy)
         self.frame_Title.setMaximumSize(QtCore.QSize(16777215, 50))
-        self.frame_Title.setStyleSheet("QLabel{\n"
-"    font-size: 14pt;\n"
-"    font-weight:bold;\n"
-"}\n"
-"\n"
-"QPushButton{\n"
-"    font:12pt \'幼圆\';\n"
-"    font-weight:bold;\n"
-"    margin:5px;\n"
-"}")
+        self.frame_Title.setStyleSheet("")
         self.frame_Title.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_Title.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_Title.setObjectName("frame_Title")
