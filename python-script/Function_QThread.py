@@ -21,7 +21,6 @@ class Launch_py_QThread(QThread):
                 break
             if output_line:
                 self.text_to_textBrowser_cmd.emit(output_line.strip())
-        
         self.text_to_textBrowser_cmd.emit(f'__________ {content} __________')
         self.text_to_textBrowser.emit(f'__________ {content} __________')
         self.finished_signal.emit()
