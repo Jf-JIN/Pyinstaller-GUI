@@ -7,6 +7,7 @@ import psutil
 import win32gui
 import win32process
 import win32con
+import socket
 
 from PyToExe_ui import *
 from Function_QThread import *
@@ -84,7 +85,24 @@ class PyToExeUI(Ui_MainWindow):
             else:
                 print("当前脚本未在运行，继续执行其他操作。")
         except Exception as e:
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             QMessageBox.information(None, ' ', e)
+    
+    def client(self, pid):
+        print("Client PID:", os.getpid())
+        com = self.find_ports_by_pid(pid)
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('localhost', com))  # 连接到服务器
+        client_socket.sendall(sys.argv[1])  # 发送消息
+        client_socket.close()
+    
+    def find_ports_by_pid(self, pid):
+        ports = []
+        for conn in psutil.net_connections(kind='inet'):
+            if conn.pid == pid:
+                ports.append(conn.laddr.port)
+        return ports
     
     def get_process_windows(self, pid):
         print(pid)
@@ -135,6 +153,8 @@ class PyToExeUI(Ui_MainWindow):
             else:
                 return False
         except Exception as e:
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             QMessageBox.information(None, ' ', e)
     
     # ****************************************初始化****************************************
@@ -168,7 +188,7 @@ class PyToExeUI(Ui_MainWindow):
             self.cmd_dict['python_file_path'][0] = '"' + os.path.join(workspace_path, py_file_name_auto) + '"'
             self.Win.pte_FileName.setPlainText(py_file_name_auto.split('.')[0])
             self.cmd_dict['output_file_name'][0] = '--name="' + py_file_name_auto.split('.')[0] + '"'
-            self.launch_flag = True
+            self.launch_flag = False
         self.plain_text_update()
     
     # 参数初始化
@@ -177,8 +197,10 @@ class PyToExeUI(Ui_MainWindow):
         pixmap_icon.loadFromData(QByteArray(icon_data.encode()))
         self.WINDOW_ICON = QIcon(pixmap_icon)
         self.progressBar_value = 0
-        self.launch_flag = True
+        self.launch_flag = False
+        self.launch_error_count = 0
         self.clear_file_flag = True
+        self.traceback_display_flag = False
         # 用于显示参数，Label是项目名，explain是参数含义
         # self.cmd_dictsss = {
         #     'output_methode': [None, self.json_widgets['rb_OutputMethod_F']['dict'], None], 'specpath': [None, '\n.spec的文件夹：\t', None], 'output_file_name': [None, '\n输出名称：\t', None], 'contents_directory': [None, '\n除exe外，输出的其他数据的存入路径：\n', None], 'add_file_folder_data': [None, '\n添加文件资源：\t', None], 
@@ -265,9 +287,8 @@ class PyToExeUI(Ui_MainWindow):
                     self.Win.cbb_LanguageSelect.setCurrentText('English(build-in)')
             self.load_language_json_file()
         except Exception as e:
-            # traceback.print_exc()
-            traceback.format_exc()
-            QMessageBox.warning(None, 'PyToExe', traceback.format_exc())
+            e = traceback.format_exc()
+            QMessageBox.warning(None, 'PyToExe', e)
     
     # 加载语言包
     def load_language_json_file(self):
@@ -284,7 +305,6 @@ class PyToExeUI(Ui_MainWindow):
             self.json_special = self.language_json['special']
             self.json_general = self.language_json['general']
         except Exception as e:
-            # traceback.print_exc()
             QMessageBox.warning(None, text=e)
             # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
@@ -298,7 +318,6 @@ class PyToExeUI(Ui_MainWindow):
                     getattr(self.Win, name).setToolTip(value['tooltip'])
             self.setWindowTitle(self.json_special['window_title'] + '\t\t\t\t' + workspace_path)
         except Exception as e:
-            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # 当语言项更改
@@ -419,7 +438,6 @@ class PyToExeUI(Ui_MainWindow):
                 self.Win.pte_FileName.setPlainText(self.recover_cmd_dict['output_file_name'][0].split('"')[1])
             self.Win.pb_Recover.hide()
         except Exception as e:
-            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************从字典中获取实际command执行命令函数****************************************
@@ -456,7 +474,6 @@ class PyToExeUI(Ui_MainWindow):
                     self.append_TB_text(command_display, self.Win.textBrowser)
             self.append_TB_text(f'__________  {self.json_general["all_parameter"]}  __________\n\n')
         except Exception as e:
-            # traceback.print_exc()
             QMessageBox.warning(None, self.json_general['msg_warning'], str(e))
             # self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
@@ -471,7 +488,6 @@ class PyToExeUI(Ui_MainWindow):
             QDesktopServices.openUrl(
                             QUrl.fromLocalFile(workspace_path))
         except Exception as e:
-            # traceback.print_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************打开输出文件夹****************************************
@@ -488,20 +504,27 @@ class PyToExeUI(Ui_MainWindow):
             QDesktopServices.openUrl(
                         QUrl.fromLocalFile(folder_path))
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************向Textbrowser添加内容****************************************
     def append_TB_text(self, text_content: str, textBrowser_object: object = None):
         if not textBrowser_object:
             textBrowser_object = self.Win.textBrowser
+        if self.json_general["error"] in text_content or text_content.startswith('===='):
+            self.launch_error_count += 1
         try:
+            if self.launch_flag and self.launch_error_count > 0:
+                text_content = '[' + self.json_general["error"] + ']  ' + text_content.split('\n')[0]
             textBrowser_object.moveCursor(QTextCursor.End)
             textBrowser_object.insertPlainText(text_content + "\n")
             textBrowser_object.moveCursor(QTextCursor.End)
         except Exception as e:
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             textBrowser_object.moveCursor(QTextCursor.End)
-            textBrowser_object.insertPlainText(e + "\n")
+            textBrowser_object.insertPlainText( str(e) + "\n")
             textBrowser_object.moveCursor(QTextCursor.End)
     
     def clear_file_after_launch_flag_change(self):
@@ -536,7 +559,8 @@ class PyToExeUI(Ui_MainWindow):
                 return receiver_temp
             return None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     def select_folder(self, display_text:str = '', window_title:str = '') -> str :
@@ -548,7 +572,8 @@ class PyToExeUI(Ui_MainWindow):
                 return receiver_temp
             return None
         except Exception as e:
-            # traceback.print_exc()
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
     
     # ****************************************自定义对话窗口****************************************
