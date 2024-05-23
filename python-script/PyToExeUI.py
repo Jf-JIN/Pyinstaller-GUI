@@ -15,7 +15,7 @@ from Language_init_Chinese import *
 from Language_init_English import *
 
 from PyQt5.QtWidgets import  QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton, QListWidgetItem, QTextBrowser, QLineEdit, QPlainTextEdit
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QTextCursor
 from PyQt5.QtCore import Qt, QByteArray
 import pygetwindow as gw
 
@@ -131,8 +131,8 @@ class PyToExeUI(Ui_MainWindow):
         self.Win.pte_OutputPath.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.Win.textBrowser_cmd.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.Win.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.font_size_setting(self.Win.textBrowser_cmd, 13)
-        self.font_size_setting(self.Win.textBrowser, 13)
+        self.font_size_setting(self.Win.textBrowser_cmd, setting_file['textBrowser_cmd_font_size_px'])
+        self.font_size_setting(self.Win.textBrowser, setting_file['textBrowser_font_size_px'])
         # 设置PlainTextedit文字
         self.Win.pte_OutputPath.setPlainText(os.path.join(workspace_path))
         # 设置语言选择Combobox的焦点
@@ -142,6 +142,8 @@ class PyToExeUI(Ui_MainWindow):
         self.pushbutton_hover(self.Win.pb_TB_up, PB_UP_PINK)
         self.Win.pb_TB_down.setIcon(self.icon_setup(PB_DOWN_GREY))
         self.pushbutton_hover(self.Win.pb_TB_down, PB_DOWN_PINK)
+        self.Win.pb_TB_reset.setIcon(self.icon_setup(PB_RESET_GREY))
+        self.pushbutton_hover(self.Win.pb_TB_reset, PB_RESET_PINK)
         self.Win.pb_TB_increase.setIcon(self.icon_setup(PB_INCREASE_GREY))
         self.pushbutton_hover(self.Win.pb_TB_increase, PB_INCREASE_PINK)
         self.Win.pb_TB_decrease.setIcon(self.icon_setup(PB_DECREASE_GREY))
@@ -150,6 +152,8 @@ class PyToExeUI(Ui_MainWindow):
         self.pushbutton_hover(self.Win.pb_TBcmd_up, PB_UP_WHITE)
         self.Win.pb_TBcmd_down.setIcon(self.icon_setup(PB_DOWN_GREY))
         self.pushbutton_hover(self.Win.pb_TBcmd_down, PB_DOWN_WHITE)
+        self.Win.pb_TBcmd_reset.setIcon(self.icon_setup(PB_RESET_GREY))
+        self.pushbutton_hover(self.Win.pb_TBcmd_reset, PB_RESET_WHITE)
         self.Win.pb_TBcmd_increase.setIcon(self.icon_setup(PB_INCREASE_GREY))
         self.pushbutton_hover(self.Win.pb_TBcmd_increase, PB_INCREASE_WHITE)
         self.Win.pb_TBcmd_decrease.setIcon(self.icon_setup(PB_DECREASE_GREY))
@@ -323,6 +327,25 @@ class PyToExeUI(Ui_MainWindow):
             self.cmd_dict['output_file_name'][0] = '--name="' + self.Win.pte_FileName.toPlainText() + '"'
             self.cmd_dict['output_file_name'][2] = self.Win.pte_FileName.toPlainText()
     
+    # ****************************************向Textbrowser添加内容****************************************
+    def append_TB_text(self, text_content: str, textBrowser_object: object = None):
+        if not textBrowser_object:
+            textBrowser_object = self.Win.textBrowser
+        if self.json_general["error"] in text_content or text_content.startswith('===='):
+            self.launch_error_count += 1
+        try:
+            if self.launch_flag and self.launch_error_count > 0:
+                text_content = '[' + self.json_general["error"] + ']  ' + text_content.split('\n')[0]
+            textBrowser_object.moveCursor(QTextCursor.End)
+            textBrowser_object.insertPlainText(text_content + "\n")
+            textBrowser_object.moveCursor(QTextCursor.End)
+        except Exception as e:
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
+            textBrowser_object.moveCursor(QTextCursor.End)
+            textBrowser_object.insertPlainText( str(e) + "\n")
+            textBrowser_object.moveCursor(QTextCursor.End)
+    
     def icon_setup(self, icon_code):
         pixmap = QPixmap()
         pixmap.loadFromData(QByteArray(icon_code.encode()))
@@ -340,6 +363,22 @@ class PyToExeUI(Ui_MainWindow):
         button.leaveEvent = on_leave
     
     def font_size_setting(self, widget, px_value):
-        font = widget.font()
-        font.setPixelSize(px_value)
-        widget.setFont(font)
+        try:
+            font = widget.font()
+            font.setPixelSize(px_value)
+            widget.setFont(font)
+            if isinstance(widget, QTextBrowser):
+                return
+            if isinstance(widget, QPlainTextEdit):
+                text_size = widget.fontMetrics().size(Qt.TextSingleLine, widget.toPlainText())
+            else:
+                text_size = widget.fontMetrics().size(Qt.TextSingleLine, widget.text())
+            if (text_size.width() > widget.width() or text_size.height() > widget.height()):
+                scale_factor = min(widget.width() / text_size.width(), widget.height() / text_size.height())
+                font.setPointSizeF(font.pointSizeF() * scale_factor)
+                widget.setFont(font)
+        except Exception as e:
+            if self.traceback_display_flag:
+                e = traceback.format_exc()
+            self.append_TB_text(
+                f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser)
