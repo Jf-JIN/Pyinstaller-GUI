@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\10_Programm\0002_Python\0100_exe开发\0202_py转exe_v3\PyToExe.ui'
+# Form implementation generated from reading ui file 'e:\10_Programm\0002_Python\0100_exe开发\0202_py转exe_v3_GUIrewrite\PyToExe.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1228, 880)
+        MainWindow.resize(1244, 919)
         MainWindow.setStyleSheet("QWidget[objectName = \'centralwidget\']{\n"
 "    background-color: rgb(175, 199, 235);\n"
 "}\n"
@@ -83,16 +83,37 @@ class Ui_MainWindow(object):
 "    background-color: transparent;\n"
 "    border:none;\n"
 "}\n"
-"QTextBrowser{\n"
+"\n"
+"QFrame#frame_TB_PB, QFrame#frame_TBcmd_PB{\n"
+"    max-height: 30px;\n"
+"    min-height: 20px;\n"
+"}\n"
+"\n"
+"QFrame#frame_textBrowser QPushButton, QFrame#frame_textBrowser_cmd QPushButton{\n"
+"    border: None;\n"
+"    background-color: transparent;\n"
+"    max-width: 30px;\n"
+"    min-width: 20px;\n"
+"}\n"
+"\n"
+"QFrame#frame_textBrowser{\n"
 "    background-color: rgb(200, 239, 167);\n"
 "    border:1px solid rgba(70, 70, 70, 200);\n"
 "    border-radius: 10px;\n"
-"    font: 13px;\n"
 "}\n"
 "\n"
-"QTextBrowser[objectName = \'textBrowser_cmd\']{\n"
-"    color: rgb(255, 255, 255);\n"
+"QFrame#frame_textBrowser_cmd{\n"
+"    border:1px solid rgba(70, 70, 70, 200);\n"
+"    border-radius: 10px;\n"
 "    background-color:rgb(60, 60, 60);\n"
+"}\n"
+"\n"
+"QTextBrowser{\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"}\n"
+"QTextBrowser#textBrowser_cmd{\n"
+"    color: rgb(255, 255, 255);\n"
 "}\n"
 "\n"
 "QGroupBox{\n"
@@ -1037,7 +1058,20 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setSpacing(5)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.textBrowser_cmd = QtWidgets.QTextBrowser(self.frame_Right)
+        self.frame_textBrowser_cmd = QtWidgets.QFrame(self.frame_Right)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(80)
+        sizePolicy.setHeightForWidth(self.frame_textBrowser_cmd.sizePolicy().hasHeightForWidth())
+        self.frame_textBrowser_cmd.setSizePolicy(sizePolicy)
+        self.frame_textBrowser_cmd.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_textBrowser_cmd.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_textBrowser_cmd.setObjectName("frame_textBrowser_cmd")
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.frame_textBrowser_cmd)
+        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_7.setSpacing(0)
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.textBrowser_cmd = QtWidgets.QTextBrowser(self.frame_textBrowser_cmd)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(100)
@@ -1045,19 +1079,140 @@ class Ui_MainWindow(object):
         self.textBrowser_cmd.setSizePolicy(sizePolicy)
         self.textBrowser_cmd.setMinimumSize(QtCore.QSize(560, 0))
         self.textBrowser_cmd.setObjectName("textBrowser_cmd")
-        self.verticalLayout_3.addWidget(self.textBrowser_cmd)
-        self.textBrowser = QtWidgets.QTextBrowser(self.frame_Right)
+        self.verticalLayout_7.addWidget(self.textBrowser_cmd)
+        self.frame_TBcmd_PB = QtWidgets.QFrame(self.frame_textBrowser_cmd)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_TBcmd_PB.sizePolicy().hasHeightForWidth())
+        self.frame_TBcmd_PB.setSizePolicy(sizePolicy)
+        self.frame_TBcmd_PB.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_TBcmd_PB.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_TBcmd_PB.setObjectName("frame_TBcmd_PB")
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.frame_TBcmd_PB)
+        self.horizontalLayout_13.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_13.setSpacing(50)
+        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
+        self.pb_TBcmd_up = QtWidgets.QPushButton(self.frame_TBcmd_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TBcmd_up.sizePolicy().hasHeightForWidth())
+        self.pb_TBcmd_up.setSizePolicy(sizePolicy)
+        self.pb_TBcmd_up.setText("")
+        self.pb_TBcmd_up.setObjectName("pb_TBcmd_up")
+        self.horizontalLayout_13.addWidget(self.pb_TBcmd_up)
+        self.pb_TBcmd_down = QtWidgets.QPushButton(self.frame_TBcmd_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TBcmd_down.sizePolicy().hasHeightForWidth())
+        self.pb_TBcmd_down.setSizePolicy(sizePolicy)
+        self.pb_TBcmd_down.setText("")
+        self.pb_TBcmd_down.setObjectName("pb_TBcmd_down")
+        self.horizontalLayout_13.addWidget(self.pb_TBcmd_down)
+        self.pb_TBcmd_increase = QtWidgets.QPushButton(self.frame_TBcmd_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TBcmd_increase.sizePolicy().hasHeightForWidth())
+        self.pb_TBcmd_increase.setSizePolicy(sizePolicy)
+        self.pb_TBcmd_increase.setText("")
+        self.pb_TBcmd_increase.setObjectName("pb_TBcmd_increase")
+        self.horizontalLayout_13.addWidget(self.pb_TBcmd_increase)
+        self.pb_TBcmd_decrease = QtWidgets.QPushButton(self.frame_TBcmd_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TBcmd_decrease.sizePolicy().hasHeightForWidth())
+        self.pb_TBcmd_decrease.setSizePolicy(sizePolicy)
+        self.pb_TBcmd_decrease.setText("")
+        self.pb_TBcmd_decrease.setObjectName("pb_TBcmd_decrease")
+        self.horizontalLayout_13.addWidget(self.pb_TBcmd_decrease)
+        self.verticalLayout_7.addWidget(self.frame_TBcmd_PB)
+        self.verticalLayout_3.addWidget(self.frame_textBrowser_cmd)
+        self.frame_textBrowser = QtWidgets.QFrame(self.frame_Right)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(100)
+        sizePolicy.setHeightForWidth(self.frame_textBrowser.sizePolicy().hasHeightForWidth())
+        self.frame_textBrowser.setSizePolicy(sizePolicy)
+        self.frame_textBrowser.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_textBrowser.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_textBrowser.setObjectName("frame_textBrowser")
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.frame_textBrowser)
+        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_8.setSpacing(0)
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.textBrowser = QtWidgets.QTextBrowser(self.frame_textBrowser)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(130)
         sizePolicy.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
         self.textBrowser.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(3)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.textBrowser.setFont(font)
         self.textBrowser.setObjectName("textBrowser")
-        self.verticalLayout_3.addWidget(self.textBrowser)
+        self.verticalLayout_8.addWidget(self.textBrowser)
+        self.frame_TB_PB = QtWidgets.QFrame(self.frame_textBrowser)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_TB_PB.sizePolicy().hasHeightForWidth())
+        self.frame_TB_PB.setSizePolicy(sizePolicy)
+        self.frame_TB_PB.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_TB_PB.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_TB_PB.setObjectName("frame_TB_PB")
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.frame_TB_PB)
+        self.horizontalLayout_14.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_14.setSpacing(50)
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.pb_TB_up = QtWidgets.QPushButton(self.frame_TB_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TB_up.sizePolicy().hasHeightForWidth())
+        self.pb_TB_up.setSizePolicy(sizePolicy)
+        self.pb_TB_up.setText("")
+        self.pb_TB_up.setObjectName("pb_TB_up")
+        self.horizontalLayout_14.addWidget(self.pb_TB_up)
+        self.pb_TB_down = QtWidgets.QPushButton(self.frame_TB_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TB_down.sizePolicy().hasHeightForWidth())
+        self.pb_TB_down.setSizePolicy(sizePolicy)
+        self.pb_TB_down.setText("")
+        self.pb_TB_down.setObjectName("pb_TB_down")
+        self.horizontalLayout_14.addWidget(self.pb_TB_down)
+        self.pb_TB_increase = QtWidgets.QPushButton(self.frame_TB_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TB_increase.sizePolicy().hasHeightForWidth())
+        self.pb_TB_increase.setSizePolicy(sizePolicy)
+        self.pb_TB_increase.setText("")
+        self.pb_TB_increase.setObjectName("pb_TB_increase")
+        self.horizontalLayout_14.addWidget(self.pb_TB_increase)
+        self.pb_TB_decrease = QtWidgets.QPushButton(self.frame_TB_PB)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_TB_decrease.sizePolicy().hasHeightForWidth())
+        self.pb_TB_decrease.setSizePolicy(sizePolicy)
+        self.pb_TB_decrease.setText("")
+        self.pb_TB_decrease.setObjectName("pb_TB_decrease")
+        self.horizontalLayout_14.addWidget(self.pb_TB_decrease)
+        self.verticalLayout_8.addWidget(self.frame_TB_PB)
+        self.verticalLayout_3.addWidget(self.frame_textBrowser)
         self.frame_pb_Right = QtWidgets.QFrame(self.frame_Right)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(75)
+        sizePolicy.setVerticalStretch(70)
         sizePolicy.setHeightForWidth(self.frame_pb_Right.sizePolicy().hasHeightForWidth())
         self.frame_pb_Right.setSizePolicy(sizePolicy)
         self.frame_pb_Right.setMinimumSize(QtCore.QSize(0, 150))
