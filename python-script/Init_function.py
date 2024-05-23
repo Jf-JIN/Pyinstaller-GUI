@@ -50,7 +50,9 @@ if not isinstance(setting_file["Language"], str) \
 if not isinstance(setting_file["Multiple_Windows"], bool):
     setting_file["Multiple_Windows"] = True
     new_setting_file_flag = True
-
+for i in ['textBrowser_font_size_px', 'textBrowser_cmd_font_size_px']:
+    if not isinstance(setting_file[i], int) and setting_file[i] > 0:
+        setting_file[i] = default_setting[i]
 # 如果存在缺失或者多余项等，则更新setting文件
 if new_setting_file_flag == True:
     with open (setting_path, 'w', encoding='utf-8') as file:
