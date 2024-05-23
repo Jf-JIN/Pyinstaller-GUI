@@ -4,7 +4,7 @@ import traceback
 from PyToExeUI import *
 
 from PyQt5.QtWidgets import  QFileDialog
-from PyQt5.QtGui import QTextCursor, QDesktopServices, QPixmap
+from PyQt5.QtGui import QDesktopServices, QPixmap
 from PyQt5.QtCore import Qt, QUrl
 
 
@@ -25,10 +25,13 @@ class PyToExeUI_function(PyToExeUI):
         self.Win.pb_ShowParameter.clicked.connect(self.parameter_display)
         self.Win.pb_OpenDir.clicked.connect(self.open_output_folder)
         self.Win.pb_Print.clicked.connect(self.print_cmd)
-        self.Win.pb_TB_increase.clicked.connect(lambda: self.font_increase_px(self.Win.textBrowser, 1))
-        self.Win.pb_TB_decrease.clicked.connect(lambda: self.font_increase_px(self.Win.textBrowser, -1))
-        self.Win.pb_TBcmd_increase.clicked.connect(lambda: self.font_increase_px(self.Win.textBrowser_cmd, 1))
-        self.Win.pb_TBcmd_decrease.clicked.connect(lambda: self.font_increase_px(self.Win.textBrowser_cmd, -1))
+        self.Win.pb_TB_reset.clicked.connect(lambda: self.textbrowser_font_reset(self.Win.textBrowser))
+        self.Win.pb_TB_increase.clicked.connect(lambda: self.textbrowser_font_increase_by_pb(self.Win.textBrowser, 1))
+        self.Win.pb_TB_decrease.clicked.connect(lambda: self.textbrowser_font_increase_by_pb(self.Win.textBrowser, -1))
+        self.Win.pb_TBcmd_reset.clicked.connect(lambda: self.textbrowser_font_reset(self.Win.textBrowser_cmd))
+        self.Win.pb_TBcmd_increase.clicked.connect(lambda: self.textbrowser_font_increase_by_pb(self.Win.textBrowser_cmd, 1))
+        self.Win.pb_TBcmd_decrease.clicked.connect(lambda: self.textbrowser_font_increase_by_pb(self.Win.textBrowser_cmd, -1))
+        
         
     # ****************************************清空函数****************************************
     # 清空控制台显示
@@ -177,25 +180,6 @@ class PyToExeUI_function(PyToExeUI):
             if self.traceback_display_flag:
                 e = traceback.format_exc()
             self.append_TB_text(f'__________ {self.json_general["error"]} __________\n{e}\n', self.Win.textBrowser_cmd)
-    
-    # ****************************************向Textbrowser添加内容****************************************
-    def append_TB_text(self, text_content: str, textBrowser_object: object = None):
-        if not textBrowser_object:
-            textBrowser_object = self.Win.textBrowser
-        if self.json_general["error"] in text_content or text_content.startswith('===='):
-            self.launch_error_count += 1
-        try:
-            if self.launch_flag and self.launch_error_count > 0:
-                text_content = '[' + self.json_general["error"] + ']  ' + text_content.split('\n')[0]
-            textBrowser_object.moveCursor(QTextCursor.End)
-            textBrowser_object.insertPlainText(text_content + "\n")
-            textBrowser_object.moveCursor(QTextCursor.End)
-        except Exception as e:
-            if self.traceback_display_flag:
-                e = traceback.format_exc()
-            textBrowser_object.moveCursor(QTextCursor.End)
-            textBrowser_object.insertPlainText( str(e) + "\n")
-            textBrowser_object.moveCursor(QTextCursor.End)
     
     def clear_file_after_launch_flag_change(self):
         if self.Win.cb_ClearFileAfterLaunchFlagChange.isChecked():
@@ -542,10 +526,20 @@ class PyToExeUI_function(PyToExeUI):
             return 1, new_size
         return 0, ori_size
     
-    def textbrowser_font_increase_by_pb(self, widget):
-        flag, new_size = self.font_increase_px(widget, 1)
+    def textbrowser_font_increase_by_pb(self, widget, increase_value):
+        flag, new_size = self.font_increase_px(widget, increase_value)
         if widget == self.Win.textBrowser and flag:
             setting_file['textBrowser_font_size_px'] = new_size
-        elif widget == self.Win.textBrowser and flag:
+            self.write_setting_file()
+        elif widget == self.Win.textBrowser_cmd and flag:
             setting_file['textBrowser_cmd_font_size_px'] = new_size
+            self.write_setting_file()
+    
+    def textbrowser_font_reset(self, widget):
+        self.font_size_setting(widget, 13)
+        if widget == self.Win.textBrowser:
+            setting_file['textBrowser_font_size_px'] = 13
+        elif widget == self.Win.textBrowser_cmd:
+            setting_file['textBrowser_cmd_font_size_px'] = 13
+        self.write_setting_file()
 
