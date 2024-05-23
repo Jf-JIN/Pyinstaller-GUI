@@ -539,3 +539,149 @@ y="82.11689" />
 </g>
 </svg>
 '''
+
+PB_RESET_WHITE = '''<svg
+width="800"
+height="800"
+viewBox="0 0 200 200"
+version="1.1"
+id="svg1"
+inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+sodipodi:docname="恢复-白.svg"
+xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:svg="http://www.w3.org/2000/svg">
+<sodipodi:namedview
+id="namedview1"
+pagecolor="#ffffff"
+bordercolor="#000000"
+borderopacity="0.25"
+inkscape:showpageshadow="2"
+inkscape:pageopacity="0.0"
+inkscape:pagecheckerboard="0"
+inkscape:deskcolor="#d1d1d1"
+inkscape:document-units="mm"
+inkscape:zoom="1.0242632"
+inkscape:cx="222.59904"
+inkscape:cy="438.85205"
+inkscape:window-width="1920"
+inkscape:window-height="1009"
+inkscape:window-x="2552"
+inkscape:window-y="210"
+inkscape:window-maximized="1"
+inkscape:current-layer="layer1" />
+<defs
+id="defs1" />
+<g
+inkscape:label="图层 1"
+inkscape:groupmode="layer"
+id="layer1">
+<path
+id="path4"
+style="fill:#ffffff;stroke:#0c0c0c;stroke-width:3.77952756;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;paint-order:fill markers stroke;stroke-dasharray:none;fill-opacity:1"
+d="M 105.85254 14.645508 A 85.039368 85.039368 0 0 0 26.004883 71.33252 L 45.47998 64.517578 L 51.944824 82.992676 A 56.692913 56.692913 0 0 1 105.85254 42.992188 A 56.692913 56.692913 0 0 1 162.54541 99.685059 A 56.692913 56.692913 0 0 1 105.85254 156.37793 A 56.692913 56.692913 0 0 1 63.743652 137.07275 L 81.060059 125.17041 L 81.428223 123.19336 L 28.83252 113.48242 L 19.056641 166.06543 L 21.033691 166.43018 L 40.154785 153.28711 A 85.039368 85.039368 0 0 0 105.85254 184.72412 A 85.039368 85.039368 0 0 0 190.8916 99.685059 A 85.039368 85.039368 0 0 0 105.85254 14.645508 z " />
+</g>
+</svg>
+'''
+
+PB_RESET_GREY = '''<svg
+width="800"
+height="800"
+viewBox="0 0 200 200"
+version="1.1"
+id="svg1"
+inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+sodipodi:docname="恢复-灰.svg"
+xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:svg="http://www.w3.org/2000/svg">
+<sodipodi:namedview
+id="namedview1"
+pagecolor="#ffffff"
+bordercolor="#000000"
+borderopacity="0.25"
+inkscape:showpageshadow="2"
+inkscape:pageopacity="0.0"
+inkscape:pagecheckerboard="0"
+inkscape:deskcolor="#d1d1d1"
+inkscape:document-units="mm"
+inkscape:zoom="1.0242632"
+inkscape:cx="222.59904"
+inkscape:cy="438.85205"
+inkscape:window-width="1920"
+inkscape:window-height="1009"
+inkscape:window-x="2552"
+inkscape:window-y="210"
+inkscape:window-maximized="1"
+inkscape:current-layer="layer1" />
+<defs
+id="defs1" />
+<g
+inkscape:label="图层 1"
+inkscape:groupmode="layer"
+id="layer1">
+<path
+id="path4"
+style="fill:#878787;stroke:#0c0c0c;stroke-width:3.77952756;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;paint-order:fill markers stroke;stroke-dasharray:none;fill-opacity:1"
+d="M 105.85254 14.645508 A 85.039368 85.039368 0 0 0 26.004883 71.33252 L 45.47998 64.517578 L 51.944824 82.992676 A 56.692913 56.692913 0 0 1 105.85254 42.992188 A 56.692913 56.692913 0 0 1 162.54541 99.685059 A 56.692913 56.692913 0 0 1 105.85254 156.37793 A 56.692913 56.692913 0 0 1 63.743652 137.07275 L 81.060059 125.17041 L 81.428223 123.19336 L 28.83252 113.48242 L 19.056641 166.06543 L 21.033691 166.43018 L 40.154785 153.28711 A 85.039368 85.039368 0 0 0 105.85254 184.72412 A 85.039368 85.039368 0 0 0 190.8916 99.685059 A 85.039368 85.039368 0 0 0 105.85254 14.645508 z " />
+</g>
+</svg>
+'''
+
+PB_RESET_PINK = '''<svg
+width="800"
+height="800"
+viewBox="0 0 200 200"
+version="1.1"
+id="svg1"
+inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+sodipodi:docname="恢复-粉红.svg"
+xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:svg="http://www.w3.org/2000/svg">
+<sodipodi:namedview
+id="namedview1"
+pagecolor="#ffffff"
+bordercolor="#000000"
+borderopacity="0.25"
+inkscape:showpageshadow="2"
+inkscape:pageopacity="0.0"
+inkscape:pagecheckerboard="0"
+inkscape:deskcolor="#d1d1d1"
+inkscape:document-units="mm"
+inkscape:zoom="1.0242632"
+inkscape:cx="222.59904"
+inkscape:cy="438.85205"
+inkscape:window-width="1920"
+inkscape:window-height="1009"
+inkscape:window-x="2552"
+inkscape:window-y="210"
+inkscape:window-maximized="1"
+inkscape:current-layer="layer1" />
+<defs
+id="defs1" />
+<g
+inkscape:label="图层 1"
+inkscape:groupmode="layer"
+id="layer1">
+<path
+id="path4"
+style="fill:#d78287;stroke:#0c0c0c;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;paint-order:fill markers stroke"
+d="M 105.85254 14.645508 A 85.039368 85.039368 0 0 0 26.004883 71.33252 L 45.47998 64.517578 L 51.944824 82.992676 A 56.692913 56.692913 0 0 1 105.85254 42.992188 A 56.692913 56.692913 0 0 1 162.54541 99.685059 A 56.692913 56.692913 0 0 1 105.85254 156.37793 A 56.692913 56.692913 0 0 1 63.743652 137.07275 L 81.060059 125.17041 L 81.428223 123.19336 L 28.83252 113.48242 L 19.056641 166.06543 L 21.033691 166.43018 L 40.154785 153.28711 A 85.039368 85.039368 0 0 0 105.85254 184.72412 A 85.039368 85.039368 0 0 0 190.8916 99.685059 A 85.039368 85.039368 0 0 0 105.85254 14.645508 z " />
+</g>
+</svg>
+'''
+
+
+
+
+
+
+
+
+
+
+
