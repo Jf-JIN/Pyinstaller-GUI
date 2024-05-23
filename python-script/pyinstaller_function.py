@@ -2,10 +2,10 @@
 
 import time
 
-from PyToExeUI import *
+from PyToExeUI_function import *
 
 
-class Pyinstaller_function(PyToExeUI):
+class Pyinstaller_function(PyToExeUI_function):
     def __init__(self):
         super().__init__()
         self.pyinstaller_function_signal_connection()
