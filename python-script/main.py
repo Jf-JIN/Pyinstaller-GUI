@@ -1,17 +1,11 @@
-from pyinstaller_function import *
 
-from PyQt5.QtWidgets import QApplication, QMainWindow
-
-
-class Exe_main_window(QMainWindow, Pyinstaller_function):
-    def __init__(self):
-        super().__init__()
-        self.setWindowIcon(self.WINDOW_ICON)
-
+from service.Function import *
+import sys
+from PyQt5.QtWidgets import QApplication
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    mainWindow = Exe_main_window()
-    mainWindow.show()
+    window = FunctionUI()
+    window.show()
+    window.start_python_conda_detection()
     sys.exit(app.exec_())
-
