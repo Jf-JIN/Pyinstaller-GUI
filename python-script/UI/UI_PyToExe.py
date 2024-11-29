@@ -13,6 +13,7 @@ import shutil
 # import win32process
 # import win32con
 import socket
+import wrapt
 
 from UI.UI_PyToExe_ui import *
 from UI.Widget_Control_TextBrowser import *
@@ -25,8 +26,9 @@ from system.Struct_IO import *
 from system.Struct_env_info import *
 from system.Thread_Conda import *
 from system.Thread_Pip_Install import *
-from system.Filter_Left_Double import *
+from system.Filter_Mouse import *
 from tools.wait_thread import *
+from tools.try_except_log import try_except_log
 
 
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QPushButton, QDialog, QListWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QFrame, QSpacerItem, QInputDialog, QLabel, QCheckBox, QRadioButton, QListWidgetItem, QTextBrowser, QMainWindow, QTableWidgetItem, QHeaderView, QTableWidget, QMenu, QAction, QTabWidget, QWidget, QScrollArea, QLineEdit, QComboBox, QGroupBox, QGridLayout, QProgressBar, QApplication, QButtonGroup
@@ -91,7 +93,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         # 菜单按钮初始化
         list_menu_buttons = [
             self.pb_page_basic, self.pb_page_advance, self.pb_page_ios_win, self.pb_page_info, self.pb_page_console,
-            self.pb_page_command, self.pb_page_setting, self.pb_show_tutorial, self.pb_reset_all_params, self.pb_open_output_folder,
+            self.pb_page_command, self.pb_page_setting, self.pb_show_tutorial,  self.pb_open_output_folder,
             self.pb_output_command]
         pb_size = 35
         icon_padding = 8
@@ -102,6 +104,11 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             button.setMinimumSize(pb_size, pb_size)
             button.setMaximumSize(pb_size, pb_size)
             button.setIconSize(QSize(pb_size-icon_padding, pb_size-icon_padding))
+        self.lb_reset_all_params.setMinimumSize(pb_size, pb_size)
+        self.lb_reset_all_params.setMaximumSize(pb_size, pb_size)
+        filter_reset_all_parameters = LabelLeftDoubleOrLangPressFilter(self, self.lb_reset_all_params)
+        filter_reset_all_parameters.signal_doublePress_longPress.connect(self.reset_parameters)
+        self.lb_reset_all_params.installEventFilter(filter_reset_all_parameters)
 
         # 主页图标初始化
         list_icon = [self.lb_output_exe_icon_icon, self.lb_input_py_file_icon,
@@ -140,22 +147,22 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.env_btn_group.addButton(self.rb_env_conda)
         self.env_btn_group.addButton(self.rb_env_builtin)
 
-        env_current_install_page_base = LabelLeftDoubleToInstallFilter(self, self.lb_env_current_check_install_page_base, self.env_struct_current)
-        env_current_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_current_check_install_page_setting_env, self.env_struct_current)
-        env_specified_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_specified_check_install_page_setting_env, self.env_struct_specified)
-        env_sys_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_sys_check_install_page_setting_env, self.env_struct_sys)
-        env_conda_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_conda_check_install_page_setting_env, self.env_struct_conda)
-        env_current_install_page_base.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
-        env_current_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
-        env_specified_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
-        env_sys_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
-        env_conda_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
+        filter_env_current_install_page_base = LabelLeftDoubleToInstallFilter(self, self.lb_env_current_check_install_page_base, self.env_struct_current)
+        filter_env_current_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_current_check_install_page_setting_env, self.env_struct_current)
+        filter_env_specified_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_specified_check_install_page_setting_env, self.env_struct_specified)
+        filter_env_sys_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_sys_check_install_page_setting_env, self.env_struct_sys)
+        filter_env_conda_install_page_setting_env = LabelLeftDoubleToInstallFilter(self, self.lb_env_conda_check_install_page_setting_env, self.env_struct_conda)
+        filter_env_current_install_page_base.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
+        filter_env_current_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
+        filter_env_specified_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
+        filter_env_sys_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
+        filter_env_conda_install_page_setting_env.signal_textbrowser_LDFilter.connect(self.tb_console.append_text)
 
-        self.lb_env_current_check_install_page_base.installEventFilter(env_current_install_page_base)
-        self.lb_env_current_check_install_page_setting_env.installEventFilter(env_current_install_page_setting_env)
-        self.lb_env_specified_check_install_page_setting_env.installEventFilter(env_specified_install_page_setting_env)
-        self.lb_env_sys_check_install_page_setting_env.installEventFilter(env_sys_install_page_setting_env)
-        self.lb_env_conda_check_install_page_setting_env.installEventFilter(env_conda_install_page_setting_env)
+        self.lb_env_current_check_install_page_base.installEventFilter(filter_env_current_install_page_base)
+        self.lb_env_current_check_install_page_setting_env.installEventFilter(filter_env_current_install_page_setting_env)
+        self.lb_env_specified_check_install_page_setting_env.installEventFilter(filter_env_specified_install_page_setting_env)
+        self.lb_env_sys_check_install_page_setting_env.installEventFilter(filter_env_sys_install_page_setting_env)
+        self.lb_env_conda_check_install_page_setting_env.installEventFilter(filter_env_conda_install_page_setting_env)
 
         self.wdg_progressbar.hide()
         self.wdg_save_setting.hide()
@@ -173,7 +180,10 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.pb_page_setting.setIcon(QIcon(self.pixmap_from_svg(ICON_MENU_BTN_SETTING)))
 
         # 执行按钮图标
-        self.pb_reset_all_params.setIcon(QIcon(self.pixmap_from_svg(ICON_RESET_ALL_PARAMETERS)))
+        self.lb_reset_all_params.setPixmap(self.pixmap_from_svg(ICON_RESET_ALL_PARAMETERS).scaled(
+            self.lb_reset_all_params.width(), self.lb_reset_all_params.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.lb_reset_all_params.setContentsMargins(4, 4, 4, 4)
+        self.lb_reset_all_params.setStyleSheet('QLabel{ border: 2px solid; border-radius: 5px; border-color: #000000; }')
         self.pb_open_output_folder.setIcon(QIcon(self.pixmap_from_svg(ICON_OPEN_FOLDER)))
         self.pb_output_command.setIcon(QIcon(self.pixmap_from_svg(ICON_OUTPUT_COMMAND)))
         self.pb_launch.setIcon(QIcon(self.pixmap_from_svg(ICON_LAUNCH)))
@@ -619,7 +629,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             self.lb_env_specified_hint_info_page_setting_env.clear()
 
     def select_python_env(self):  # 重写
-        """ 
+        """
         更新当前选定的python环境显示
         """
         self.update_installer_info()
@@ -691,3 +701,19 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             self.lb_env_current_check_install_page_setting_env.setStyleSheet('background-color: rgb(200, 0, 0); color: rgb(200, 200, 200);')
             self.lb_env_current_check_install_page_base.setText('pyinstaller\n未安装')
             self.lb_env_current_check_install_page_base.setStyleSheet('background-color: rgb(200, 0, 0); color: rgb(200, 200, 200);')
+
+    def reset_parameters_double_click(self):
+        print('双击')
+        # 双击完成重置到打开时的命令行参数
+
+    def reset_parameters_long_pressed(self):
+        print('长按')
+        # 长按完成重置到默认命令行参数
+
+    def reset_parameters(self, flag: str):
+        if flag == 'doublePressed':
+            self.reset_parameters_double_click()
+        elif flag == 'longPressed':
+            self.reset_parameters_long_pressed()
+        else:
+            pass
