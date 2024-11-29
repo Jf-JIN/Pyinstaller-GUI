@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QEventLoop, pyqtSignal, QObject, QEvent, Qt
+from PyQt5.QtCore import QEventLoop, pyqtSignal, QObject, QEvent, Qt, QTimer
 from PyQt5.QtWidgets import QLabel
 
 from system.Thread_Pip_Install import ThreadPipInstall
@@ -23,10 +23,6 @@ class LabelLeftDoubleToInstallFilter(QObject):
         loop = QEventLoop()
         outputsignal.connect(lambda: loop.quit())
         loop.exec_()
-
-    def __signal_received(self, data):
-        # 当线程发射信号时，捕获数据并重新发射
-        self.signal_textbrowser_LDFilter.emit(data)
 
     def eventFilter(self, obj, event):
         if event.type() == QEvent.MouseButtonDblClick and obj is not None:
@@ -61,4 +57,38 @@ class LabelLeftDoubleToInstallFilter(QObject):
                     # 系统
                     elif self.__label == self.__parent.lb_env_sys_check_install_page_setting_env:
                         self.__parent.update_env_sys()
+        return super().eventFilter(obj, event)
+
+
+class LabelLeftDoubleOrLangPressFilter(QObject):
+    signal_textbrowser_LDFilter = pyqtSignal(str)
+    signal_doublePress_longPress = pyqtSignal(str)
+
+    def __init__(self, parent, label: QLabel):
+        super().__init__(label)
+        # self.__parent: PyToExeUI = parent # 用于检查，记得运行时注释掉！
+        self.__parent = parent
+        self.__label = label
+        self.__timer_press = QTimer()
+        self.__timer_press.timeout.connect(self.__long_press_action)
+        self.__time_interval_s = 1.5
+        self.__time_interval = int(self.__time_interval_s * 1000)
+
+    def __long_press_action(self):
+        self.__timer_press.stop()
+        self.signal_doublePress_longPress.emit('longPressed')
+
+    def eventFilter(self, obj, event):
+        # 双击
+        if event.type() == QEvent.MouseButtonDblClick and obj is not None and event.button() == Qt.LeftButton:
+            self.__timer_press.stop()
+            self.signal_doublePress_longPress.emit('doublePressed')
+        # 长按
+        if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
+            if not self.__timer_press.isActive():
+                self.__timer_press.start(self.__time_interval)
+            self.is_long_press = False
+        elif event.type() == QEvent.MouseButtonRelease and event.button() == Qt.LeftButton:
+            if self.__timer_press.isActive():
+                self.__timer_press.stop()
         return super().eventFilter(obj, event)
