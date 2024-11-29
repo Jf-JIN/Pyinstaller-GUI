@@ -1899,13 +1899,15 @@ class Ui_MainWindow(object):
         self.horizontalLayout_10.setSpacing(15)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.horizontalLayout_10.setContentsMargins(10, 10, 10, 10)
-        self.pb_reset_all_params = QPushButton(self.widget_launch)
-        self.pb_reset_all_params.setObjectName(u"pb_reset_all_params")
-        sizePolicy1.setHeightForWidth(self.pb_reset_all_params.sizePolicy().hasHeightForWidth())
-        self.pb_reset_all_params.setSizePolicy(sizePolicy1)
-        self.pb_reset_all_params.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.lb_reset_all_params = QLabel(self.widget_launch)
+        self.lb_reset_all_params.setObjectName(u"lb_reset_all_params")
+        sizePolicy1.setHeightForWidth(self.lb_reset_all_params.sizePolicy().hasHeightForWidth())
+        self.lb_reset_all_params.setSizePolicy(sizePolicy1)
+        self.lb_reset_all_params.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.lb_reset_all_params.setScaledContents(True)
+        self.lb_reset_all_params.setAlignment(Qt.AlignCenter)
 
-        self.horizontalLayout_10.addWidget(self.pb_reset_all_params)
+        self.horizontalLayout_10.addWidget(self.lb_reset_all_params)
 
         self.pb_output_command = QPushButton(self.widget_launch)
         self.pb_output_command.setObjectName(u"pb_output_command")
@@ -1967,7 +1969,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2113,7 +2115,7 @@ class Ui_MainWindow(object):
         self.wdg_save_setting.setProperty(u"wdg_group", QCoreApplication.translate("MainWindow", u"area_widget", None))
         self.pb_save_setting.setText(QCoreApplication.translate("MainWindow", u"\u4fdd\u5b58\u5e76\u7acb\u5373\u751f\u6548", None))
         self.widget_launch.setProperty(u"wdg_group", QCoreApplication.translate("MainWindow", u"area_launch", None))
-        self.pb_reset_all_params.setText("")
+        self.lb_reset_all_params.setText("")
         self.pb_output_command.setText("")
         self.pb_open_output_folder.setText("")
         self.pb_launch.setText(QCoreApplication.translate("MainWindow", u"\u8fd0\u884c", None))

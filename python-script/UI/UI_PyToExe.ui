@@ -2577,7 +2577,7 @@
               </sizepolicy>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="tab_common">
               <attribute name="title">
@@ -3873,7 +3873,7 @@
            <number>10</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pb_reset_all_params">
+           <widget class="QLabel" name="lb_reset_all_params">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -3885,6 +3885,12 @@
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
