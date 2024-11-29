@@ -6,10 +6,17 @@ import subprocess
 import traceback
 import platform
 import os
-import time
+import atexit
 
 from tools.find_pyinstaller import *
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
+
+executor = ThreadPoolExecutor(max_workers=5)
+
+
+@atexit.register
+def cleanup_executor():
+    executor.shutdown(wait=True)
 
 
 class PythonCondaEnvDetection(QThread):
