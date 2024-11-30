@@ -492,6 +492,9 @@
            <verstretch>100</verstretch>
           </sizepolicy>
          </property>
+         <property name="currentIndex">
+          <number>6</number>
+         </property>
          <widget class="QWidget" name="page_base">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -585,13 +588,12 @@
                <widget class="QLabel" name="lb_env_current_check_install_page_base">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
+                  <horstretch>5</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
                 <property name="text">
-                 <string>pyinstaller
-已安装</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -1321,7 +1323,7 @@
                     <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="text">
-                    <string>创建/编辑</string>
+                    <string>创建/编辑/预览</string>
                    </property>
                   </widget>
                  </item>
@@ -1547,7 +1549,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_3">
+               <widget class="QPushButton" name="pb_add_file_folder_data">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1563,7 +1565,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_5">
+               <widget class="QPushButton" name="pb_add_binary_data">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1579,7 +1581,7 @@
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QPushButton" name="pushButton_35">
+               <widget class="QPushButton" name="pb_collect_submodules">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1595,7 +1597,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QPushButton" name="pushButton_36">
+               <widget class="QPushButton" name="pb_collect_data">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1611,7 +1613,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QPushButton" name="pushButton_37">
+               <widget class="QPushButton" name="pb_collect_binaries">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1627,7 +1629,7 @@
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QPushButton" name="pushButton_38">
+               <widget class="QPushButton" name="pb_collect_all">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1643,7 +1645,7 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="pb_add_splash_screen">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1692,7 +1694,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_10">
+               <widget class="QPushButton" name="pb_hidden_import">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1708,7 +1710,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_11">
+               <widget class="QPushButton" name="pb_imports_paths">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1724,7 +1726,7 @@
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QPushButton" name="pushButton_43">
+               <widget class="QPushButton" name="pb_exclude_module">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1773,7 +1775,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_39">
+               <widget class="QPushButton" name="pb_copy_metadata">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1789,7 +1791,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_40">
+               <widget class="QPushButton" name="pb_recursive_copy_metadata">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1848,7 +1850,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_41">
+               <widget class="QPushButton" name="pb_additional_hooks_dir">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1864,7 +1866,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_42">
+               <widget class="QPushButton" name="pb_runtime_hook">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1923,7 +1925,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_44">
+               <widget class="QPushButton" name="pb_runtime_tmpdir">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1939,7 +1941,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_30">
+               <widget class="QPushButton" name="pb_workpath_option">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1955,7 +1957,7 @@
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QPushButton" name="pushButton_47">
+               <widget class="QPushButton" name="pb_specpath">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1971,7 +1973,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QCheckBox" name="checkBox_10">
+               <widget class="QCheckBox" name="cb_noupx_option">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -1987,7 +1989,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QPushButton" name="pushButton_45">
+               <widget class="QPushButton" name="pb_upx_dir">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2003,7 +2005,7 @@
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QPushButton" name="pushButton_31">
+               <widget class="QPushButton" name="pb_upx_exclude">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2052,7 +2054,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_46">
+               <widget class="QPushButton" name="pb_log_level">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2068,7 +2070,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_33">
+               <widget class="QPushButton" name="pb_python_option">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2084,7 +2086,7 @@
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QPushButton" name="pushButton_34">
+               <widget class="QPushButton" name="pb_debug_mode">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2100,7 +2102,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QCheckBox" name="checkBox_8">
+               <widget class="QCheckBox" name="cb_disable_traceback">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2116,7 +2118,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QCheckBox" name="checkBox_7">
+               <widget class="QCheckBox" name="cb_ignore_signals">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2132,7 +2134,7 @@
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QCheckBox" name="checkBox_15">
+               <widget class="QCheckBox" name="cb_noconfirm_option">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2148,7 +2150,7 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QCheckBox" name="checkBox_11">
+               <widget class="QCheckBox" name="cb_strip_option">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2160,6 +2162,22 @@
                 </property>
                 <property name="text">
                  <string>去除符号表</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QCheckBox" name="cb_clean_cache">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>清理缓存</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2214,7 +2232,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_16">
+               <widget class="QPushButton" name="pb_target_architecture">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2230,7 +2248,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_17">
+               <widget class="QPushButton" name="pb_codesign_identity">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2246,7 +2264,7 @@
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QPushButton" name="pushButton_15">
+               <widget class="QPushButton" name="pb_osx_bundle_identifier">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2262,7 +2280,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QPushButton" name="pushButton_29">
+               <widget class="QPushButton" name="pb_osx_entitlements_file">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2278,7 +2296,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QCheckBox" name="checkBox_3">
+               <widget class="QCheckBox" name="cb_argv_emulation">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2330,7 +2348,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_12">
+               <widget class="QPushButton" name="pb_add_resource">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2346,7 +2364,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_13">
+               <widget class="QPushButton" name="pb_add_xml_file">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2362,7 +2380,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QCheckBox" name="checkBox">
+               <widget class="QCheckBox" name="cb_uac_admin_apply">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2378,7 +2396,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QCheckBox" name="checkBox_2">
+               <widget class="QCheckBox" name="cb_uac_uiaccess">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2394,7 +2412,7 @@
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QCheckBox" name="checkBox_9">
+               <widget class="QCheckBox" name="cb_hide_console">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2577,7 +2595,7 @@
               </sizepolicy>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="tab_common">
               <attribute name="title">
@@ -2759,7 +2777,7 @@
                    <number>5</number>
                   </property>
                   <item>
-                   <widget class="QLabel" name="label">
+                   <widget class="QLabel" name="lb_use_py_pyinstaller_auto_conda">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                       <horstretch>26</horstretch>
@@ -2796,22 +2814,6 @@
                       <number>0</number>
                      </property>
                      <item>
-                      <widget class="QRadioButton" name="rb_use_auto_select">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>自动</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
                       <widget class="QRadioButton" name="rb_use_pyinstaller">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -2823,7 +2825,7 @@
                         <string>使用pyinstaller.exe</string>
                        </property>
                        <property name="checked">
-                        <bool>false</bool>
+                        <bool>true</bool>
                        </property>
                       </widget>
                      </item>
@@ -2841,15 +2843,12 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QRadioButton" name="rb_use_virtual_env">
+                      <widget class="QWidget" name="widget_42" native="true">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                          <horstretch>0</horstretch>
                          <verstretch>0</verstretch>
                         </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>激活虚拟环境</string>
                        </property>
                       </widget>
                      </item>
@@ -2864,7 +2863,7 @@
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                    <horstretch>0</horstretch>
-                   <verstretch>40</verstretch>
+                   <verstretch>60</verstretch>
                   </sizepolicy>
                  </property>
                  <property name="wdg_group" stdset="0">
@@ -3016,6 +3015,88 @@
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                          <horstretch>100</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="widget_29" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>20</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_31">
+                     <property name="spacing">
+                      <number>10</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>5</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>5</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>5</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>5</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lb_print_cmd_option">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                         <horstretch>40</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>打印完命令行后</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QCheckBox" name="cb_print_cmd_auto_open_folder">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                         <horstretch>50</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>自动打开文件夹</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QCheckBox" name="cb_print_cmd_auto_open_file">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                         <horstretch>50</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>自动打开文件</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_41" native="true">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                         <horstretch>48</horstretch>
                          <verstretch>0</verstretch>
                         </sizepolicy>
                        </property>
@@ -3545,7 +3626,7 @@
                          <widget class="QPushButton" name="pb_env_specified_browser_page_setting_env">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                            <horstretch>10</horstretch>
+                            <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
                           </property>
@@ -3554,6 +3635,19 @@
                           </property>
                           <property name="text">
                            <string>浏览</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="pushButton">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="text">
+                           <string>保存</string>
                           </property>
                          </widget>
                         </item>
@@ -3574,7 +3668,7 @@
                    <widget class="QWidget" name="widget_56" native="true">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                      <horstretch>20</horstretch>
+                      <horstretch>2</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
