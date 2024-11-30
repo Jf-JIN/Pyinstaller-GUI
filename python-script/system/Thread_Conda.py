@@ -25,8 +25,9 @@ class PythonCondaEnvDetection(QThread):
     signal_finished = pyqtSignal()
     signal_textBrowser_cmd = pyqtSignal(str)
 
-    def __init__(self, parent):
+    def __init__(self, parent, runOnlyConda: bool = False):
         super().__init__(parent)
+        self.__runOnlyConda = runOnlyConda
 
     def __python_path_detection(self):
         try:
@@ -60,7 +61,6 @@ class PythonCondaEnvDetection(QThread):
             # 获取环境列表,[0] conda环境名, [1] python版本, [2] python解释器路径 [3] pyinstaller路径
             conda_env_list = []
             futures = []
-
             with ThreadPoolExecutor(max_workers=5) as executor:
                 for line in lines:
                     if not line.startswith('#'):
@@ -74,7 +74,7 @@ class PythonCondaEnvDetection(QThread):
                         future = executor.submit(find_pyinstaller_path, env_path)
                         futures.append((env_name, version_output, env_path, future))
 
-                # 等待所有线程任务完成，并收集结果
+                # 等待所有线程任务完成, 并收集结果
                 for env_name, version_output, env_path, future in futures:
                     pyinstaller_path = future.result()  # 获取异步任务的返回结果
                     conda_env_list.append([env_name, version_output, env_path, pyinstaller_path])
@@ -86,7 +86,8 @@ class PythonCondaEnvDetection(QThread):
             # self.signal_textBrowser_cmd.emit(f'__________ {self.parent().language.error} __________\n{e}\n')
 
     def run(self):
-        self.__python_path_detection()
+        if not self.__runOnlyConda:
+            self.__python_path_detection()
         self.__conda_env_detection()
 
 
