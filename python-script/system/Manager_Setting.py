@@ -11,6 +11,8 @@ DEFAULT_SETTING = {
     'last_command': [str, ''],
     'tb_console_font_size': [int, 18],
     'tb_command_line_font_size': [int, 18],
+    'auto_open_printed_command_line_folder': [bool, False],
+    'auto_open_printed_command_line_file': [bool, True]
 
 }
 

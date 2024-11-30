@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QLabel
 
 from system.Thread_Pip_Install import ThreadPipInstall
 from system.Struct_env_info import *
-# from UI.UI_PyToExe import PyToExeUI # 可以用于检查 PyToExeUI 中的属性、方法名是否正确。注意！运行时必须注释掉，否则将循环引入
+# from UI.UI_PyToExe import PyToExeUI # 可以用于检查 PyToExeUI 中的属性、方法名是否正确. 注意! 运行时必须注释掉, 否则将循环引入
 
 
 class LabelLeftDoubleToInstallFilter(QObject):
@@ -11,7 +11,7 @@ class LabelLeftDoubleToInstallFilter(QObject):
 
     def __init__(self, parent, label: QLabel, env_struct: StructEnvInfo):
         super().__init__(label)
-        # self.__parent: PyToExeUI = parent # 用于检查，记得运行时注释掉！
+        # self.__parent: PyToExeUI = parent # 用于检查, 记得运行时注释掉! 
         self.__parent = parent
         self.__label = label
         self.__env_struct = env_struct
@@ -30,7 +30,7 @@ class LabelLeftDoubleToInstallFilter(QObject):
                 pyinstaller_path = self.__env_struct.path_pyinstaller
                 python_interpreter_path = self.__env_struct.path_python
                 if python_interpreter_path != '' and not pyinstaller_path:
-                    # 如果是 指定，但是路径错误，则不执行
+                    # 如果是 指定, 但是路径错误, 则不执行
                     if self.__label == self.__parent.lb_env_specified_check_install_page_setting_env and self.__parent.env_struct_current.path_error:
                         return super().eventFilter(obj, event)
                     self.__thread = ThreadPipInstall(python_interpreter_path)
@@ -66,7 +66,7 @@ class LabelLeftDoubleOrLangPressFilter(QObject):
 
     def __init__(self, parent, label: QLabel):
         super().__init__(label)
-        # self.__parent: PyToExeUI = parent # 用于检查，记得运行时注释掉！
+        # self.__parent: PyToExeUI = parent # 用于检查, 记得运行时注释掉! 
         self.__parent = parent
         self.__label = label
         self.__timer_press = QTimer()

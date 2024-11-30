@@ -11,7 +11,7 @@ def wait_for_thread_result(outputsignal: pyqtSignal, default_value=None) -> bool
         loop.quit()
 
     loop = QEventLoop()
-    result_container = {}  # 使用字典是因为这个是引用，否则可能就要用nonlocal
+    result_container = {}  # 使用字典是因为这个是引用, 否则可能就要用nonlocal
     outputsignal.connect(on_thread_finished)
     loop.exec_()
     return result_container.get('value', default_value)
