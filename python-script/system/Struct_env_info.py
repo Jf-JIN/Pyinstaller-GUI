@@ -4,9 +4,10 @@ class StructEnvInfo(object):
         self.__name = name
         self.env_name: str = ''
         self.path_python: str = ''
-        self.path_pyinstaller: str = ''
+        self.path_pyinstaller: str = None
         self.version: str = ''
-        self.path_error: bool = False  # 给 指定解释器路径 用的，记录路径是否错误
+        self.path_error: bool = False  # 给 指定解释器路径 用的, 记录路径是否错误
+        self.command_launch: str = ''  # 给 当前环境 用的, 记录启动路径
 
     @property
     def name(self) -> str:
