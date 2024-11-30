@@ -1,7 +1,6 @@
-import enum
+
 import os
-from queue import PriorityQueue
-from re import L
+import time
 import sys
 import json
 import traceback
@@ -20,6 +19,7 @@ from UI.Widget_Control_TextBrowser import *
 from UI.Message_Notification import *
 from const.Const_Icon import *
 from const.Const_Parameter import *
+from const.Const_Index import EnumIndex
 from system.Manager_Language import *
 from system.Manager_Setting import *
 from system.Struct_IO import *
@@ -55,7 +55,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.installer_manager = Struct_IO()
         self.installer = self.installer_manager.struct_data
         # self.language = LanguageManager(PATH_APP_FOLDER)
-        self.message = MessageNotification(self, position='bottom', offset=100, move_in_point=(None, '50'))
+        self.message = MessageNotification(self, position='bottom', offset=100, move_in_point=(None, '50'), hold_duration=4000)
         self.clipboard = QApplication.clipboard()
 
         self.env_struct_current = StructEnvInfo('current')
@@ -64,16 +64,16 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.env_struct_conda = StructEnvInfo('conda')
 
         self.timer_check_install = QTimer()
-        self.timer_check_install.timeout.connect(self.check_all_env)
+        self.timer_check_install.timeout.connect(self.check_all_env_installed)
         self.timer_check_install.start(1000)
         self.timer_check_env = QTimer()
-        self.timer_check_env.timeout.connect(self.check_env)
+        self.timer_check_env.timeout.connect(self.check_conda_env)
         self.timer_check_env.start(2000)
 
     def init_ui(self):
         self.init_ui_frame()
         self.update_ui_style()
-        self.update_installer_info()
+        # self.update_installer_display_info()
 
     def init_ui_frame(self):
         # 命令行显示控件初始化
@@ -268,10 +268,11 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
                     string_list[i] = new_fill_color + string_list[i][fill_end_index:]
         return 'style="fill:'.join(string_list)
 
-    def update_installer_info(self):
+    def update_installer_display_info(self):
         """ 显示安装器信息 """
         self.update_table_widget_installer_info()
         self.update_command_display()
+        self.update_options_display()
 
     def update_table_widget_installer_info(self):
         """ 更新安装器信息 """
@@ -279,9 +280,9 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         # self.installer.add_icon.set_args('E:')
         # self.installer.imports_paths.append_args('F:')
         # self.installer.imports_paths.append_args('F:\\test')
-        installer_dict = self.installer.get_flattened_struct_command_args()
-        length = installer_dict['length']
-        data: dict = installer_dict['data']
+        self.installer_dict = self.installer.get_flattened_struct_command_args()
+        length = self.installer_dict['length']
+        data: dict = self.installer_dict['data']
         self.tbwdg_info.clear()
         self.tbwdg_info.setRowCount(length)
         self.tbwdg_info.setHorizontalHeaderLabels(["命令名称", "命令选项", "命令值"])
@@ -290,8 +291,15 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             key: StateStruct | SwitchStruct | RelPathStruct | SingleInfoStruct | MultiInfoStruct
             # name = getattr(self.language, f'{key.name}.display_text')
             # tooltip = getattr(self.language, f'{key.name}.tool_tip')
-            item_name = QTableWidgetItem(key.name)
-            item_option = QTableWidgetItem(key.command_option)
+            name = key.name
+            if isinstance(key, StateStruct) and not key.isWithOption:
+                option = key.current_state
+            elif isinstance(key.command_option, list):
+                option = key.command_option[0]
+            else:
+                option = key.command_option
+            item_name = QTableWidgetItem(name)
+            item_option = QTableWidgetItem(option)
             self.tbwdg_info.setItem(index, 0, item_name)
             self.tbwdg_info.setItem(index, 1, item_option)
             item_name.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
@@ -325,12 +333,109 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
     def update_command_display(self):
         """ 更新命令显示 """
         self.tb_command_display.clear()
-        self.current_interpreter_path = self.lb_env_current_path_page_setting_env.text()
-        # if not self.current_interpreter_path:
-        #     return
-        command_line = self.installer.get_command_line(self.current_interpreter_path)
+        command_line = self.installer.get_command_line(self.env_struct_current.path_pyinstaller)
         if command_line:
             self.tb_command_display.set_text(command_line)
+
+    def update_options_display(self):
+        """ 
+        通过 self.installer 更新界面中选项显示
+
+        dict_mapping 是一个所有参数/控件的字典, 循环此字典, 并pop installer 的字典, 如果installer中存在控件参数, 则置控件的值, 否则置为空/默认样式
+        """
+        dict_mapping = {
+            'python_file_path': [self.le_input_py_file_path, self.update_option_display_line_edit],
+            'output_methode': [self.rb_output_form_file, self.update_option_display_radio_button],
+            'specpath': [self.pb_specpath, self.update_option_display_push_buttons],
+            'output_file_name': [self.le_output_file_name, self.update_option_display_line_edit],
+            'contents_directory': [self.rb_output_form_folder, self.update_option_display_radio_button],
+            'add_file_folder_data': [self.pb_add_file_folder_data, self.update_option_display_push_buttons],
+            'add_binary_data': [self.pb_add_binary_data, self.update_option_display_push_buttons],
+            'imports_paths': [self.pb_imports_paths, self.update_option_display_push_buttons],
+            'hidden_import': [self.pb_hidden_import, self.update_option_display_push_buttons],
+            'collect_submodules': [self.pb_collect_submodules, self.update_option_display_push_buttons],
+            'collect_data': [self.pb_collect_data, self.update_option_display_push_buttons],
+            'collect_binaries': [self.pb_collect_binaries, self.update_option_display_push_buttons],
+            'collect_all': [self.pb_collect_all, self.update_option_display_push_buttons],
+            'copy_metadata': [self.pb_copy_metadata, self.update_option_display_push_buttons],
+            'recursive_copy_metadata': [self.pb_recursive_copy_metadata, self.update_option_display_push_buttons],
+            'additional_hooks_dir': [self.pb_additional_hooks_dir, self.update_option_display_push_buttons],
+            'runtime_hook': [self.pb_runtime_hook, self.update_option_display_push_buttons],
+            'exclude_module': [self.pb_exclude_module, self.update_option_display_push_buttons],
+            'add_splash_screen': [self.pb_add_splash_screen, self.update_option_display_push_buttons],
+            'debug_mode': [self.pb_debug_mode, self.update_option_display_push_buttons],
+            'python_option': [self.pb_python_option, self.update_option_display_push_buttons],
+            'strip_option': [self.cb_strip_option, self.update_option_display_check_box],
+            'noupx_option': [self.cb_noupx_option, self.update_option_display_check_box],
+            'upx_exclude': [self.pb_upx_exclude, self.update_option_display_push_buttons],
+            'console_window_control': [self.rb_exe_console_display_show, self.update_option_display_radio_button],
+            'hide_console': [self.cb_hide_console, self.update_option_display_check_box],
+            'add_icon': [self.le_output_exe_icon, self.update_option_display_line_edit],
+            'disable_traceback': [self.cb_disable_traceback, self.update_option_display_check_box],
+            'version_file': [self.le_output_exe_version, self.update_option_display_line_edit],
+            'add_xml_file': [self.pb_add_xml_file, self.update_option_display_push_buttons],
+            'add_resource': [self.pb_add_resource, self.update_option_display_push_buttons],
+            'uac_admin_apply': [self.cb_uac_admin_apply, self.update_option_display_check_box],
+            'uac_uiaccess': [self.cb_uac_uiaccess, self.update_option_display_check_box],
+            'argv_emulation': [self.cb_argv_emulation, self.update_option_display_check_box],
+            'osx_bundle_identifier': [self.pb_osx_bundle_identifier, self.update_option_display_push_buttons],
+            'target_architecture': [self.pb_target_architecture, self.update_option_display_push_buttons],
+            'codesign_identity': [self.pb_codesign_identity, self.update_option_display_push_buttons],
+            'osx_entitlements_file': [self.pb_osx_entitlements_file, self.update_option_display_push_buttons],
+            'runtime_tmpdir': [self.pb_runtime_tmpdir, self.update_option_display_push_buttons],
+            'ignore_signals': [self.cb_ignore_signals, self.update_option_display_check_box],
+            'output_folder_path': [self.le_output_folder_path, self.update_option_display_line_edit],
+            'workpath_option': [self.pb_workpath_option, self.update_option_display_push_buttons],
+            'noconfirm_option': [self.cb_noconfirm_option, self.update_option_display_check_box],
+            'upx_dir': [self.pb_upx_dir, self.update_option_display_push_buttons],
+            'clean_cache': [self.cb_clean_cache, self.update_option_display_check_box],
+            'log_level': [self.pb_log_level, self.update_option_display_push_buttons]
+        }
+        dict_installer: dict = copy.deepcopy(self.installer.get_command_dict())
+        for key, item in dict_mapping.items():
+            target_item = dict_installer.pop(key, None)
+            item[1](item[0], target_item)
+
+    def update_option_display_push_buttons(self, widget: QPushButton, command: str):
+        """ 更新选项显示按钮 """
+        if not command:
+            return
+        widget.setStyleSheet('QPushButton{background-color: red}')
+
+    def update_option_display_radio_button(self, widget: QRadioButton, command: str):
+        """ 更新选项显示单选按钮 """
+        if widget in (self.rb_output_form_file, self.rb_output_form_folder):
+            if command in ('--onedir', '-D'):
+                self.rb_output_form_folder.setChecked(True)
+                if widget == self.rb_output_form_folder:
+                    pass  # 此处添加样式, 区分已输入指定输出打包文件夹
+            else:
+                self.rb_output_form_file.setChecked(True)  # 默认样式
+        elif widget in (self.rb_exe_console_display_show, self.rb_exe_console_display_hide):
+            if command in ('--windowed', '--noconsole', '-w'):
+                self.rb_exe_console_display_hide.setChecked(True)
+            else:
+                self.rb_exe_console_display_show.setChecked(True)  # 默认样式
+        else:
+            print('[控件错误] 请检查控件')
+
+    def update_option_display_check_box(self, widget: QCheckBox, command: str):
+        """ 更新选项显示复选框 """
+        if command:
+            widget.setChecked(True)
+        else:
+            widget.setChecked(False)  # 默认样式
+
+    def update_option_display_line_edit(self, widget: QLineEdit, command: str):
+        """ 更新选项显示单行文本框 """
+        if command:
+            if '"' in command:
+                temp_list = command.split('"')
+                if len(temp_list) > 1:
+                    command = temp_list[1].strip('"')
+            widget.setText(command)
+        else:
+            widget.clear()
 
     def open_output_folder(self):
         """ 打开输出文件夹 """
@@ -351,11 +456,15 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         """ 打印命令行 """
         output_file_name = f'[command_line]-{self.installer.output_file_name.command_args}' + '.txt'
         output_file_path = os.path.normpath(os.path.join(self.installer.output_folder_path.command_args, output_file_name))
-        if command_line := self.installer.get_command_line(self.lb_env_current_path_page_setting_env.text()):
+        if command_line := self.installer.get_command_line(self.env_struct_current.path_pyinstaller):
             with open(output_file_path, 'w', encoding='utf-8') as f:
                 f.write(command_line)
-            Popen(['explorer', '/select,', output_file_path], creationflags=CREATE_NO_WINDOW)
-            Popen(['explorer', output_file_path], creationflags=CREATE_NO_WINDOW)
+            if self.setting['auto_open_printed_command_line_folder']:
+                Popen(['explorer', '/select,', output_file_path], creationflags=CREATE_NO_WINDOW)
+            if self.setting['auto_open_printed_command_line_file']:
+                Popen(['explorer', output_file_path], creationflags=CREATE_NO_WINDOW)
+            self.tb_console.append_text(f'[{time.localtime()}]\n命令行已打印到: {output_file_path}')
+            self.message.notification(f'命令行已打印到', open_file_path=output_file_path)
 
     def record_font_change_in_tb_console(self, font_size):
         """
@@ -492,7 +601,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         复制python解释器路径
         """
         self.clipboard.setText(text)
-        self.message.notification(f'已复制：{text}')
+        self.message.notification(f'已复制: {text}')
 
     def update_env_sys_without_select_python_env(self):
         """
@@ -587,7 +696,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
 
     def update_env_sys(self) -> None:
         """
-        更新系统python环境显示，并更新当前环境显示
+        更新系统python环境显示, 并更新当前环境显示
         """
         self.reset_style_specified()
         self.update_env_sys_without_select_python_env()
@@ -595,7 +704,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
 
     def update_env_conda_specified(self) -> None:
         """
-        更新指定conda环境显示，并更新当前环境显示
+        更新指定conda环境显示, 并更新当前环境显示
         """
         self.reset_style_specified()
         self.update_env_conda_specified_without_select_python_env()
@@ -603,23 +712,23 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
 
     def update_env_specified(self):
         """
-        更新指定路径环境显示，并更新当前环境显示
+        更新指定路径环境显示, 并更新当前环境显示
         """
         self.update_env_specified_without_select_python_env()
         self.select_python_env()
 
-    def check_all_env(self):
+    def check_all_env_installed(self):
         """
-        更新所有显示，并更新当前环境显示
+        更新所有显示, 并更新当前环境显示
         """
         self.update_env_specified_without_select_python_env()
         self.update_env_sys_without_select_python_env()
         self.update_env_conda_specified_without_select_python_env()
         self.select_python_env()
 
-    def check_env(self):
-        self.thread_python_conda_detection = PythonCondaEnvDetection(self)
-        self.thread_python_conda_detection.signal_python_path.connect(self.get_sys_python_env_from_detection_thread)
+    def check_conda_env(self):
+        # 更新 Conda环境
+        self.thread_python_conda_detection = PythonCondaEnvDetection(self, True)
         self.thread_python_conda_detection.signal_env_conda_list.connect(self.get_env_conda_from_detection_thread)
         self.thread_python_conda_detection.start()
 
@@ -632,14 +741,14 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         """
         更新当前选定的python环境显示
         """
-        self.update_installer_info()
+        self.update_installer_display_info()
 
         if self.rb_env_specified.isChecked():
             self.env_struct_current.env_name = self.env_struct_specified.env_name
             self.env_struct_current.path_python = self.env_struct_specified.path_python
             self.env_struct_current.path_pyinstaller = self.env_struct_specified.path_pyinstaller
             self.env_struct_current.version = self.env_struct_specified.version
-            self.env_struct_current.path_error = self.env_struct_specified.path_error  # 给过滤器用的，判断是否执行安装，当指定路径错误时，Label仍存在且可点击，所以要区分
+            self.env_struct_current.path_error = self.env_struct_specified.path_error  # 给过滤器用的, 判断是否执行安装, 当指定路径错误时, Label仍存在且可点击, 所以要区分
 
         elif self.rb_env_sys.isChecked():
             self.env_struct_current.env_name = self.env_struct_sys.env_name
@@ -648,7 +757,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             self.env_struct_current.version = self.env_struct_sys.version
             self.env_struct_current.path_error = self.env_struct_specified.path_error
 
-        elif self.rb_env_conda.isChecked():  # (sender == self.rb_env_conda or sender == self.tbwdg_env_conda) and
+        elif self.rb_env_conda.isChecked():
             self.env_struct_current.env_name = self.env_struct_conda.env_name
             self.env_struct_current.path_python = self.env_struct_conda.path_python
             self.env_struct_current.path_pyinstaller = self.env_struct_conda.path_pyinstaller
@@ -664,7 +773,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             self.env_struct_current.path_error = False
 
         self.update_env_current_display_and_para()
-        self.update_installer_info()
+        # self.update_installer_display_info()
 
     def set_env_specified_path(self):
         file_path = QFileDialog.getOpenFileName(self, '选择Python解释器', os.path.expanduser("~"), 'Python解释器 (python.exe)')[0]
@@ -673,9 +782,9 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
 
     def update_env_current_display_and_para(self):
         """
-        更新Python环境显示，根据控件选择改变
+        更新Python环境显示, 根据控件选择改变
 
-        更改主页和设置页中的 当前环境 的显示， 包括名称，路径，是否安装状态
+        更改主页和设置页中的 当前环境 的显示,  包括名称, 路径, 是否安装状态
         """
         self.lb_env_current_name_page_setting_env.clear()
         self.lb_env_current_path_page_setting_env.clear()
@@ -717,3 +826,5 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             self.reset_parameters_long_pressed()
         else:
             pass
+
+    # def update_display_from_installer(self):
