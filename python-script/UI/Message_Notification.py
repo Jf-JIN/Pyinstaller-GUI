@@ -1,6 +1,8 @@
 
-from PyQt5.QtCore import Qt, QPropertyAnimation, QTimer, QParallelAnimationGroup, QPoint
+from PyQt5.QtCore import Qt, QPropertyAnimation, QTimer, QParallelAnimationGroup, QPoint, QEvent, QObject
 from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout
+from subprocess import Popen, CREATE_NO_WINDOW
+from os.path import exists
 
 
 class MessageNotification(QWidget):
@@ -45,14 +47,33 @@ class MessageNotification(QWidget):
                 border_width=None, border_style=None, border_color=None, border_radius=None, font_color=None, font_family=None, font_size_px=None, font_weight=None, font_italic=None): 设置样式属性并更新样式表
     """
 
-    def notification(self, message: str) -> None:
+    def notification(self, *message: str | tuple, open_file_path: str = None) -> None:
         """
         显示提示框并开始淡入动画
 
         参数:
-            - message (str): 要显示的提示信息
+            - *message (str): 要显示的提示信息
+            - open_file_path (str): 点击提示框时打开的文件路径, 默认为 None
         """
-        self.__label.setText(message)
+        if not message:
+            return
+        text_list = []
+        for i in message:
+            try:
+                text_list.append(str(i))
+            except:
+                print('参数 message 必须为字符串')
+                return
+        text_str = ' '.join(text_list)
+        if open_file_path:
+            self.__label.setCursor(Qt.PointingHandCursor)
+            self.__label.mousePressEvent = lambda event: self.__open_excel_folder(open_file_path) if event.button() == Qt.LeftButton else None
+            path_format = open_file_path.replace('\\', '  /  ')
+            self.__label.setText(f"{text_str}: <b><u>{path_format}</u></b>")
+        else:
+            self.__label.setCursor(Qt.ArrowCursor)
+            self.__label.mousePressEvent = None
+            self.__label.setText(text_str)
         self.__set_position()  # 设置提示框位置
         self.show()
         self.__animation_group_in.start()
@@ -77,6 +98,24 @@ class MessageNotification(QWidget):
         - font_weight (str | int, optional): 字体粗细, 默认为None, 维持原样式
         - font_italic (bool, optional): 是否斜体, 默认为None, 维持原样式
         """
+        def check_type(param, param_type, param_name):
+            if param is not None and not isinstance(param, param_type):
+                print(f'{param_name} 必须为 {param_type.__name__} 或 None')
+                return False
+            return True
+
+        if not (check_type(background_color, str, 'background_color') and
+                check_type(padding, int, 'padding') and
+                check_type(border_width, int, 'border_width') and
+                check_type(border_style, str, 'border_style') and
+                check_type(border_color, str, 'border_color') and
+                check_type(border_radius, int, 'border_radius') and
+                check_type(font_color, str, 'font_color') and
+                check_type(font_family, str, 'font_family') and
+                check_type(font_size_px, int, 'font_size_px') and
+                check_type(font_weight, (str, int), 'font_weight') and
+                check_type(font_italic, bool, 'font_italic')):
+            return
         self.__set_style_sheet(background_color=background_color, padding=padding,
                                border_width=border_width, border_style=border_style, border_color=border_color, border_radius=border_radius,
                                font_color=font_color, font_family=font_family, font_size_px=font_size_px, font_weight=font_weight, font_italic=font_italic)
@@ -134,8 +173,13 @@ class MessageNotification(QWidget):
         self.__border_radius: int
         self.__animation_group_in = QParallelAnimationGroup(self)
         self.__animation_group_out = QParallelAnimationGroup(self)
+        self.__animation_move_in = QPropertyAnimation(self, b"pos")
+        self.__animation_move_out = QPropertyAnimation(self, b"pos")
+        self.__fade_out = QPropertyAnimation(self, b"windowOpacity")
+        self.__fade_in = QPropertyAnimation(self, b"windowOpacity")
         self.__fade_in_action(self.__fade_in_duration)
         self.__fade_out_action(self.__fade_out_duration)
+        self.parent().installEventFilter(self)
 
     def __ui_init(self) -> None:
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool)
@@ -148,6 +192,19 @@ class MessageNotification(QWidget):
         layout.addWidget(self.__label)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
+
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+        if source == self.parent():
+            if event.type() == QEvent.WindowStateChange:
+                if self.parent().windowState() & Qt.WindowMinimized:
+                    self.hide()
+                else:
+                    if self.__label.text() != "":
+                        self.show()
+            elif event.type() == QEvent.Move or event.type() == QEvent.Resize:
+                self.__set_position()
+                self.__adjust_animation_targets()
+        return super().eventFilter(source, event)
 
     def __set_style_sheet(self, background_color=None, padding=None,
                           border_width=None, border_style=None, border_color=None, border_radius=None,
@@ -205,10 +262,9 @@ class MessageNotification(QWidget):
         参数:
         - fade_in_duration_ms(int): 淡入动画的持续时间, 单位为毫秒(ms)
         """
-        self.__fade_in = QPropertyAnimation(self, b"windowOpacity")
         self.__fade_in.setDuration(fade_in_duration_ms)  # 淡入时间 1 秒
-        self.__fade_in.setStartValue(0)
-        self.__fade_in.setEndValue(1)
+        self.__fade_in.setStartValue(0.0)
+        self.__fade_in.setEndValue(1.0)
         self.__animation_group_in.addAnimation(self.__fade_in)
 
     def __fade_out_action(self, fade_out_duration_ms) -> None:
@@ -218,10 +274,9 @@ class MessageNotification(QWidget):
         参数:
         - fade_out_duration_ms(int): 淡出动画的持续时间, 单位为毫秒(ms)
         """
-        self.__fade_out = QPropertyAnimation(self, b"windowOpacity")
         self.__fade_out.setDuration(fade_out_duration_ms)  # 淡出时间 1 秒
-        self.__fade_out.setStartValue(1)
-        self.__fade_out.setEndValue(0)
+        self.__fade_out.setStartValue(1.0)
+        self.__fade_out.setEndValue(0.0)
         self.__animation_group_out.addAnimation(self.__fade_out)
 
     def __move_action(self, animation: QPropertyAnimation, start_pos: tuple | QPoint, end_pos: tuple | QPoint, duration_ms: int) -> None:
@@ -252,25 +307,23 @@ class MessageNotification(QWidget):
         """创建移入动画"""
         if not self.__display_pos or not self.__move_in_point:
             return
-        self.__animation_move_in = QPropertyAnimation(self, b"pos")
-        self.__animation_group_in.addAnimation(self.__animation_move_in)
         x, y = self.__move_in_point
         start_x = self.__derive_start_value(x, self.__display_pos[0])
         start_y = self.__derive_start_value(y, self.__display_pos[1])
         start_pos = (start_x, start_y)
         self.__move_action(self.__animation_move_in, start_pos, self.__display_pos, self.__move_duration)
+        self.__animation_group_in.addAnimation(self.__animation_move_in)
 
     def __move_out_action(self) -> None:
         """创建移出动画"""
         if not self.__display_pos or not self.__move_in_point:
             return
-        self.__animation_move_out = QPropertyAnimation(self, b"pos")
-        self.__animation_group_out.addAnimation(self.__animation_move_out)
         x, y = self.__move_in_point
         start_x = self.__derive_start_value(x, self.__display_pos[0])
         start_y = self.__derive_start_value(y, self.__display_pos[1])
         start_pos = (start_x, start_y)
         self.__move_action(self.__animation_move_out, self.__display_pos, start_pos, self.__move_duration)
+        self.__animation_group_out.addAnimation(self.__animation_move_out)
 
     def __timer_init(self, duration: int) -> None:
         """
@@ -329,6 +382,13 @@ class MessageNotification(QWidget):
                 self.__move_in_action()
             if self.__flag_move_out:
                 self.__move_out_action()
+
+    def __adjust_animation_targets(self):
+        """动态调整动画目标位置"""
+        if self.__flag_move_in and self.__animation_move_in.state() == QPropertyAnimation.Running:
+            self.__animation_move_in.setEndValue(QPoint(*self.__display_pos))
+        if self.__flag_move_out and self.__animation_move_out.state() == QPropertyAnimation.Running:
+            self.__animation_move_out.setStartValue(QPoint(*self.__display_pos))
 
     def __convert_text_to_vertical(self, text: str) -> str:
         """
@@ -389,6 +449,11 @@ class MessageNotification(QWidget):
         else:
             start_value = base
         return start_value
+
+    def __open_excel_folder(self, file_path: str):
+        if not file_path or not exists(file_path):
+            return
+        Popen(['explorer', '/select,', file_path], creationflags=CREATE_NO_WINDOW)
 
 
 if __name__ == "__main__":
