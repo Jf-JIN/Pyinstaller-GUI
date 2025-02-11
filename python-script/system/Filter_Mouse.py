@@ -1,9 +1,13 @@
+from __future__ import annotations
 from PyQt5.QtCore import QEventLoop, pyqtSignal, QObject, QEvent, Qt, QTimer
 from PyQt5.QtWidgets import QLabel
 
+from system.Struct_Env_Info import StructEnvInfo
 from system.Thread_Pip_Install import ThreadPipInstall
-from system.Struct_env_info import *
+from system.Struct_Env_Info import *
 # from UI.UI_PyToExe import PyToExeUI # 可以用于检查 PyToExeUI 中的属性、方法名是否正确. 注意! 运行时必须注释掉, 否则将循环引入
+if 0:
+    from UI.UI_PyToExe import PyToExeUI
 
 
 class LabelLeftDoubleToInstallFilter(QObject):
@@ -11,10 +15,9 @@ class LabelLeftDoubleToInstallFilter(QObject):
 
     def __init__(self, parent, label: QLabel, env_struct: StructEnvInfo):
         super().__init__(label)
-        # self.__parent: PyToExeUI = parent # 用于检查, 记得运行时注释掉! 
-        self.__parent = parent
-        self.__label = label
-        self.__env_struct = env_struct
+        self.__parent: PyToExeUI = parent
+        self.__label: QLabel = label
+        self.__env_struct: StructEnvInfo = env_struct
 
     def __wait_for_thread_result(self, outputsignal: pyqtSignal) -> bool:
         """
@@ -31,7 +34,7 @@ class LabelLeftDoubleToInstallFilter(QObject):
                 python_interpreter_path = self.__env_struct.path_python
                 if python_interpreter_path != '' and not pyinstaller_path:
                     # 如果是 指定, 但是路径错误, 则不执行
-                    if self.__label == self.__parent.lb_env_specified_check_install_page_setting_env and self.__parent.env_struct_current.path_error:
+                    if self.__label == self.__parent.lb_env_specified_check_install_page_setting_env and self.__parent.data_manager.env_current.path_error:
                         return super().eventFilter(obj, event)
                     self.__thread = ThreadPipInstall(python_interpreter_path)
                     self.__thread.signal_textbrowser_pip_install.connect(self.signal_textbrowser_LDFilter.emit)
@@ -66,9 +69,8 @@ class LabelLeftDoubleOrLangPressFilter(QObject):
 
     def __init__(self, parent, label: QLabel):
         super().__init__(label)
-        # self.__parent: PyToExeUI = parent # 用于检查, 记得运行时注释掉! 
-        self.__parent = parent
-        self.__label = label
+        self.__parent: PyToExeUI = parent
+        self.__label: QLabel = label
         self.__timer_press = QTimer()
         self.__timer_press.timeout.connect(self.__long_press_action)
         self.__time_interval_s = 1.5
