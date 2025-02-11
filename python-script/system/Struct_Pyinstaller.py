@@ -8,7 +8,7 @@ pyinstaller数据结构类
 - SingleInfoStruct(name:str, cmd_option:str): 单信息类, 用于存储单信息参数, 例如:  --distpath=E:\Programm 等
 - MultiInfoStruct(name:str, cmd_option:str): 多信息类, 用于存储多信息参数, 例如:  --add-data=1.txt;E:\Programm 等
 - RelPathStruct(name:str, cmd_option:str): 相对地址类, 用于存储相对地址参数, 例如:  --add-data="Programm;." 等
-- StrucPyinstaller(name:str, cmd_option:str): pyinstaller数据结构类
+- PyinstallerStruct(name:str, cmd_option:str): pyinstaller数据结构类
 
 函数: 
 - 无
@@ -16,10 +16,14 @@ pyinstaller数据结构类
 变量: 
 - 无
 
+信号: 
+- signal_isChanged: 数据变更信号
+
 """
 import os
-import json
+import pprint
 import copy
+from .Signal_Event import EventSignal
 
 
 class BasicStruct(object):
@@ -30,6 +34,9 @@ class BasicStruct(object):
     - name: 结构名称
     - cmd_option: 命令行选项
 
+    信号: 
+    - signal_isChanged: 数据变更信号
+
     属性: 
     - name: 结构名称
     - command_option: 命令行选项
@@ -37,16 +44,17 @@ class BasicStruct(object):
     - command: 命令行
 
     方法: 
-    - _set_command_option(command_option:str):  设置命令行选项
+    - _set_command_option(command_option:str|list):  设置命令行选项
     - _set_args(para:str):  设置命令行参数, 直接覆盖添加
     - _add_args(para:str):  添加命令行参数, 在原有基础添加
     - _clear_args():  清空命令行参数
     """
+    signal_isChanged = EventSignal()
 
     def __init__(self, name: str, cmd_option: str | list, isRepeatable: bool = False):
         super().__init__()
         self.__name = name
-        self.__command_option = cmd_option  # 例如:  '--distpath' 或  ['-D', '--distpath']
+        self.__command_option: str | list = cmd_option  # 例如:  '--distpath' 或  ['-D', '--distpath']
         if isRepeatable:
             self.__command_args: list = []  # 例如:  ["E:\\10_Programm"] (可重复)
         else:
@@ -58,7 +66,7 @@ class BasicStruct(object):
         return self.__name
 
     @property
-    def command_option(self) -> str:
+    def command_option(self) -> str | list:
         return self.__command_option
 
     @property
@@ -70,11 +78,15 @@ class BasicStruct(object):
         return self._command
 
     def _set_args(self, para: str | list) -> None:
+        if para == self.__command_args:
+            return
         self.__command_args = para
+        self.signal_isChanged.emit()
 
     def _add_args(self, para: str) -> None:
         if isinstance(self.__command_args, list):
             self.__command_args.append(para)
+            self.signal_isChanged.emit()
 
     def _clear_args(self) -> None:
         if isinstance(self.__command_args, list):
@@ -82,9 +94,16 @@ class BasicStruct(object):
         else:
             self.__command_args = ''
         self._command = ''
+        self.signal_isChanged.emit()
 
-    def _set_command_option(self, command_option: str) -> None:
+    def _set_command_option(self, command_option: str | list) -> None:
+        if command_option == self.__command_option:
+            return
         self.__command_option = command_option
+        self.signal_isChanged.emit()
+
+    def __str__(self):
+        return f'{self.name}: "{self.command_args}"'
 
 
 class SwitchStruct(BasicStruct):
@@ -95,6 +114,9 @@ class SwitchStruct(BasicStruct):
     参数: 
     - name: 结构名称
     - cmd_option: 命令行选项
+
+    信号: 
+    - signal_isChanged: 数据变更信号
 
     属性: 
     - name: 结构名称
@@ -118,11 +140,15 @@ class SwitchStruct(BasicStruct):
         return self.__isOn
 
     def set_on(self) -> None:
+        if self.__isOn:
+            return
         self.__isOn = True
         self._command = self.command_option
+        self.signal_isChanged.emit()
 
     def set_off(self) -> None:
-        self.__isOn = False
+        if not self.__isOn:
+            return
         self._clear_args()
 
     def _clear_args(self):
@@ -139,6 +165,9 @@ class StateStruct(BasicStruct):
     - name: 结构名称
     - cmd_option: 命令行选项
     - isWithOption: 是否带选项, 默认为 True
+
+    信号: 
+    - signal_isChanged: 数据变更信号
 
     属性:
     - name: 结构名称
@@ -171,8 +200,10 @@ class StateStruct(BasicStruct):
         return self.__isWithOption
 
     def set_state(self, state: str) -> None:
-        if state is None:
-            self._clear_args()
+        if isinstance(state, str) and state == self.__current_state:
+            return
+        if not state:
+            self._clear_args()  # self.__current_state 会在 self._clear_args() 中被重置
             self._command = ''
             return None
         self.__current_state = state
@@ -182,6 +213,7 @@ class StateStruct(BasicStruct):
             self._set_args(self.__current_state)
         else:
             self.__command = state
+            self.signal_isChanged.emit()  # 上面不用的原因是 _set_args 会调用 signal_isChanged.emit()
 
     def _clear_args(self):
         super()._clear_args()
@@ -197,6 +229,9 @@ class SingleInfoStruct(BasicStruct):
     参数:
     - name: 结构名称
     - cmd_option: 命令行选项
+
+    信号: 
+    - signal_isChanged: 数据变更信号
 
     属性:
     - name: 结构名称
@@ -233,6 +268,9 @@ class MultiInfoStruct(BasicStruct):
     参数:
     - name: 结构名称
     - cmd_option: 命令行选项
+
+    信号: 
+    - signal_isChanged: 数据变更信号
 
     属性:
     - name: 结构名称
@@ -271,7 +309,7 @@ class MultiInfoStruct(BasicStruct):
             para = para.replace('"', '')
         self._add_args(para)
         option = self.command_option[0] if isinstance(self.command_option, list) else self.command_option
-        self._command = f'"{option}"="' + f'" {option}"='.join(self.command_args) + '"'
+        self._command = f'{option}="' + f' {option}='.join(self.command_args) + '"'
 
 
 class RelPathStruct(BasicStruct):
@@ -282,6 +320,9 @@ class RelPathStruct(BasicStruct):
     参数:
     - name: 结构名称
     - cmd_option: 命令行选项
+
+    信号: 
+    - signal_isChanged: 数据变更信号
 
     属性:
     - name: 结构名称
@@ -339,7 +380,7 @@ class RelPathStruct(BasicStruct):
         self.__command_args_display = []
 
 
-class StrucPyinstaller(object):
+class PyinstallerStruct(object):
     """ 
     pyinstaller结构类
         用于存储完整pyinstaller命令行结构, 参数等
@@ -351,6 +392,9 @@ class StrucPyinstaller(object):
     - ...命令行属性
         (python_file_path, output_methode, specpath, output_file_name, contents_directory, add_file_folder_data, add_binary_data, imports_paths, hidden_import, collect_submodules, collect_data, collect_binaries, collect_all, copy_metadata, recursive_copy_metadata, additional_hooks_dir, runtime_hook, exclude_module, add_splash_screen, debug_mode, python_option, strip_option, noupx_option, upx_exclude, console_window_control, hide_console, add_icon, disable_traceback, version_file, add_xml_file, add_resource, uac_admin_apply, uac_uiaccess, argv_emulation, osx_bundle_identifier, target_architecture, codesign_identity, osx_entitlements_file, runtime_tmpdir, ignore_signals, output_folder_path, workpath_option, noconfirm_option, upx_dir, clean_cache, log_level)
 
+    信号: 
+    - signal_isChanged: 数据变更信号
+
     方法: 
     - set_implement_path(implement_path: str): 设置执行器路径
     - get_command_list(): 获取命令行参数列表
@@ -360,6 +404,8 @@ class StrucPyinstaller(object):
     - get_flattened_dict_command_args(): 获取扁平化的结构命令行参数, 用于生成命令行
     - find_struct_from_option(option:str): 根据命令行选项查找结构
     """
+    signal_isChanged = EventSignal()
+
     @property
     def install_mode(self):
         return self.__install_mode
@@ -385,11 +431,11 @@ class StrucPyinstaller(object):
         返回:
         None
         """
-        if 'pyinstaller.exe' in implement_path and os.path.exists(implement_path):
+        if implement_path and 'pyinstaller.exe' in implement_path and os.path.exists(implement_path):
             self.__install_mode = 'pyinstaller'
             self.__implement_path = implement_path
             self.__implement_command = f'"{implement_path}" '
-        elif 'python.exe' in implement_path and os.path.exists(implement_path):
+        elif implement_path and 'python.exe' in implement_path and os.path.exists(implement_path):
             self.__install_mode = 'python'
             self.__implement_path = implement_path
             self.__implement_command = f'"{implement_path}" -m PyInstaller '
@@ -400,7 +446,7 @@ class StrucPyinstaller(object):
 
     def get_command_dict(self) -> dict:
         """ 
-        获取当前结构中的所有命令参数, 并返回一个字典, 键名为命令的名字，值为命令行
+        获取当前结构中的所有命令参数, 并返回一个字典, 键名为命令的名字, 值为命令行
 
         返回: 
         dict: 例如 {'output_methode': '-F', 'imports_paths': '-p="E:\\10_Programm" -p="E:\\10_Programm\\test"'}}
@@ -415,7 +461,7 @@ class StrucPyinstaller(object):
 
     def get_command_list(self) -> list:
         """ 
-        获取命令行列表，可用于使用 内置pyinstaller. 
+        获取命令行列表, 可用于使用 内置pyinstaller. 
 
         返回: 
         list[str]: 如 ['-c', '-F', 'main.py', '-p="E:\Python\Python38"']
@@ -436,18 +482,13 @@ class StrucPyinstaller(object):
 
         返回:
         str: 如 '"E:\Python\Python38\Scripts\pyinstaller.exe" -c -F main.py -p="E:\Python\Python38"'
-         """
+        """
         temp_list = self.get_command_list()
         if not temp_list:
             print(f'从 get_command_list() 返回空值, 命令行无参数, 请检查. {temp_list}')
             return None
         self.set_implement_path(implement_path)   # 此处定义了 self.__install_mode, self.__implement_path, self.__implement_command
         launch_command = self.__implement_command + ' '.join(temp_list)
-        # 弃用
-        # if withPathChange:
-        #     driver_path = os.path.splitdrive(self.__python_file_path.command)[0]
-        #     py_script_path = os.path.dirname(self.__python_file_path.command)
-        #     return f'{driver_path}\ncd {py_script_path}\n{launch_command}'
         return launch_command
 
     def get_struct_list(self) -> list:
@@ -497,14 +538,7 @@ class StrucPyinstaller(object):
         返回:
         SingleInfoStruct | StateStruct | RelPathStruct | MultiInfoStruct | SwitchStruct | None: 找到的结构, 如果没有找到则返回None
         """
-        for item in self.__sequence:
-            item: StateStruct | SwitchStruct | RelPathStruct | SingleInfoStruct | MultiInfoStruct
-            if isinstance(item.command_option, list):
-                if option in item.command_option:
-                    return item
-            elif item.command_option == option:
-                return item
-        return None
+        return self.__option_struct_dict.get(option, None)
 
     def clear(self):
         """ 清空结构 """
@@ -517,6 +551,7 @@ class StrucPyinstaller(object):
         return copy.deepcopy(self)
 
     def __init__(self) -> None:
+        self.__signal_isChanged = EventSignal()
         # -------------------------------------------------------------------------------
         # 开关结构类 9
         # -------------------------------------------------------------------------------
@@ -632,200 +667,205 @@ class StrucPyinstaller(object):
         # -------------------------------------------------------------------------------
         # python 解释器路径
         # -------------------------------------------------------------------------------
-        self.__python_interpreter_path = ''
+        self.__generate_option_struct_dict()
+
+    def __setattr__(self, name, value):
+        if isinstance(value, (SwitchStruct, StateStruct, SingleInfoStruct, MultiInfoStruct, RelPathStruct)):
+            value.signal_isChanged.connect(self.signal_isChanged.emit)
+        return super().__setattr__(name, value)
 
     @property
-    def python_file_path(self):
+    def python_file_path(self) -> SingleInfoStruct:
         return self.__python_file_path
 
     @property
-    def output_methode(self):
+    def output_methode(self) -> StateStruct:
         return self.__output_methode
 
     @property
-    def specpath(self):
+    def specpath(self) -> SingleInfoStruct:
         return self.__specpath
 
     @property
-    def output_file_name(self):
+    def output_file_name(self) -> SingleInfoStruct:
         return self.__output_file_name
 
     @property
-    def contents_directory(self):
+    def contents_directory(self) -> SingleInfoStruct:
         return self.__contents_directory
 
     @property
-    def add_binary_data(self):
+    def add_binary_data(self) -> RelPathStruct:
         return self.__add_binary_data
 
     @property
-    def imports_paths(self):
+    def imports_paths(self) -> MultiInfoStruct:
         return self.__imports_paths
 
     @property
-    def hidden_import(self):
+    def hidden_import(self) -> MultiInfoStruct:
         return self.__hidden_import
 
     @property
-    def collect_submodules(self):
+    def collect_submodules(self) -> MultiInfoStruct:
         return self.__collect_submodules
 
     @property
-    def collect_data(self):
+    def collect_data(self) -> MultiInfoStruct:
         return self.__collect_data
 
     @property
-    def collect_binaries(self):
+    def collect_binaries(self) -> MultiInfoStruct:
         return self.__collect_binaries
 
     @property
-    def collect_all(self):
+    def collect_all(self) -> MultiInfoStruct:
         return self.__collect_all
 
     @property
-    def copy_metadata(self):
+    def copy_metadata(self) -> MultiInfoStruct:
         return self.__copy_metadata
 
     @property
-    def recursive_copy_metadata(self):
+    def recursive_copy_metadata(self) -> MultiInfoStruct:
         return self.__recursive_copy_metadata
 
     @property
-    def additional_hooks_dir(self):
+    def additional_hooks_dir(self) -> MultiInfoStruct:
         return self.__additional_hooks_dir
 
     @property
-    def runtime_hook(self):
+    def runtime_hook(self) -> MultiInfoStruct:
         return self.__runtime_hook
 
     @property
-    def exclude_module(self):
+    def exclude_module(self) -> MultiInfoStruct:
         return self.__exclude_module
 
     @property
-    def add_splash_screen(self):
+    def add_splash_screen(self) -> SingleInfoStruct:
         return self.__add_splash_screen
 
     @property
-    def debug_mode(self):
+    def debug_mode(self) -> StateStruct:
         return self.__debug_mode
 
     @property
-    def python_option(self):
+    def python_option(self) -> StateStruct:
         return self.__python_option
 
     @property
-    def strip_option(self):
+    def strip_option(self) -> SwitchStruct:
         return self.__strip_option
 
     @property
-    def noupx_option(self):
+    def noupx_option(self) -> SwitchStruct:
         return self.__noupx_option
 
     @property
-    def upx_exclude(self):
+    def upx_exclude(self) -> MultiInfoStruct:
         return self.__upx_exclude
 
     @property
-    def console_window_control(self):
+    def console_window_control(self) -> StateStruct:
         return self.__console_window_control
 
     @property
-    def hide_console(self):
+    def hide_console(self) -> StateStruct:
         return self.__hide_console
 
     @property
-    def add_icon(self):
+    def add_icon(self) -> MultiInfoStruct:
         return self.__add_icon
 
     @property
-    def disable_traceback(self):
+    def disable_traceback(self) -> SwitchStruct:
         return self.__disable_traceback
 
     @property
-    def version_file(self):
+    def version_file(self) -> SingleInfoStruct:
         return self.__version_file
 
     @property
-    def add_xml_file(self):
+    def add_xml_file(self) -> SingleInfoStruct:
         return self.__add_xml_file
 
     @property
-    def add_resource(self):
+    def add_resource(self) -> MultiInfoStruct:
         return self.__add_resource
 
     @property
-    def uac_admin_apply(self):
+    def uac_admin_apply(self) -> SwitchStruct:
         return self.__uac_admin_apply
 
     @property
-    def uac_uiaccess(self):
+    def uac_uiaccess(self) -> SwitchStruct:
         return self.__uac_uiaccess
 
     @property
-    def argv_emulation(self):
+    def argv_emulation(self) -> SwitchStruct:
         return self.__argv_emulation
 
     @property
-    def osx_bundle_identifier(self):
+    def osx_bundle_identifier(self) -> SingleInfoStruct:
         return self.__osx_bundle_identifier
 
     @property
-    def target_architecture(self):
+    def target_architecture(self) -> StateStruct:
         return self.__target_architecture
 
     @property
-    def codesign_identity(self):
+    def codesign_identity(self) -> SingleInfoStruct:
         return self.__codesign_identity
 
     @property
-    def osx_entitlements_file(self):
+    def osx_entitlements_file(self) -> SingleInfoStruct:
         return self.__osx_entitlements_file
 
     @property
-    def runtime_tmpdir(self):
+    def runtime_tmpdir(self) -> SingleInfoStruct:
         return self.__runtime_tmpdir
 
     @property
-    def ignore_signals(self):
+    def ignore_signals(self) -> SwitchStruct:
         return self.__ignore_signals
 
     @property
-    def output_folder_path(self):
+    def output_folder_path(self) -> SingleInfoStruct:
         return self.__output_folder_path
 
     @property
-    def workpath_option(self):
+    def workpath_option(self) -> SingleInfoStruct:
         return self.__workpath_option
 
     @property
-    def noconfirm_option(self):
+    def noconfirm_option(self) -> SwitchStruct:
         return self.__noconfirm_option
 
     @property
-    def upx_dir(self):
+    def upx_dir(self) -> SingleInfoStruct:
         return self.__upx_dir
 
     @property
-    def clean_cache(self):
+    def clean_cache(self) -> SwitchStruct:
         return self.__clean_cache
 
     @property
-    def log_level(self):
+    def log_level(self) -> StateStruct:
         return self.__log_level
 
-    def __take_whole_path(self, path_str: str):
-        temp_list = path_str.split(' ')
-        if len(temp_list) == 0:
-            return None
-        path_part = temp_list.pop(0)
-        if path_part.startswith('"'):
-            path_list = [path_part]
-            while temp_list and not path_list[-1].endswith('"'):
-                temp_param = temp_list.pop(0)
-                path_list.append(temp_param)
-            path_part = ' '.join(path_list)
-        return path_part
+    def __generate_option_struct_dict(self) -> None:
+        """ 
+        生成 选项-结构 字典. 一个选项对应一个结构, 但是一个结构可能对应多个选项. 
+        """
+        self.__option_struct_dict = {}
+        for item in self.__sequence:
+            item: StateStruct | SwitchStruct | RelPathStruct | SingleInfoStruct | MultiInfoStruct
+            if isinstance(item.command_option, list):
+                for option in item.command_option:
+                    self.__option_struct_dict[option] = item
+            else:
+                self.__option_struct_dict[item.command_option] = item
 
     def __dict_struct(self) -> dict:
         temp_dict = {}
@@ -844,4 +884,4 @@ class StrucPyinstaller(object):
         return temp_dict
 
     def __str__(self):
-        return json.dumps(self.__dict_struct(), indent=4, ensure_ascii=False)
+        return pprint.pformat(self.__dict_struct(), indent=1)
