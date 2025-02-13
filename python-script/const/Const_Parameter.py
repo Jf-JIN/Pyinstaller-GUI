@@ -1,10 +1,21 @@
 
+if 1:
+    import os
+    import sys
+    parent_folder = os.path.dirname(__file__)
+    parent_folder = os.path.dirname(parent_folder)
+    sys.path.append(parent_folder)
 
 import os
 import sys
 import platform
 from DToolslib.Enum_Static import StaticEnum
 from DToolslib.Logger import *
+
+from system.Manager_Setting import SettingManager
+from system.Manager_Language import LanguageManager
+from const.Const_language_chinese import LANGUAGE_CHINESE
+from const.Const_language_english import LANGUAGE_ENGLISH
 
 
 os.chdir(os.path.dirname(os.path.dirname(__file__)))
@@ -80,6 +91,9 @@ _level = 'DEBUG'
 class Log(StaticEnum):
     CRITICAL = Logger('CRITICAL', APP_WORKSPACE_PATH, count_limit=_files_num, log_level=_level)
     DataManager = Logger('DataManager', APP_WORKSPACE_PATH, count_limit=_files_num, log_level=_level)
+    StyleManager = Logger('StyleManager', APP_WORKSPACE_PATH, count_limit=_files_num, log_level=_level)
+    LanguageManager = Logger('LanguageManager', APP_WORKSPACE_PATH, count_limit=_files_num, log_level=_level)
+    SettingManager = Logger('SettingManager', APP_WORKSPACE_PATH, count_limit=_files_num, log_level=_level)
 
 
 class Pyinstaller(StaticEnum):
@@ -117,3 +131,17 @@ class App(EnumConst):
     WORKSPACE_PATH: str = detemine_workspace_path()
     OS: str = detect_system()
     DEFAULT_INSTALLER_COMMANDLINE: str = '--onefile --console --clean'
+    DEFAULT_SETTING = {
+        'language': [str, 'default'],
+        'multi_win': [bool, True],
+        'win_mode': [str, 'simple'],
+        'last_command': [str, ''],
+        'tb_console_font_size': [int, 18],
+        'tb_command_line_font_size': [int, 18],
+        'auto_open_printed_command_line_folder': [bool, False],
+        'auto_open_printed_command_line_file': [bool, True]
+    }
+
+
+SettingManager(App.WORKSPACE_PATH, App.DEFAULT_SETTING, isEncrypted=True)
+LanguageManager(LANGUAGE_CHINESE, LANGUAGE_ENGLISH, App.WORKSPACE_PATH, SettingManager.get('language'))
