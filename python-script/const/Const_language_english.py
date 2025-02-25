@@ -465,7 +465,607 @@ LANGUAGE_ENGLISH = {
         "lb_CondaTitle": {"text": "Conda Current: "},
         "pte_FilePath": {"dict": "\nPython script: \t"},
         "pte_OutputPath": {"dict": "\nOutput directory\t"},
-        "pte_FileName": {"dict": "\nOutput file name: \t"}
+        "pte_FileName": {"dict": "\nOutput file name: \t"},
+        # ############################################# [PushButton] #############################################
+        "pb_input_py_file_browser": {
+            "display_text": "Browse ____",
+            "tooltip": "______________________"
+        },
+        "pb_output_folder_browser": {
+            "display_text": "Browse ____",
+            "tooltip": "______________________"
+        },
+        "pb_output_exe_icon_browser": {
+            "display_text": "Browse ____",
+            "tooltip": "______________________"
+        },
+        "pb_output_exe_version_browser": {
+            "display_text": "Browse ____",
+            "tooltip": "______________________"
+        },
+        "pb_output_exe_version_edit": {
+            "display_text": "Create/Edit/Preview ____",
+            "tooltip": "______________________"
+        },
+        "pb_add_file_folder_data": {
+            "display_text": "Add file resources ____",
+            "tooltip": "______________________"
+        },
+        "pb_add_binary_data": {
+            "display_text": "Add binary resources ____",
+            "tooltip": "______________________"
+        },
+        "pb_collect_submodules": {
+            "display_text": "Collect submodules ____",
+            "tooltip": "______________________ ____"
+        },
+        "pb_collect_data": {
+            "display_text": "Collect data files ____",
+            "tooltip": "______________________"
+        },
+        "pb_collect_binaries": {
+            "display_text": "Collect binary files ____",
+            "tooltip": "______________________"
+        },
+        "pb_collect_all": {
+            "display_text": "收集所有模块资源 ____",
+            "tooltip": "______________________"
+        },
+        "pb_add_splash_screen": {
+            "display_text": "添加启动画面 ____",
+            "tooltip": "______________________"
+        },
+        "pb_hidden_import": {
+            "display_text": "指定模块导入路径 ____",
+            "tooltip": "______________________"
+        },
+        "pb_imports_paths": {
+            "display_text": "指定模块搜寻路径 ____",
+            "tooltip": "______________________"
+        },
+        "pb_exclude_module": {
+            "display_text": "排除模块 ____",
+            "tooltip": "______________________"
+        },
+        "pb_copy_metadata": {
+            "display_text": "复制包的元数据 ____",
+            "tooltip": "______________________"
+        },
+        "pb_recursive_copy_metadata": {
+            "display_text": "递归复制包的元数据 ____",
+            "tooltip": "______________________"
+        },
+        "pb_additional_hooks_dir": {
+            "display_text": "额外的钩子路径 ____",
+            "tooltip": "______________________"
+        },
+        "pb_runtime_hook": {
+            "display_text": "运行时的钩子 ____",
+            "tooltip": "______________________"
+        },
+        "pb_runtime_tmpdir": {
+            "display_text": "运行工作路径 ____",
+            "tooltip": "______________________"
+        },
+        "pb_workpath_option": {
+            "display_text": "构建时工作目录 ____",
+            "tooltip": "______________________"
+        },
+        "pb_specpath": {
+            "display_text": "SPEC 文件生成路径 ____",
+            "tooltip": "______________________"
+        },
+        "pb_upx_dir": {
+            "display_text": "UPX 压缩工具路径 ____",
+            "tooltip": "______________________"
+        },
+        "pb_upx_exclude": {
+            "display_text": "UPX 排除文件 ____",
+            "tooltip": "______________________"
+        },
+        "pb_log_level": {
+            "display_text": "日志级别 ____",
+            "tooltip": "______________________"
+        },
+        "pb_python_option": {
+            "display_text": "Python 选项 ____",
+            "tooltip": "______________________"
+        },
+        "pb_debug_mode": {
+            "display_text": "调试选项 ____",
+            "tooltip": "______________________"
+        },
+        "pb_target_architecture": {
+            "display_text": "指定架构 ____",
+            "tooltip": "______________________"
+        },
+        "pb_codesign_identity": {
+            "display_text": "指定代码签名 ____",
+            "tooltip": "______________________"
+        },
+        "pb_osx_bundle_identifier": {
+            "display_text": "设置唯一标识符 ____",
+            "tooltip": "______________________"
+        },
+        "pb_osx_entitlements_file": {
+            "display_text": "指定 Entitlements 文件 ____",
+            "tooltip": "______________________"
+        },
+        "pb_add_resource": {
+            "display_text": "添加额外资源 ____",
+            "tooltip": "______________________"
+        },
+        "pb_add_xml_file": {
+            "display_text": "添加清单文件 ____",
+            "tooltip": "______________________"
+        },
+        "pb_save_setting": {
+            "display_text": "保存并立即生效 ____",
+            "tooltip": "______________________"
+        },
+        "pb_env_sys_edit_page_setting_env": {
+            "display_text": "打开环境变量 ____",
+            "tooltip": "______________________"
+        },
+        "pb_env_specified_browser_page_setting_env": {
+            "display_text": "浏览 ____",
+            "tooltip": "______________________"
+        },
+        "pb_env_specified_save_page_setting_env": {
+            "display_text": "保存 ____",
+            "tooltip": "______________________"
+        },
+        "pb_launch": {
+            "display_text": "运行 ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        # ############################################# [ComboBox] #############################################
+        "cb_lock_output_folder": {
+            "display_text": "锁定文件夹路径 ____",
+            "tooltip": "______________________"
+        },
+        "cb_lock_output_file_name": {
+            "display_text": "锁定文件名 ____",
+            "tooltip": "______________________"
+        },
+        "cb_noupx_option": {
+            "display_text": "禁用 UPX 压缩 ____",
+            "tooltip": "______________________"
+        },
+        "cb_disable_traceback": {
+            "display_text": "禁用窗口化回溯 ____",
+            "tooltip": "______________________"
+        },
+        "cb_ignore_signals": {
+            "display_text": "忽略信号处理 ____",
+            "tooltip": "______________________"
+        },
+        "cb_noconfirm_option": {
+            "display_text": "自动确认 ____",
+            "tooltip": "______________________"
+        },
+        "cb_strip_option": {
+            "display_text": "去除符号表 ____",
+            "tooltip": "______________________"
+        },
+        "cb_clean_cache": {
+            "display_text": "清理缓存 ____",
+            "tooltip": "______________________"
+        },
+        "cb_argv_emulation": {
+            "display_text": "启用argv模拟 ____",
+            "tooltip": "______________________"
+        },
+        "cb_uac_admin_apply": {
+            "display_text": "申请管理员权限 ____",
+            "tooltip": "______________________"
+        },
+        "cb_uac_uiaccess": {
+            "display_text": "申请 UIAccess 权限 ____",
+            "tooltip": "______________________"
+        },
+        "cb_hide_console": {
+            "display_text": "隐藏控制台窗口 ____",
+            "tooltip": "______________________"
+        },
+        "cb_delete_build": {
+            "display_text": "清除 /build 文件夹 ____",
+            "tooltip": "______________________"
+        },
+        "cb_delete_spec": {
+            "display_text": "删除 *.spec 文件 ____",
+            "tooltip": "______________________"
+        },
+        "rb_use_pyinstaller": {
+            "display_text": "使用pyinstaller.exe ____",
+            "tooltip": "______________________"
+        },
+        "rb_use_python": {
+            "display_text": "使用python解释器 ____",
+            "tooltip": "______________________"
+        },
+        "cbb_tooltip_show": {
+            "display_text": "显示 ____",
+            "tooltip": "______________________"
+        },
+        "cbb_multi_win": {
+            "display_text": "允许多窗口 ____",
+            "tooltip": "______________________"
+        },
+        "cb_print_cmd_auto_open_folder": {
+            "display_text": "Automatically open folders ____",
+            "tooltip": "______________________"
+        },
+        "cb_print_cmd_auto_open_file": {
+            "display_text": "Automatically open files ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        # ############################################# [RadioButton] #############################################
+        "rb_output_form_folder": {
+            "display_text": "文件夹 ____",
+            "tooltip": "______________________"
+        },
+        "rb_output_form_file": {
+            "display_text": "文件(exe) ____",
+            "tooltip": "______________________"
+        },
+        "rb_exe_console_display_show": {
+            "display_text": "显示 ____",
+            "tooltip": "______________________"
+        },
+        "rb_exe_console_display_hide": {
+            "display_text": "不显示/隐藏 ____",
+            "tooltip": "______________________"
+        },
+        "rb_env_sys": {
+            "display_text": "使用系统默认环境 ____",
+            "tooltip": "______________________"
+        },
+        "rb_env_specified": {
+            "display_text": "使用指定解释器环境 ____",
+            "tooltip": "______________________"
+        },
+        "rb_env_conda": {
+            "display_text": "使用 Conda 环境 ____",
+            "tooltip": "______________________"
+        },
+        "rb_env_builtin": {
+            "display_text": "使用内置 pyinstaller ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        # ############################################# [Label] #############################################
+        "lb_env_current_title_page_base": {
+            "display_text": "当前环境 ____",
+            "tooltip": "______________________"
+        },
+        "lb_input_py_file_path": {
+            "display_text": "请选择需要打包的 python 脚本入口文件, 支持 *.py, *.pyw, *.pyd, *.spec文件或 *.ocl, *.txt ____",
+            "tooltip": "______________________"
+        },
+        "lb_output_folder_path": {
+            "display_text": "请指定输出的文件夹 ____",
+            "tooltip": "______________________"
+        },
+        "lb_output_file_name": {
+            "display_text": "请指定输入文件名 ____",
+            "tooltip": "______________________"
+        },
+        "lb_output_exe_icon": {
+            "display_text": "(可选) 请添加应用图标 ____",
+            "tooltip": "______________________"
+        },
+        "lb_output_exe_version": {
+            "display_text": "(可选) 请添加版本信息 ____",
+            "tooltip": "______________________"
+        },
+        "lb_output_form": {
+            "display_text": "打包输出形式 ____",
+            "tooltip": "______________________"
+        },
+        "lb_exe_console_display": {
+            "display_text": "显示终端窗口 ____",
+            "tooltip": "______________________"
+        },
+        "lb_language": {
+            "display_text": "显示语言 ____",
+            "tooltip": "______________________"
+        },
+        "lb_build_files_clear": {
+            "display_text": "执行完打包后 ____",
+            "tooltip": "______________________"
+        },
+        "lb_use_py_pyinstaller_auto_conda": {
+            "display_text": "命令行执行方式 ____",
+            "tooltip": "______________________"
+        },
+        "lb_tooltip_show": {
+            "display_text": "工具提示 ____",
+            "tooltip": "______________________"
+        },
+        "lb_multi_win": {
+            "display_text": "新文件处理 ____",
+            "tooltip": "______________________"
+        },
+        "lb_print_cmd_option": {
+            "display_text": "打印完命令行后 ____",
+            "tooltip": "______________________"
+        },
+        "lb_env_current_title_page_setting_env": {
+            "display_text": "当前使用环境 ____",
+            "tooltip": "______________________"
+        },
+        "lb_env_current_path_title_page_setting_env": {
+            "display_text": "python解释器路径 ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        # ############################################# [GroupBox] #############################################
+        "groupBox_ios": {
+            "display_text": "IOS系统 ____",
+            "tooltip": "______________________"
+        },
+        "groupBox_windows": {
+            "display_text": "Windows系统 ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        # ############################################# [TabWidget] #############################################
+        "tabWidget": {
+            "tab_common": {
+                "display_text": "常规 ____",
+                "tooltip": "______________________"
+            },
+            "tab_env": {
+                "display_text": "运行环境 ____",
+                "tooltip": "______________________"
+            },
+            "tab_theme": {
+                "display_text": "主题 ____",
+                "tooltip": "______________________"
+            },
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
+        "_________________________": {
+            "display_text": "______________________ ____",
+            "tooltip": "______________________"
+        },
     },
     "special": {
         "window_title": "Python packaging to executable (.exe) development tools",
@@ -541,6 +1141,21 @@ LANGUAGE_ENGLISH = {
         "msg_file_replace": "Would you want to replace the original file option path",
         "msg_item_replace": "Would you want to replace the original option",
         "msg_if_replace": "Would you want to replace",
-        "deleted_file": "Remaining files deleted"
+        "deleted_file": "Remaining files deleted",
+        # ############################################# [Others] #############################################
+        "reset": "重置 ____",
+        "cancel": "取消 ____",
+        "certain": "确定 ____",
+        "error": "错误 ____",
+        "warning": "警告 ____",
+        "info": "信息 ____",
+        "critical": "严重错误 ____",
+        "copied": "已复制 ____",
+        "command_printed": "命令行已打印到",
+        "command_empty": "Pyinstaller 命令为空",
+        "env_conda_table_header": ["环境名 ____", "版本号 ____", "Python解释器路径 ____", "Pyinstaller路径 ____", "Pyinstaller版本 ____"],
+        "pyinstaller_info_table_header": ["命令名称 ____", "命令选项 ____", "命令值 ____"],
+        "output_folder_not_exist": "输出文件夹不存在 ____",
+
     }
 }
