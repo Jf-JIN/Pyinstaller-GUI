@@ -1,10 +1,11 @@
 
 
-import platform
 from system.Struct_Pyinstaller import *
 from const.Const_Parameter import *
+from system.UI.Dialog_MessageBox import DialogMessageBox
+from tools import *
 
-lg: Logger = Log.DataManager
+_log: Logger = Log.DataManager
 
 
 class PyinstallerStructLoader:
@@ -33,17 +34,44 @@ class PyinstallerStructLoader:
         return self.__implement_path
 
     def read_file(self, file_path) -> tuple:
+        """
+        读取安装命令行文件
+
+        参数:
+            file_path: 安装命令行文件路径
+
+        返回:
+            path_configurations(list): 配置信息, 如: set PATH=C:/Users/.../Library/bin;%PATH%
+            implement_path(str): 执行器路径
+            pyinstaller_struct(PyinstallerStruct): pyinstaller 结构体
+        """
         self.__read_file_in_lines(file_path)
-        lg.trace(f'path_configurations: {self.path_configurations}\npyinstaller_struct: {self.pyinstaller_struct}')
+        _log.trace(f'path_configurations: {self.path_configurations}\npyinstaller_struct: {self.pyinstaller_struct}')
         return self.path_configurations, self.implement_path, self.pyinstaller_struct
 
-    def read_command(self, command: str) -> PyinstallerStruct:
+    def read_command(self, command_line_str: str) -> tuple:
         self.__pyinstaller_struct.clear()
-        self.__parse_pyinstaller_command(command_line_list=command.split())
-        return self.pyinstaller_struct
+        command_line_str = command_line_str.replace("'", '"')
+        command_line_list = command_line_str.split('\n')
+        for command in command_line_list:
+            self.__parse_command(command)
+        return self.path_configurations, self.implement_path, self.pyinstaller_struct
 
     def __call__(self, file_path, *args, **kwds):
         return self.read_file(file_path)
+
+    def __parse_command(self, command: str) -> bool:
+        if command.startswith(('set', 'export')):
+            self.__parse_and_set_env_path(command)
+        elif (
+            command.startswith(('pyinstaller ', 'PyInstaller ')) or
+            ('pyinstaller ' in command.lower()) or
+            'pyinstaller.exe' in command
+        ):
+            # 这里有一个特性, 只会存在一个pyinstaller命令, 且只读取第一个命令:
+            self.__load_pyinstaller_command_in_struct(command)
+            return True
+        return False
 
     def __read_file_in_lines(self, file_path) -> list:
         self.__path_configurations_set.clear()
@@ -51,15 +79,8 @@ class PyinstallerStructLoader:
         with open(file_path,  'r', encoding='utf-8') as f:
             line = f.readline().strip()
             while line:
-                if line.startswith(('set ', 'export ')):
-                    self.__parse_and_set_env_path(line)
-                # 这里有一个特性, 只会存在一个pyinstaller命令, 且只读取第一个命令:
-                elif (
-                    line.startswith(('pyinstaller ', 'PyInstaller ')) or
-                    ('pyinstaller ' in line.lower()) or
-                    'pyinstaller.exe' in line
-                ):
-                    self.__get_cmd_data(line)
+                flag_finished: bool = self.__parse_command(line)
+                if flag_finished:
                     break
                 line = f.readline()
 
@@ -71,28 +92,10 @@ class PyinstallerStructLoader:
         Linux:   export PATH="Users/username/miniconda3/envs/envsname/Library/bin:$PATH"
         MacOs:   export PATH="$HOME/miniconda3/envs/envsname/Library/bin:$PATH" 
         """
-        cmd_line: str = line_str.strip().replace('\\', '/').split(' ')[1]
-        path: str = cmd_line.split('=')[1].strip('"')
-        # 处理路径开头
-        user_path = os.path.expanduser('~')
-        if '$HOME' in path:
-            path = path.replace('$HOME', user_path)
-        elif 'Users/' in path:
-            path_part = path.split('Users/')[1].split('/', 1)[1]
-            path = os.path.join(user_path, path_part)
-        # 处理路径结尾
-        path = path.replace(':$PATH', '').replace(';%PATH%', '')
-        # 验证路径是否存在
-        if not os.path.exists(os.path.normpath(path)):
-            return
-        # 添加开头和结尾
-        if self.__system_tpye == OsType.WINDOWS:
-            path = f'set PATH="{path};%PATH%"'.replace('\\', '/')
-        elif self.__system_tpye == OsType.LINUX or self.__system_tpye == OsType.MACOS:
-            path = f'export PATH="{path}:$PATH"'.replace('\\', '/')
-        else:
-            path = ''
-        self.__path_configurations_set.add(path)
+        self.__path_configurations_set.clear()
+        path = split_path_from_env_config_line(line_str)
+        if path:
+            self.__path_configurations_set.add(path)
 
     def __split_implement_and_cmd(self, line_str_list: list) -> tuple:
         implement_path = ''
@@ -136,12 +139,13 @@ class PyinstallerStructLoader:
             param = ' '.join(param_list)
         return param
 
-    def __get_cmd_data(self, line_str: str) -> None:
+    def __load_pyinstaller_command_in_struct(self, line_str: str) -> None:
         line_str_list: list = line_str.strip().split(' ')
         self.__implement_path, self.__command_line = self.__split_implement_and_cmd(line_str_list)
         self.__parse_pyinstaller_command(self.__command_line)
 
     def __parse_pyinstaller_command(self, command_line_list: list):
+        hasUnknownParam = False
         try:
             while len(command_line_list) > 0:
                 param_phrase = self.__get_next_param(command_line_list)
@@ -150,9 +154,10 @@ class PyinstallerStructLoader:
                     param_name, param_value = param_phrase.split('=', 1)
                     struct:  RelPathStruct | MultiInfoStruct | SingleInfoStruct | None = self.__pyinstaller_struct.find_struct_from_option(param_name)
                     if struct is None:
-                        lg.debug(f'未找到对应参数 {param_name}')
+                        _log.debug(f'未找到对应参数 {param_name}')
+                        hasUnknownParam = True
                         continue
-                    if param_name in Pyinstaller.CmdArgsCategory.LIST_MULTI:
+                    if param_name in App.Pyinstaller.LIST_MULTI:
                         # RelPathStruct | MultiInfoStruct
                         struct: RelPathStruct | MultiInfoStruct
                         struct.append_args(param_value)
@@ -161,33 +166,36 @@ class PyinstallerStructLoader:
                         struct: SingleInfoStruct
                         struct.set_args(param_value)
                 # StateStruct 带参数
-                elif param_phrase in Pyinstaller.CmdArgsCategory.DICT_STATE_WITH_PARAMS:
+                elif param_phrase in App.Pyinstaller.DICT_STATE_WITH_PARAMS:
                     param_name = param_phrase
                     struct:   StateStruct | None = self.__pyinstaller_struct.find_struct_from_option(param_name)
                     if struct is None:
-                        lg.debug(f'未找到对应参数 {param_name}')
+                        _log.debug(f'未找到对应参数 {param_name}')
+                        hasUnknownParam = True
                         continue
                     parm_state = self.__get_next_param(command_line_list)
                     struct.set_state(parm_state)
                 # StateStruct 不带参数
-                elif param_phrase in Pyinstaller.CmdArgsCategory.DICT_STATE_WITHOUT_PARAMS['--onefile'] or param_phrase in Pyinstaller.CmdArgsCategory.DICT_STATE_WITHOUT_PARAMS['--console']:
+                elif param_phrase in App.Pyinstaller.DICT_STATE_WITHOUT_PARAMS['--onefile'] or param_phrase in App.Pyinstaller.DICT_STATE_WITHOUT_PARAMS['--console']:
                     param_name = param_phrase
-                    if param_phrase in Pyinstaller.CmdArgsCategory.DICT_STATE_WITHOUT_PARAMS['--onefile']:
+                    if param_phrase in App.Pyinstaller.DICT_STATE_WITHOUT_PARAMS['--onefile']:
                         option_key = '--onefile'
                     else:
                         option_key = '--console'
                     struct:   StateStruct | None = self.__pyinstaller_struct.find_struct_from_option(option_key)
                     if struct is None:
-                        lg.debug(f'未找到对应参数 {param_name}')
+                        _log.debug(f'未找到对应参数 {param_name}')
+                        hasUnknownParam = True
                         continue
                     struct: StateStruct
                     struct.set_state(param_phrase)
                 # SwitchStruct
-                elif param_phrase in Pyinstaller.CmdArgsCategory.LIST_SWITCH:
+                elif param_phrase in App.Pyinstaller.LIST_SWITCH:
                     param_name = param_phrase
                     struct:   SwitchStruct | None = self.__pyinstaller_struct.find_struct_from_option(param_name)
                     if struct is None:
-                        lg.debug(f'未找到对应参数 {param_name}')
+                        _log.debug(f'未找到对应参数 {param_name}')
+                        hasUnknownParam = True
                         continue
                     else:
                         struct.set_on()
@@ -197,36 +205,43 @@ class PyinstallerStructLoader:
                     if param_name.endswith(('.py', 'pyw', 'pyd', '.spec')):
                         struct:   SingleInfoStruct | None = self.__pyinstaller_struct.find_struct_from_option('')
                         if struct is None:
-                            lg.debug(f'未找到对应参数 {param_name}')
+                            _log.debug(f'未找到对应参数 {param_name}')
+                            hasUnknownParam = True
                             continue
                         struct.set_args(param_phrase)
                     # 以下针对非标准写法, 比如需要写 "=", 但是没有写的情况
                     # StateStruct 带参数
-                    elif param_name in Pyinstaller.CmdArgsCategory.DICT_STATE_WITH_PARAMS:
+                    elif param_name in App.Pyinstaller.DICT_STATE_WITH_PARAMS:
                         struct:   StateStruct | None = self.__pyinstaller_struct.find_struct_from_option(option_key)
                         if struct is None:
-                            lg.debug(f'未找到对应参数 {param_name}')
+                            _log.debug(f'未找到对应参数 {param_name}')
+                            hasUnknownParam = True
                             continue
                         parm_state = self.__get_next_param(command_line_list)
                         struct.set_state(parm_state)
                     # SingleInfoStruct
-                    elif param_name in Pyinstaller.CmdArgsCategory.LIST_SINGLE:
+                    elif param_name in App.Pyinstaller.LIST_SINGLE:
                         struct: SingleInfoStruct | None | None = self.__pyinstaller_struct.find_struct_from_option(param_phrase)
                         if struct is None:
-                            lg.debug(f'未找到对应参数 {param_name}')
+                            _log.debug(f'未找到对应参数 {param_name}')
+                            hasUnknownParam = True
                             continue
                         parm_arg = self.__get_next_param(command_line_list)
                         struct.set_args(parm_arg)
                     # RelPathStruct | MultiInfoStruct
-                    elif param_name in Pyinstaller.CmdArgsCategory.LIST_MULTI:
+                    elif param_name in App.Pyinstaller.LIST_MULTI:
                         struct: RelPathStruct | MultiInfoStruct | None = self.__pyinstaller_struct.find_struct_from_option(param_phrase)
                         if struct is None:
-                            lg.debug(f'未找到对应参数 {param_name}')
+                            _log.debug(f'未找到对应参数 {param_name}')
+                            hasUnknownParam = True
                             continue
                         parm_arg = self.__get_next_param(command_line_list)
                         struct.append_args(parm_arg)
                     else:
-                        lg.debug(f'未找到对应参数 "{param_name}"({param_phrase})')
+                        _log.debug(f'未找到对应参数 "{param_name}"({param_phrase})')
+                        hasUnknownParam = True
                         continue
         except:
-            lg.exception('命令解析异常')
+            _log.exception('命令解析异常')
+        if hasUnknownParam:
+            DialogMessageBox.warning(None, '存在未知参数, 请检查命令行参数')

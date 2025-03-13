@@ -1,5 +1,5 @@
 
-from .Signal_Event import EventSignal
+from DToolslib import EventSignal
 
 from PyQt5.QtCore import QTimer
 

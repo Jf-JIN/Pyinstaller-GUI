@@ -1,13 +1,25 @@
 
+from typing import TypeAlias
 import os
 import json
 import copy
 import logging
+import traceback
+import os
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from DToolslib import SingletonMeta
+from const.Const_Parameter import *
+
+_log = Log.SettingManager
+
+AES_KEY = b"This\x00is\x18ein\x20Versuch\x7fvon\x07Cytrotxt"
+AES_IV = b"This-is-Versuch1"
 
 
-class SettingManager():
+class SettingManager(metaclass=SingletonMeta):
     """
-    设置管理器
+    设置管理器(单例模式)
 
     参数:
     - exe_folder_path(str): 可执行文件所在文件夹路径
@@ -30,14 +42,42 @@ class SettingManager():
             cls.__instance.__isInitialized = False
         return cls.__instance
 
-    def __init__(self, exe_folder_path: str, default_setting_dict: dict = {}, default_setting_name: str = '') -> None:
+    def __init__(self, exe_folder_path: str = '', default_setting_dict: dict = {}, default_setting_name: str = '', isEncrypted=True) -> None:
         if self.__isInitialized:
             return
         self.__isInitialized = True
-        self.__exe_folder_path = exe_folder_path
-        self.__default_setting_dict = default_setting_dict or {}
-        self.__setting_path = self.__build_setting_path(default_setting_name)
-        self.__setting_data = self.__initialize_settings()
+        self.__isEncrypted: bool = isEncrypted
+        self.__exe_folder_path: str = exe_folder_path
+        self.__default_setting_dict: dict = default_setting_dict or {}
+        self.__setting_path: str = self.__build_setting_path(default_setting_name)
+        self.__setting_data: dict = self.__initialize_settings()
+
+    @staticmethod
+    def getConfig(key):
+        setting_manager = SettingManager()
+        return setting_manager.get_config(key)
+
+    @staticmethod
+    def setConfig(key, value):
+        setting_manager = SettingManager()
+        setting_manager.set_config(key, value)
+
+    def get_config(self, key: str):
+        if key not in self.__setting_data:
+            _log.warning(f"Setting key {key} not found in current setting data")
+        return self.__setting_data.get(key, self.__default_setting_dict.get(key, ''))
+
+    def set_config(self, key: str, value: str):
+        if value is None:
+            _log.warning(f"Setting value for key {key} is empty")
+            return
+        if key not in self.__setting_data:
+            _log.warning(f"Setting key {key} not found in current setting data.")
+            return
+        if isinstance(value, str):
+            value = value.replace('"', "'")
+        self.__setting_data[key] = value
+        self.save_settings()
 
     def __build_setting_path(self, suffix: str) -> str:
         """构建设置文件路径"""
@@ -47,6 +87,7 @@ class SettingManager():
     def __initialize_settings(self) -> dict:
         """初始化设置数据"""
         if not os.path.exists(self.__setting_path):
+            _log.warning("Setting file not found, creating a new one.")
             return self.__rebuild_settings()
 
         try:
@@ -55,14 +96,28 @@ class SettingManager():
             if validated != loaded:
                 self.__save_settings(validated)
             return validated
-        except (json.JSONDecodeError, IOError) as e:
-            logging.warning(f"设置文件损坏, 重新生成默认配置: {str(e)}")
+        except Exception as e:
+            logging.warning(f"设置文件损坏, ✅ 重新生成默认配置")
             return self.__rebuild_settings()
 
     def __load_settings_file(self) -> dict:
         """加载并解析设置文件"""
-        with open(self.__setting_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+        if not self.__isEncrypted:
+            with open(self.__setting_path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+                json_data = "".join(lines[1:])  # 跳过第一行
+                return json.loads(json_data)
+        else:
+            try:
+                with open(self.__setting_path, "rb") as f:
+                    f.readline()  # 跳过第一行
+                    encrypted = f.read()
+
+                cipher = AES.new(AES_KEY, AES.MODE_CBC, AES_IV)
+                decrypted = unpad(cipher.decrypt(encrypted), AES.block_size).decode()
+                return json.loads(decrypted)
+            except:
+                raise IOError(traceback.format_exc())
 
     def __validate_settings(self, settings: dict) -> dict:
         """验证并修复设置数据"""
@@ -122,7 +177,7 @@ class SettingManager():
                     expected_type, default_value = default
                     if not isinstance(current[key], expected_type):
                         current[key] = default_value
-                        logging.warning(f"类型修复: {key} 替换为默认值")
+                        logging.warning(f"类型修复: {key} 替换为默认值 {default_value}")
 
         __traverse(fixed, self.__default_setting_dict)
         return fixed
@@ -147,14 +202,25 @@ class SettingManager():
 
     def __save_settings(self, data: dict) -> None:
         """保存设置到文件"""
-        with open(self.__setting_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
-        logging.info("设置文件已更新")
+        header = "The file is encrypted using AES to minimize the risk of unauthorized access and unintended modifications.\n"  # 需要写入的标识行
+
+        if not self.__isEncrypted:
+            with open(self.__setting_path, "w", encoding="utf-8") as f:
+                f.write(header)  # 先写入标识行
+                json.dump(data, f, indent=4, ensure_ascii=False)
+        else:
+            json_str = json.dumps(data)
+            cipher = AES.new(AES_KEY, AES.MODE_CBC, AES_IV)
+            encrypted = cipher.encrypt(pad(json_str.encode(), AES.block_size))
+            with open(self.__setting_path, "wb") as f:
+                f.write(header.encode())
+                f.write(encrypted)
 
     @property
     def setting_data(self) -> dict:
         """获取当前设置数据"""
-        return copy.deepcopy(self.__setting_data)
+        temp = copy.deepcopy(self.__setting_data)
+        return temp
 
     @property
     def default_setting_dict(self) -> dict:
@@ -189,3 +255,6 @@ class SettingManager():
     def update_and_save_setting(self, key_path: str, value) -> None:
         self.update_setting(key_path, value)
         self.save_settings()
+
+
+SM: TypeAlias = SettingManager

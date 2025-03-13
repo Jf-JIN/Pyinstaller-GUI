@@ -6,9 +6,14 @@ import subprocess
 
 from DToolslib import *
 
-from system.Struct_Pyinstaller import *
 from const.Const_Parameter import *
+from system.Struct_Pyinstaller import *
 from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, QTimer, QThreadPool
+from PyQt5 import sip
+
+from tools.data_handle import normalize_path
+
+_log = Log.ExecutorInfoManager
 
 
 class ExecutorInfoStruct(QObject):
@@ -24,7 +29,7 @@ class ExecutorInfoStruct(QObject):
         pyinstaller_version (str, optional): pyinstaller版本 默认: ''
 
     信号: 
-        signal_update_data (pyqtSignal(dict)): 更新数据信号, 如果数据更改, 则将通过信号通知其他组件
+        signal_data_changed_EIS (pyqtSignal(dict)): 更新数据信号, 如果数据更改, 则将通过信号通知其他组件
 
     方法: 
         set_name(name: str): 设置执行器名称
@@ -36,12 +41,13 @@ class ExecutorInfoStruct(QObject):
         clear(): 清除所有数据
         clear_pyinstaller(): 清除pyinstaller数据
     """
-    signal_update_data = pyqtSignal()
+    signal_data_changed_EIS = pyqtSignal()
 
     def __init__(self, name: str, path: str = '', python_path: str = '', python_version: str = '', pyinstaller_path: str = '', pyinstaller_version: str = ''):
         super().__init__()
         self.__name: str = name
         self.__path: str = path
+        self.__config_library = []
         self.__python_path: str = python_path
         self.__python_version: str = python_version
         self.__pyinstaller_path: str = pyinstaller_path
@@ -53,27 +59,31 @@ class ExecutorInfoStruct(QObject):
 
     @property
     def path(self) -> str:
-        return self.__path
+        return self.__path.replace('\\', '/')
 
     @property
     def python_path(self) -> str:
-        return self.__python_path
+        return self.__python_path.replace('\\', '/')
+
+    @property
+    def config_libraries(self) -> list:
+        return self.__config_library
 
     @property
     def python_version(self) -> str:
-        return self.__python_version
+        return self.__python_version.replace('\\', '/')
 
     @property
     def pyinstaller_path(self) -> str:
-        return self.__pyinstaller_path
+        return self.__pyinstaller_path.replace('\\', '/')
 
     @property
     def pyinstaller_version(self) -> str:
-        return self.__pyinstaller_version
+        return self.__pyinstaller_version.replace('\\', '/')
 
     @property
     def info_list(self) -> list:
-        return [self.__name, self.__python_path, self.__python_version, self.__pyinstaller_path, self.__pyinstaller_version]
+        return [self.name, self.path, self.config_libraries, self.python_path, self.python_version, self.pyinstaller_path, self.pyinstaller_version]
 
     def __str__(self) -> str:
         return str(self.info_list)
@@ -82,37 +92,44 @@ class ExecutorInfoStruct(QObject):
         if name == self.__name:
             return
         self.__name = name
-        self.signal_update_data.emit()
+        self.__send_signal()
 
     def set_path(self, path) -> None:
-        if path == self.__path:
+        if path == self.__path or 'builtin' in self.__name:
             return
         self.__path = path
-        self.signal_update_data.emit()
+        self.__send_signal()
 
     def set_python_path(self, python_path) -> None:
-        if python_path == self.__python_path:
+        if python_path == self.__python_path or 'builtin' in self.__name:
             return
         self.__python_path = python_path
-        self.signal_update_data.emit()
+        self.__set_config_library(python_path)
+        pyinstaller_path = self.find_pyinstaller_path_by_python_path(python_path)
+        if pyinstaller_path != self.__pyinstaller_path:
+            self.set_pyinstaller_path(pyinstaller_path)
+        self.__send_signal()
 
     def set_python_version(self, python_version) -> None:
-        if python_version == self.__python_version:
+        if python_version == self.__python_version or 'builtin' in self.__name:
             return
         self.__python_version = python_version
-        self.signal_update_data.emit()
+        self.__send_signal()
 
     def set_pyinstaller_path(self, pyinstaller_path) -> None:
-        if pyinstaller_path == self.__pyinstaller_path:
+        if pyinstaller_path == self.__pyinstaller_path or 'builtin' in self.__name:
             return
         self.__pyinstaller_path = pyinstaller_path
-        self.signal_update_data.emit()
+        python_path = self.find_python_path_by_pyinstaller_path(pyinstaller_path)
+        if python_path != self.__python_path:
+            self.set_python_path(python_path)
+        self.__send_signal()
 
     def set_pyinstaller_version(self, pyinstaller_version) -> None:
-        if pyinstaller_version == self.__pyinstaller_version:
+        if pyinstaller_version == self.__pyinstaller_version or 'builtin' in self.__name:
             return
         self.__pyinstaller_version = pyinstaller_version
-        self.signal_update_data.emit()
+        self.__send_signal()
 
     def clear(self) -> None:
         if self.__path == '' and self.__python_path == '' and self.__python_version == '' and self.__pyinstaller_path == '' and self.__pyinstaller_version == '':
@@ -122,14 +139,71 @@ class ExecutorInfoStruct(QObject):
         self.__python_version = ''
         self.__pyinstaller_path = ''
         self.__pyinstaller_version = ''
-        self.signal_update_data.emit()
+        self.__send_signal()
 
     def clear_pyinstaller(self) -> None:
         if self.__pyinstaller_path == '' and self.__pyinstaller_version == '':
             return
         self.__pyinstaller_path = ''
         self.__pyinstaller_version = ''
-        self.signal_update_data.emit()
+        self.__send_signal()
+
+    def find_pyinstaller_path_by_python_path(self, python_path: str) -> str:
+        pyinstaller_path = ''
+        current = os.path.dirname(python_path)
+        current_path = os.path.join(current, 'pyinstaller.exe')
+        current_bin_path = os.path.join(current, 'bin', 'pyinstaller.exe')
+        current_script_path = os.path.join(current, 'Scripts', 'pyinstaller.exe')
+        parent = os.path.dirname(current)
+        parent_path = os.path.join(parent, 'pyinstaller.exe')
+        parent_bin_path = os.path.join(parent, 'bin', 'pyinstaller.exe')
+        parent_script_path = os.path.join(parent, 'Scripts', 'pyinstaller.exe')
+        if os.path.exists(current_path):
+            pyinstaller_path = current_path
+        elif os.path.exists(current_bin_path):
+            pyinstaller_path = current_bin_path
+        elif os.path.exists(current_script_path):
+            pyinstaller_path = current_script_path
+        elif os.path.exists(parent_path):
+            pyinstaller_path = parent_path
+        elif os.path.exists(parent_bin_path):
+            pyinstaller_path = parent_bin_path
+        elif os.path.exists(parent_script_path):
+            pyinstaller_path = parent_script_path
+        pyinstaller_path = normalize_path(pyinstaller_path)
+        return pyinstaller_path
+
+    def find_python_path_by_pyinstaller_path(self, pyinstaller_path: str) -> str:
+        python_path = ''
+        current = os.path.dirname(pyinstaller_path)
+        current_path = os.path.join(current, 'python.exe')
+        parent = os.path.dirname(current)
+        parent_path = os.path.join(parent, 'python.exe')
+        parent_parent = os.path.dirname(parent)
+        parent_parent_path = os.path.join(parent_parent, 'python.exe')
+        if os.path.exists(current_path):
+            python_path = current_path
+        elif os.path.exists(parent_path):
+            python_path = parent_path
+        elif os.path.exists(parent_parent_path):
+            python_path = parent_parent_path
+        python_path = normalize_path(python_path)
+        return python_path
+
+    def __send_signal(self):
+        if sip.isdeleted(self):
+            return
+        self.signal_data_changed_EIS.emit()
+
+    def __set_config_library(self, python_path: str):
+        current = os.path.dirname(python_path)
+        current_path = os.path.join(current, 'Library', 'bin')
+        # _log.info(f'{self.name}\tcurrent_path: {current_path}')
+        if os.path.exists(current_path):
+            current_path = normalize_path(current_path)
+            self.__config_library = [current_path]
+        else:
+            self.__config_library = []
 
 
 class TaskRunner(QRunnable):
@@ -145,7 +219,7 @@ class TaskRunner(QRunnable):
 
 class ExecutorInfoManager(QObject):
     """
-    执行器信息管理类
+    执行器信息管理类(单例)
 
     运行逻辑: 
 
@@ -157,21 +231,32 @@ class ExecutorInfoManager(QObject):
 
     指定的环境则通过外部调用检查, 这个部分放在UI中, 如果选定了指定的环境, 则每隔一段时间调用检查一次
 
-    - 信号发射有节流机制，或时间大于指定时间，或请求发送次数超过最大次数，才会发送信号
+    - 信号发射有节流机制, 或时间大于指定时间, 或请求发送次数超过最大次数, 才会发送信号
 
     参数: 
         executor_struct_dict: 执行器信息字典
 
     信号: 
-        signal_update_GUI: 更新GUI信号
+        signal_data_changed_EIM: 更新 ExecutorInfoManager 数据信号
 
-    方法：
+    方法: 
         set_special_env: 设置指定的环境
 
     """
-    signal_update_GUI = pyqtSignal()
+    signal_data_changed_EIM = pyqtSignal()
+    signal_specified_env = pyqtSignal()
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = super().__new__(cls)
+            cls.__instance.__isInitialized = False
+        return cls.__instance
 
     def __init__(self):
+        if self.__isInitialized:
+            return
+        self.__isInitialized = True
         super().__init__()
         self.__conda_struct_dict = {}
         self.__conda_env_compare_list = ''
@@ -182,7 +267,6 @@ class ExecutorInfoManager(QObject):
         self.__emit_signal_index = 0
         self.__emit_signal_index_max = 30
         """ 信号发射最小次数间隔, 阻止信号高频发射 """
-
         self.__local_struct = ExecutorInfoStruct(name='local')
         self.__special_struct = ExecutorInfoStruct(name='special')
         self.__thread_pool_conda = QThreadPool()
@@ -197,7 +281,7 @@ class ExecutorInfoManager(QObject):
         self.__timer_polling_conda = QTimer()
         self.__timer_polling_conda.timeout.connect(self.__create_task_detect_conda_polling)
         self.__timer_polling_conda.start(2000)
-        self.__timer_emit_signal = threading.Timer(self.__emit_signal_interval, self.__emit_signal_update_GUI)
+        self.__timer_emit_signal = threading.Timer(self.__emit_signal_interval, self.__emit_signal_data_changed_EIM)
 
     @property
     def executor_struct_dict(self):
@@ -208,19 +292,49 @@ class ExecutorInfoManager(QObject):
         }
         return temp
 
-    def set_special_env(self, python_path: str, pyinstaller_path: str = '') -> None:
-        if not os.path.exists(python_path):
+    @property
+    def local_struct(self) -> ExecutorInfoStruct:
+        return self.__local_struct
+
+    @property
+    def special_struct(self) -> ExecutorInfoStruct:
+        return self.__special_struct
+
+    @property
+    def conda_struct_dict(self) -> dict:
+        return self.__conda_struct_dict
+
+    def set_special_env(self, input_path: str) -> None:
+        """ 
+        内部不做轮询处理, 外部轮询调用
+        """
+        if not os.path.exists(input_path):
             self.__special_struct.clear()
+            self.signal_specified_env.emit()
             return
-        self.__create_tast_detect_special_env(python_path, pyinstaller_path)
+        if input_path.endswith('python.exe'):
+            pyinstaller_path = self.__special_struct.find_pyinstaller_path_by_python_path(input_path)
+            self.__create_tast_detect_special_env(input_path, pyinstaller_path)
+        elif input_path.endswith('pyinstaller.exe'):
+            python_path = self.__special_struct.find_python_path_by_pyinstaller_path(input_path)
+            self.__create_tast_detect_special_env(python_path, input_path)
+        else:
+            self.__special_struct.clear()
+        self.signal_specified_env.emit()
+
+    def update_local_env(self) -> None:
+        self.__create_tast_detect_local_env()
 
     # @Inner_Decorators.time_counter
     def __detect_special_env(self, python_path: str, pyinstaller_path: str) -> None:
+        python_path = python_path.replace('\\', '/')
+        if App.OS == OsType.WINDOWS:
+            python_path = python_path.replace('/users/', '/Users/')
         if python_path != self.__special_struct.python_path:
             self.__special_struct.clear()
             cmdline: str = f'{python_path} --version'
             python_version_process = subprocess.Popen(cmdline, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
-            python_version: str = python_version_process.stdout.read().strip().lower().replace('python ', '')
+            python_version: str = python_version_process.stdout.read().strip().replace('python ', '')
             self.__special_struct.set_path(os.path.dirname(python_path))
             self.__special_struct.set_python_path(python_path)
             self.__special_struct.set_python_version(python_version)
@@ -238,13 +352,14 @@ class ExecutorInfoManager(QObject):
         python_path: str = python_path_process.stdout.read().strip().split('\n')[0]
         cmdline: str = f'{python_path} --version'
         python_version_process = subprocess.Popen(cmdline, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        python_version: str = python_version_process.stdout.read().strip().lower().replace('python ', '')
+        python_version: str = python_version_process.stdout.read().strip().replace('python ', '')
         python_folder_path: str = os.path.dirname(python_path)
         self.__local_struct.clear()
         self.__local_struct.set_path(python_folder_path)
         self.__local_struct.set_python_path(python_path)
         self.__local_struct.set_python_version(python_version)
         self.__detect_pyinstaller(self.__local_struct)
+        self.__schedule_signal_data_changed_EIM()
         return
 
     # @Inner_Decorators.time_counter
@@ -282,14 +397,14 @@ class ExecutorInfoManager(QObject):
                 continue
             env_name, env_path = env.split()
             struct = ExecutorInfoStruct(name=env_name, path=env_path)
-            struct.signal_update_data.connect(self.__schedule_signal_update_GUI)
+            struct.signal_data_changed_EIS.connect(self.__schedule_signal_data_changed_EIM)
             self.__conda_struct_dict[env_name] = struct
             flag_add = True
             self.__detect_conda_python_path(struct)
 
         # 通知外部更新
         if flag_add or flag_del:
-            self.__schedule_signal_update_GUI()
+            self.__schedule_signal_data_changed_EIM()
 
         return
 
@@ -307,12 +422,13 @@ class ExecutorInfoManager(QObject):
             return
         cmdline: str = f'{python_path} --version'
         python_version_process = subprocess.Popen(cmdline, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        python_version: str = python_version_process.stdout.read().strip().lower().replace('python ', '')
+        python_version: str = python_version_process.stdout.read().strip().replace('python ', '')
         struct.set_python_path(python_path)
         struct.set_python_version(python_version)
         return
 
     # @Inner_Decorators.time_counter
+
     def __detect_pyinstaller(self, struct: ExecutorInfoStruct, pyinstaller_path: str = '') -> None:
         """
         检查 pyinstaller 是否存在, 如果存在则设置路径和版本, 项目修改值 `pyinstaller_path`, `pyinstaller_version`
@@ -322,33 +438,11 @@ class ExecutorInfoManager(QObject):
             pyinstaller_path: pyinstaller 可执行文件路径, 改参数主要是给 special_struct 用的
         """
         if not struct.python_path:
+            # 必须先有 python 才能运行 pyinstaller
             struct.clear()
             return
-        current = os.path.dirname(struct.python_path)
-        current_path = os.path.join(current, 'pyinstaller.exe')
-        current_bin_path = os.path.join(current, 'bin', 'pyinstaller.exe')
-        current_script_path = os.path.join(current, 'Scripts', 'pyinstaller.exe')
-        parent = os.path.dirname(current)
-        parent_path = os.path.join(parent, 'pyinstaller.exe')
-        parent_bin_path = os.path.join(parent, 'bin', 'pyinstaller.exe')
-        parent_script_path = os.path.join(parent, 'Scripts', 'pyinstaller.exe')
-        if (
-            pyinstaller_path and isinstance(pyinstaller_path, str) and
-            os.path.exists(pyinstaller_path)
-        ):
-            pyinstaller_path = pyinstaller_path
-        elif os.path.exists(current_path):
-            pyinstaller_path = current_path
-        elif os.path.exists(current_bin_path):
-            pyinstaller_path = current_bin_path
-        elif os.path.exists(current_script_path):
-            pyinstaller_path = current_script_path
-        elif os.path.exists(parent_path):
-            pyinstaller_path = parent_path
-        elif os.path.exists(parent_bin_path):
-            pyinstaller_path = parent_bin_path
-        elif os.path.exists(parent_script_path):
-            pyinstaller_path = parent_script_path
+        if not os.path.exists(pyinstaller_path):
+            pyinstaller_path = struct.find_pyinstaller_path_by_python_path(struct.python_path)
         current_time = int(time.time())
         if pyinstaller_path == '':
             struct.clear_pyinstaller()
@@ -425,16 +519,28 @@ class ExecutorInfoManager(QObject):
         add_list = [item for item in list_new if item not in old_set]
         return add_list, del_list
 
-    def __schedule_signal_update_GUI(self):
+    def __schedule_signal_data_changed_EIM(self):
         if self.__timer_emit_signal.is_alive() or self.__emit_signal_index < self.__emit_signal_index_max:
             self.__timer_emit_signal.cancel()
             self.__emit_signal_index += 1
         if self.__emit_signal_index >= self.__emit_signal_index_max:
-            self.__emit_signal_update_GUI()
-        self.__timer_emit_signal = threading.Timer(self.__emit_signal_interval, self.__emit_signal_update_GUI)
+            self.__emit_signal_data_changed_EIM()
+        self.__timer_emit_signal = threading.Timer(self.__emit_signal_interval, self.__emit_signal_data_changed_EIM)
         self.__timer_emit_signal.start()
 
-    def __emit_signal_update_GUI(self):
+    def __emit_signal_data_changed_EIM(self):
+        if sip.isdeleted(self):
+            return
         self.__emit_signal_index = 0
+        self.signal_data_changed_EIM.emit()
+
+    def __del__(self):
+        self.__isExist = False
         self.__timer_emit_signal.cancel()
-        self.signal_update_GUI.emit()
+        self.__timer_emit_signal.join()
+        self.__timer_polling_conda.stop()
+        self.__thread_pool_conda.cancel()
+        self.__thread_pool_conda.waitForDone()
+        self.__thread_pool_normal.cancel()
+        self.__thread_pool_normal.waitForDone()
+        super().__del__()
