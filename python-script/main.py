@@ -31,18 +31,18 @@ socket_ref_list = [None]
 
 
 def bring_existing_window_to_front():
-    windows = gw.getWindowsWithTitle(LM.getWord('app_title'))  # 替换为你的窗口标题
+    windows = gw.getWindowsWithTitle(LM.getWord('app_title'))
     if windows:
         win: gw._pygetwindow_win.Win32Window = windows[0]
-        win.restore()  # 取消最小化
-        win.activate()  # 置前
+        win.restore()
+        win.activate()
 
 
 def isAllreadyRunning():
     socket_ref_list[0] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socket_instance: socket.socket = socket_ref_list[0]
     try:
-        socket_instance.bind(('127.0.0.1', 18686))  # 尝试绑定端口
+        socket_instance.bind(('127.0.0.1', 18686))
         return False
     except socket.error:
         return True
