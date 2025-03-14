@@ -26,9 +26,9 @@
      * 加载 Version.txt 文件
      * 编辑 Version.txt 文件
 
-   <div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Home_Page_zh.png" alt="erweitung4" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Light_zh.png" alt="erweitung4" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Version_Editor_zh.png" alt="erweitung4" height = "200"></div>
+   <div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Home_Page_zh.png" alt="Home_Page_zh" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Light_zh.png" alt="Light_zh" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Version_Editor_zh.png" alt="Version_Editor_zh" height = "200"></div>
    
-<div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Operation_Page_zh.png" alt="erweitung4" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Setting_Page_1_zh.png" alt="erweitung4" height = "200"></div>
+<div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Operation_Page_zh.png" alt="Operation_Page_zh" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Setting_Page_zh.png" alt="Setting_Page_zh" height = "200"></div>
 
 2. 参数设置: 
 

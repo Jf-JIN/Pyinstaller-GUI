@@ -28,9 +28,9 @@ The software may still be in the process of refinement, and there might be bugs.
      * Load an `*.ico` file.
         * Load a `Version.txt` file.
         * Edit the `Version.txt` file.
-<div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Home_Page_en.png" alt="erweitung4" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Light_en.png" alt="erweitung4" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Version_Editor_en.png" alt="erweitung4" height = "200"></div>
+<div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Home_Page_en.png" alt="Home_Page_en" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Light_en.png" alt="Light_en" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Version_Editor_en.png" alt="Version_Editor_en." height = "200"></div>
 
-<div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Operation_Page_en.png" alt="erweitung4" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Setting_Page_1_en.png" alt="erweitung4" height = "200"></div>
+<div style="display:inline-block;"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Operation_Page_en.png" alt="Operation_Page_en" height = "200"><img src="https://github.com/Jf-JIN/Pyinstaller-GUI/blob/main/image/Setting_Page_en.png" alt="Setting_Page_en" height = "200"></div>
 
 2. **Parameter Settings**: 
 
