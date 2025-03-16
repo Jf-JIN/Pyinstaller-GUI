@@ -426,6 +426,7 @@ LANGUAGE_CHINESE = {
         "completed_reset_all_parameters": "已重置所有参数",
         "copied": "已复制",
         "copy_config_path": "复制配置路径",
+        "copy_path": "复制路径",
         "copy_python_path": "复制Python解释器路径",
         "copy_pyinstaller_path": "复制pyinstaller路径",
         "critical": "严重错误",
@@ -632,9 +633,11 @@ LANGUAGE_CHINESE = {
 
         "new_data_is": "新数据为",
         "no_pyinstaller_use_builtin": "该环境未安装 PyInstaller\n点击 '确认' 使用内置 PyInstaller\n点击 '取消' 可更改环境设置",
+        "no_pyinstaller": "未安装Pyinstaller\n请检查环境, 安装PyInstaller, 然后重试\n左键双击红色标签即可安装",
         "not_add": "不添加",
 
         "open_config_path": "打开配置路径",
+        "open_file": "打开文件",
         "open_folder": "打开文件夹",
         "output_folder_not_exist": "输出文件夹不存在",
         "open_python_folder": "打开python所在文件夹",

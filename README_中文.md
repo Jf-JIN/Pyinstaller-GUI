@@ -96,6 +96,11 @@
 * Icon Images: https://www.iconfont.cn/
 
 ##### 版本说明   |   Version Descriptions: 
+
+* v4.0.1:
+  * 移除了内置PyInstaller的功能，原因是会导致使用外置环境时，内置模块会影响运行命令行终端的行为，导致打包得到*.exe出现丢失python内置库的错误
+  * 增加了对启动软件时的报错跟踪，目前该报错仅在日志文件夹中输出，没有对话框提示
+
 * v4.0:
   * 新增对 *.spec, *.pyw, *.pyd, *.spec, *.txt(命令行文件) 的支持
   * 新增对命令行文件读取/加载的功能

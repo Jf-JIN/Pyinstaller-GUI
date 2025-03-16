@@ -26,10 +26,10 @@ class FunctionUI(PyToExeUI):
             # ===================================================== [主页] =====================================================
             'python_file_path': self.set_input_py_file_path_from_browser,
             'output_folder_path': self.set_output_folder_path_from_browser,
-            'output_file_name': functools.partial(self.to_page, 0),
-            'output_method': functools.partial(self.to_page, 0),
+            'output_file_name': functools.partial(self.to_page, App.MainPage.Home),
+            'output_method': functools.partial(self.to_page, App.MainPage.Home),
             'contents_directory': self.add_contents_directory,
-            'console_window_control': functools.partial(self.to_page, 0),
+            'console_window_control': functools.partial(self.to_page, App.MainPage.Home),
             'add_icon': self.add_icon,
             'version_file': self.set_version_file_path_from_button,
             # ===================================================== [通用] =====================================================
@@ -56,12 +56,12 @@ class FunctionUI(PyToExeUI):
             'python_option': self.add_python_option,
             'debug_mode': self.add_debug_mode,
             'optimize_level': self.add_optimize_level,
-            'noupx_option': functools.partial(self.to_page, 1),  # ComboBox
-            'disable_traceback': functools.partial(self.to_page, 1),  # ComboBox
-            'ignore_signals': functools.partial(self.to_page, 1),  # ComboBox
-            'noconfirm_option': functools.partial(self.to_page, 1),  # ComboBox
-            'strip_option': functools.partial(self.to_page, 1),  # ComboBox
-            'clean_cache': functools.partial(self.to_page, 1),  # ComboBox
+            'noupx_option': functools.partial(self.to_page, App.MainPage.Operation),  # ComboBox
+            'disable_traceback': functools.partial(self.to_page, App.MainPage.Operation),  # ComboBox
+            'ignore_signals': functools.partial(self.to_page, App.MainPage.Operation),  # ComboBox
+            'noconfirm_option': functools.partial(self.to_page, App.MainPage.Operation),  # ComboBox
+            'strip_option': functools.partial(self.to_page, App.MainPage.Operation),  # ComboBox
+            'clean_cache': functools.partial(self.to_page, App.MainPage.Operation),  # ComboBox
             # ===================================================== [IOS/ Win] =====================================================
             'add_resource': self.add_resource,
             'codesign_identity': self.add_codesign_identity,
@@ -69,10 +69,10 @@ class FunctionUI(PyToExeUI):
             'osx_entitlements_file': self.add_osx_entitlements_file,
             'add_xml_file': self.add_xml_file,
             'hide_console': self.add_hide_console,
-            'target_architecture': functools.partial(self.to_page, 2),  # ComboBox
-            'argv_emulation': functools.partial(self.to_page, 2),  # ComboBox
-            'uac_admin_apply': functools.partial(self.to_page, 2),  # ComboBox
-            'uac_uiaccess': functools.partial(self.to_page, 2),  # ComboBox
+            'target_architecture': functools.partial(self.to_page, App.MainPage.Win_IOS),  # ComboBox
+            'argv_emulation': functools.partial(self.to_page, App.MainPage.Win_IOS),  # ComboBox
+            'uac_admin_apply': functools.partial(self.to_page, App.MainPage.Win_IOS),  # ComboBox
+            'uac_uiaccess': functools.partial(self.to_page, App.MainPage.Win_IOS),  # ComboBox
         }
 
     def init_ui(self):
@@ -153,27 +153,32 @@ class FunctionUI(PyToExeUI):
             self.check_default_parameters()
         # 定位到输出信息页面
         if not 2 < self.stackedWidget.currentIndex() < 6:
-            self.to_page(3)
+            self.to_page(App.MainPage.Info)
             DialogMessageBox.info(self, LM.getWord('info_check_before_packing'))
             return
 
         # 选择打包方式
-        if self.rb_env_builtin.isChecked():
-            self.data_manager.pyinstaller_struct.optimize_level.clear_args()
-            cmd = self.data_manager.pyinstaller_struct.get_command_list(self.rb_output_as_folder.isChecked())
+        if self.rb_env_builtin.isChecked() or not self.data_manager.current_env.pyinstaller_path:
+            self.to_env_setting_page()
+            DialogMessageBox.info(self, LM.getWord('no_pyinstaller'))
+            return
+            # self.data_manager.pyinstaller_struct.optimize_level.clear_args()
+            # cmd = self.data_manager.pyinstaller_struct.get_command_list(self.rb_output_as_folder.isChecked())
         else:
-            if self.rb_use_python.isChecked() and self.data_manager.current_env.pyinstaller_path:
+            if self.rb_use_python.isChecked():
                 cmd = self.data_manager.command_use_python()
                 cmd = cmd.replace('\n', '&&')
-            elif self.rb_use_pyinstaller.isChecked() and self.data_manager.current_env.pyinstaller_path:
+            elif self.rb_use_pyinstaller.isChecked():
                 cmd = self.data_manager.command_use_pyinstaller()
                 cmd = cmd.replace('\n', '&&')
             else:
-                res = DialogMessageBox.info(self, LM.getWord('no_pyinstaller_use_builtin'))
-                if res == DialogMessageBox.StandardButton.CANCEL:
-                    return
-                self.data_manager.pyinstaller_struct.optimize_level.clear_args()
-                cmd = self.data_manager.pyinstaller_struct.get_command_list(self.rb_output_as_folder.isChecked())
+                DialogMessageBox.info(self, 'Select a packaging Environment')
+                return
+            #     res = DialogMessageBox.info(self, LM.getWord('no_pyinstaller'))
+            #     if res == DialogMessageBox.StandardButton.CANCEL:
+            #         return
+            #     self.data_manager.pyinstaller_struct.optimize_level.clear_args()
+            #     cmd = self.data_manager.pyinstaller_struct.get_command_list(self.rb_output_as_folder.isChecked())
         index_auto_add_version = self.cbb_auto_add_version.currentData()
         # 检查是否需要添加版本号
         if index_auto_add_version >= 0:
@@ -244,10 +249,11 @@ with suppress(ModuleNotFoundError):
         self.pb_launch_cancel.hide()
         self.wdg_progressbar.hide()
         self.delete_files_after_packing(flag)
+        self.to_page(App.MainPage.Console)
 
     def delete_files_after_packing(self, flag: bool) -> None:
         if self.cb_delete_build.isChecked() or not flag:
-            path = self.data_manager.pyinstaller_struct.output_folder_path.command_args
+            path = os.path.dirname(self.data_manager.pyinstaller_struct.python_file_path.command_args)
             dist_path = os.path.join(path, 'dist')
             build_path = os.path.join(path, 'build')
             try:
@@ -263,8 +269,6 @@ with suppress(ModuleNotFoundError):
                 _log.exception()
         if self.cb_delete_spec.isChecked() or not flag:
             path = self.data_manager.pyinstaller_struct.specpath.command_args
-            if not path:
-                path = self.data_manager.pyinstaller_struct.output_folder_path.command_args
             if not path:
                 path = os.path.dirname(self.data_manager.pyinstaller_struct.python_file_path.command_args)
             spec_path = os.path.join(path, f'{self.data_manager.pyinstaller_struct.output_file_name.command_args}.spec')
@@ -288,10 +292,11 @@ with suppress(ModuleNotFoundError):
     def init_python_file_path(self):
         if len(sys.argv) > 1:
             file_path = sys.argv[1]
-            self.app_workspace_path = os.path.dirname(file_path)
             self.set_input_file(file_path)
         else:
             self.load_pyinstaller_command(SM.getConfig('pyinstaller_command'))
+            if self.data_manager.pyinstaller_struct.python_file_path.command_args:
+                os.chdir(os.path.dirname(self.data_manager.pyinstaller_struct.python_file_path.command_args))
 
     def set_input_py_file_path_from_lineEdit(self):
         file_path: str = self.le_input_py_file_path.text()
@@ -300,7 +305,7 @@ with suppress(ModuleNotFoundError):
     def set_input_py_file_path_from_browser(self):
         accept_files_type = LM.getWord('accept_files_type')
         file_path = QFileDialog.getOpenFileName(
-            self, LM.getWord('select_input_file'), '', f"""{accept_files_type} (*.py *.pyw *.pyd *.spec *.txt);; 
+            self, LM.getWord('select_input_file'), os.getcwd(), f"""{accept_files_type} (*.py *.pyw *.pyd *.spec *.txt);; 
             Python Files (*.py *.pyw *.pyd *.spec);; 
             Text Files (*.txt)""")[0]
         if not file_path:
@@ -308,7 +313,12 @@ with suppress(ModuleNotFoundError):
         self.set_input_file(file_path)
 
     def set_output_folder_path_from_browser(self):
-        folder_path = QFileDialog.getExistingDirectory(self, LM.getWord('question_select_output_folder'), self.app_workspace_path)
+        pre_path = pre_path = os.path.normpath(self.le_output_folder_path.text())
+        if os.path.exists(pre_path) and os.path.isdir(pre_path):
+            pass
+        else:
+            pre_path = os.getcwd()
+        folder_path = QFileDialog.getExistingDirectory(self, LM.getWord('question_select_output_folder'), pre_path)
         if not folder_path:
             return
         self.installer.output_folder_path.set_args(folder_path)
@@ -326,8 +336,13 @@ with suppress(ModuleNotFoundError):
         self.installer.output_file_name.set_args(file_name)
 
     def set_version_file_path_from_button(self):
+        pre_path = pre_path = os.path.normpath(self.le_output_exe_version.text())
+        if os.path.exists(pre_path) and os.path.isdir(pre_path):
+            pass
+        else:
+            pre_path = os.getcwd()
         version_hint_text = LM.getWord('version_file')
-        file_path: str = QFileDialog.getOpenFileName(self, LM.getWord('question_select_version_file'), '', f'{version_hint_text} (*.txt)')[0]
+        file_path: str = QFileDialog.getOpenFileName(self, LM.getWord('question_select_version_file'), pre_path, f'{version_hint_text} (*.txt)')[0]
         if not file_path:
             return
         self.installer.version_file.set_args(file_path)

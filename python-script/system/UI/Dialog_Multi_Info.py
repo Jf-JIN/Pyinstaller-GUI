@@ -1,7 +1,7 @@
 
 import functools
 import subprocess
-from PyQt5.QtWidgets import QDialog, QAbstractItemView, QTableWidget, QTableWidgetItem, QHeaderView, QLabel, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QTextEdit, QMenu, QFileDialog, QFileIconProvider, QTableWidgetSelectionRange
+from PyQt5.QtWidgets import QDialog, QAbstractItemView, QTableWidget, QTableWidgetItem, QHeaderView, QLabel, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QTextEdit, QMenu, QFileDialog, QFileIconProvider, QTableWidgetSelectionRange, QApplication
 from PyQt5.QtCore import Qt, pyqtSignal, QTimer, QEvent, QObject, QSize, QFileInfo, QRect
 from PyQt5.QtGui import QIcon, QDragMoveEvent, QTextCursor
 
@@ -350,7 +350,7 @@ class DialogMultiArgs(QDialog):
         self.__load_data_to_table()
 
     def __on_add_folder(self):
-        folder_path = QFileDialog.getExistingDirectory(self, LanguageManager.getWord('open_file'), '')
+        folder_path = QFileDialog.getExistingDirectory(self, LanguageManager.getWord('open_folder'), '')
         if not folder_path:
             return
         self.__data.append(folder_path.replace('\\', '/'))
@@ -602,15 +602,22 @@ class DialogMultiRelativePath(QDialog):
             del self.__data[index.row()]
             self.__load_data_to_table()
 
+    def __on_copy(self, item: QTableWidgetItem):
+        folder_path: str = os.path.normpath(self.__tableWidget.item(item.row(), 2).text()).replace('\\', '/')
+        QApplication.clipboard().setText(folder_path)
+
     def __on_context_menu(self, position):
         item: QTableWidgetItem = self.__tableWidget.itemAt(position)
         if item is None:
             return
         menu = QMenu()
+        action_copy = menu.addAction(LanguageManager.getWord('copy_path'))
+        # action_copy.setIcon(QIcon(convert_svg_to_pixmap(ICON.COPY)))
         action_open_folder = menu.addAction(LanguageManager.getWord('open_folder'))
         action_open_folder.setIcon(QIcon(convert_svg_to_pixmap(ICON.FOLDER)))
         action_delete = menu.addAction(LanguageManager.getWord('delete'))
         action_delete.setIcon(QIcon(convert_svg_to_pixmap(ICON.DELETE)))
+        action_copy.triggered.connect(lambda: self.__on_copy(item))
         action_open_folder.triggered.connect(lambda: self.__open_folder(item))
         action_delete.triggered.connect(self.__on_delete)
         menu.exec_(self.__tableWidget.mapToGlobal(position))
@@ -887,11 +894,17 @@ class DialogMultiResourcePath(QDialog):
             del self.__data[index.row()]
             self.__load_data_to_table()
 
+    def __on_copy(self, item: QTableWidgetItem):
+        folder_path = os.path.normpath(self.__tableWidget.item(item.row(), 3).text()).replace('\\', '/')
+        QApplication.clipboard().setText(folder_path)
+
     def __on_context_menu(self, position):
         item: QTableWidgetItem = self.__tableWidget.itemAt(position)
         if item is None:
             return
         menu = QMenu()
+        action_copy = menu.addAction(LanguageManager.getWord('copy_path'))
+        # action_copy.setIcon(QIcon(convert_svg_to_pixmap(ICON.COPY)))
         action_edit_file_path = menu.addAction(LanguageManager.getWord('edit_file_path'))
         action_edit_folder_path = menu.addAction(LanguageManager.getWord('edit_folder_path'))
         action_open_folder = menu.addAction(LanguageManager.getWord('open_folder'))
@@ -900,6 +913,7 @@ class DialogMultiResourcePath(QDialog):
         action_delete.setIcon(QIcon(convert_svg_to_pixmap(ICON.DELETE)))
         action_edit_file_path.triggered.connect(lambda: self.__edit_file_path(item))
         action_edit_folder_path.triggered.connect(lambda: self.__edit_folder_path(item))
+        action_copy.triggered.connect(lambda: self.__on_copy(item))
         action_open_folder.triggered.connect(lambda: self.__open_folder(item))
         action_delete.triggered.connect(self.__on_delete)
         menu.exec_(self.__tableWidget.mapToGlobal(position))
@@ -1160,15 +1174,22 @@ class DialogMultiAbsolutePath(QDialog):
             del self.__data[index.row()]
             self.__load_data_to_table()
 
+    def __on_copy(self, item: QTableWidgetItem):
+        folder_path = os.path.normpath(self.__tableWidget.item(item.row(), 0).text()).replace('\\', '/')
+        QApplication.clipboard().setText(folder_path)
+
     def __on_context_menu(self, position) -> None:
         item: QTableWidgetItem = self.__tableWidget.itemAt(position)
         if item is None:
             return
         menu = QMenu()
+        action_copy = menu.addAction(LanguageManager.getWord('copy_path'))
+        # action_copy.setIcon(QIcon(convert_svg_to_pixmap(ICON.COPY)))
         action_open_folder = menu.addAction(LanguageManager.getWord('open_folder'))
         action_open_folder.setIcon(QIcon(convert_svg_to_pixmap(ICON.FOLDER)))
         action_delete = menu.addAction(LanguageManager.getWord('delete'))
         action_delete.setIcon(QIcon(convert_svg_to_pixmap(ICON.DELETE)))
+        action_copy.triggered.connect(lambda: self.__on_copy(item))
         action_open_folder.triggered.connect(lambda: self.__open_folder(item))
         action_delete.triggered.connect(self.__on_delete)
         menu.exec_(self.__tableWidget.mapToGlobal(position))

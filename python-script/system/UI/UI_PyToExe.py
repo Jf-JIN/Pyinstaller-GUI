@@ -44,10 +44,9 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.init_parameters()
         self.init_ui()
         self.init_signal_connections()
-        self.to_page(0)
+        self.to_page(App.MainPage.Home)
 
     def init_parameters(self) -> None:
-        self.app_workspace_path: str = WORKSPACE_PATH
         self.setting_manager = SettingManager()
         self.data_manager = DataManager()
         self.installer: PyinstallerStruct = self.data_manager.pyinstaller_struct
@@ -261,13 +260,14 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.lb_env_current_pyinstaller_path_page_base.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.lb_env_current_pyinstaller_path_page_setting_env.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.set_square_btn_icon_size(self.pb_refresh_sys_env)
+        self.rb_env_builtin.hide()
 
         # 环境选择按钮组
         self.env_btn_group = QButtonGroup()
         self.env_btn_group.addButton(self.rb_env_sys)
         self.env_btn_group.addButton(self.rb_env_specified)
         self.env_btn_group.addButton(self.rb_env_conda)
-        self.env_btn_group.addButton(self.rb_env_builtin)
+        # self.env_btn_group.addButton(self.rb_env_builtin)
         # Conda 环境表格初始化
         self.tbwdg_env_conda.setColumnCount(5)
         self.tbwdg_env_conda.setColumnWidth(0, 100)
@@ -359,7 +359,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         LM.bindLanguage('theme_light', lambda x: self.cbb_current_style.setItemText(0, x))
         LM.bindLanguage('theme_dark', lambda x: self.cbb_current_style.setItemText(1, x))
         LM.bindLanguage('pyinstaller_already_installed', self.__update_pyinstaller_installation_status)
-        LM.bindLanguage('builtin_in_use', self.__update_pyinstaller_installation_status)
+        # LM.bindLanguage('builtin_in_use', self.__update_pyinstaller_installation_status)
         LM.bindLanguage('pyinstaller_not_installed', self.__update_pyinstaller_installation_status)
 
     def init_display_from_setting(self) -> None:
@@ -384,17 +384,17 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.data_manager.signal_pyinstaller_data_changed_DM.connect(self.test_func)
         self.data_manager.signal_current_env_changed_DM.connect(self.set_current_env_path)
         # ===================================================== [换页] =====================================================
-        self.pb_page_basic.clicked.connect(functools.partial(self.to_page, 0))
-        self.pb_page_advance.clicked.connect(functools.partial(self.to_page, 1))
-        self.pb_page_ios_win.clicked.connect(functools.partial(self.to_page, 2))
-        self.pb_page_info.clicked.connect(functools.partial(self.to_page, 3))
-        self.pb_page_command.clicked.connect(functools.partial(self.to_page, 4))
-        self.pb_page_console.clicked.connect(functools.partial(self.to_page, 5))
-        self.pb_page_setting.clicked.connect(functools.partial(self.to_page, 6))
+        self.pb_page_basic.clicked.connect(functools.partial(self.to_page, App.MainPage.Home))
+        self.pb_page_advance.clicked.connect(functools.partial(self.to_page, App.MainPage.Operation))
+        self.pb_page_ios_win.clicked.connect(functools.partial(self.to_page, App.MainPage.Win_IOS))
+        self.pb_page_info.clicked.connect(functools.partial(self.to_page, App.MainPage.Info))
+        self.pb_page_command.clicked.connect(functools.partial(self.to_page, App.MainPage.Command))
+        self.pb_page_console.clicked.connect(functools.partial(self.to_page, App.MainPage.Console))
+        self.pb_page_setting.clicked.connect(functools.partial(self.to_page, App.MainPage.Setting))
         # ===================================================== [主页] =====================================================
         self.pb_open_output_folder.clicked.connect(self.open_output_folder)
         self.pb_output_command.clicked.connect(self.print_command_line)
-        self.pb_to_env_setting.clicked.connect(self.turn_to_env_setting_page)
+        self.pb_to_env_setting.clicked.connect(self.to_env_setting_page)
         self.le_output_exe_version.editingFinished.connect(self.__on_le_output_exe_version_changed)
         self.le_output_file_name.editingFinished.connect(self.__on_le_output_file_name_changed)
         self.le_output_folder_path.editingFinished.connect(self.__on_le_output_folder_path_changed)
@@ -436,7 +436,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.rb_env_sys.clicked.connect(self.__on_select_env)
         self.rb_env_specified.clicked.connect(self.__on_select_env)
         self.rb_env_conda.clicked.connect(self.__on_select_env)
-        self.rb_env_builtin.clicked.connect(self.__on_select_env)
+        # self.rb_env_builtin.clicked.connect(self.__on_select_env)
         self.tbwdg_env_conda.itemSelectionChanged.connect(self.__on_conda_env_selected)
         self.le_env_specified_path_page_setting_env.textChanged.connect(self.__on_select_env)
         # self.le_env_specified_path_page_setting_env.textChanged.connect(lambda: self.update_env_specified(isWithSelectUpdate=True))
@@ -463,7 +463,6 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         # 文件输入后, 进行更新,  TODO 可以添加是否覆盖的选择
         elif os.path.exists(file_path) and file_path.endswith(('.py', '.pyd', '.pyw')):
             self.installer.python_file_path.set_args(file_path)
-            self.app_workspace_path = os.path.dirname(file_path)
             if not self.cb_lock_output_folder.isChecked():
                 folder_path = os.path.dirname(file_path)
                 self.installer.output_folder_path.set_args(folder_path)
@@ -476,8 +475,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         else:
             self.show_message('文件不存在或格式不正确')
             return
-        WORKSPACE_PATH: str = os.path.dirname(file_path)
-        os.chdir(WORKSPACE_PATH)
+        os.chdir(os.path.dirname(self.installer.python_file_path.command_args))
 
     def load_pyinstaller_command(self, data_str: str) -> None:
         if os.path.isfile(data_str):
@@ -494,10 +492,11 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         self.installer = self.data_manager.pyinstaller_struct
         self.data_manager.set_implement_path(exe_path)
         if self.cb_synchron_env_from_file.isChecked():
-            if exe_path:
-                self.set_special_env(exe_path)
-            else:
-                self.set_builtin_env()
+            # if exe_path:
+            #     self.set_special_env(exe_path)
+            # else:
+            #     self.set_builtin_env()
+            self.set_special_env(exe_path)
         if self.cb_load_env_config.isChecked():
             self.set_input_env_config(bin_config)
 
@@ -525,9 +524,10 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             target_label.width(), target_label.height(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
 
     def set_builtin_env(self) -> None:
-        self.data_manager.set_current_env(self.data_manager.builtin_env)
-        self.rb_env_builtin.setChecked(True)
-        self.__on_select_env()
+        return
+        # self.data_manager.set_current_env(self.data_manager.builtin_env)
+        # self.rb_env_builtin.setChecked(True)
+        # self.__on_select_env()
 
     def set_special_env(self, env_path: str) -> None:
         env_path = env_path.replace('\\', '/').replace('"', '').replace("'", '').replace('file:///', '')
@@ -662,8 +662,8 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
     def auto_add_version(self) -> None:
         VersionEditor.add_version(self, self.le_output_exe_version.text(), self.cbb_auto_add_version.currentData())
 
-    def turn_to_env_setting_page(self) -> None:
-        self.to_page(6)
+    def to_env_setting_page(self) -> None:
+        self.to_page(App.MainPage.Setting)
         self.tabWidget.setCurrentIndex(1)
 
     def __on_cb_synchron_env_from_file_changed(self) -> None:
@@ -820,7 +820,6 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             # item_name.setToolTip(tooltip)
             # item_option.setToolTip(tooltip)
             if isinstance(item, list):
-                start_index = index+1
                 for sub_index, sub_item in enumerate(item):
                     item_command = QTableWidgetItem(sub_item)
                     item_command.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
@@ -836,8 +835,6 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
                     self.tbwdg_info.setItem(index, 0, item_blank_0)
                     self.tbwdg_info.setItem(index, 1, item_blank_1)
                     index += 1
-                if index != start_index:
-                    self.tbwdg_info.setSpan(start_index, 0, index-start_index, 2)
             else:
                 item_command = QTableWidgetItem(item)
                 if item:
@@ -1153,7 +1150,8 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
         elif self.rb_env_conda.isChecked():
             self.__on_conda_env_selected()
         elif self.rb_env_builtin.isChecked():
-            self.data_manager.set_current_env(self.data_manager.builtin_env)
+            pass
+            # self.data_manager.set_current_env(self.data_manager.builtin_env)
         else:
             self.data_manager.set_current_env(self.executor_info_manager.special_struct)
             self.timer_specified_detection.setInterval(500)
@@ -1166,12 +1164,12 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
             self.lb_env_current_check_install_page_base.setText(text)
             self.lb_env_current_check_install_page_setting_env.setStyleSheet(STYLE.getBlock().get_item('@lb_pyinstaller_installed').style)
             self.lb_env_current_check_install_page_base.setStyleSheet(STYLE.getBlock().get_item('@lb_pyinstaller_installed').style)
-        elif self.data_manager.current_env.name == self.data_manager.builtin_env.name:
-            text: str = LM.getWord('builtin_in_use')
-            self.lb_env_current_check_install_page_setting_env.setText(text)
-            self.lb_env_current_check_install_page_base.setText(text)
-            self.lb_env_current_check_install_page_setting_env.setStyleSheet('')
-            self.lb_env_current_check_install_page_base.setStyleSheet('')
+        # elif self.data_manager.current_env.name == self.data_manager.builtin_env.name:
+        #     text: str = LM.getWord('builtin_in_use')
+        #     self.lb_env_current_check_install_page_setting_env.setText(text)
+        #     self.lb_env_current_check_install_page_base.setText(text)
+        #     self.lb_env_current_check_install_page_setting_env.setStyleSheet('')
+        #     self.lb_env_current_check_install_page_base.setStyleSheet('')
         else:
             text: str = LM.getWord('pyinstaller_not_installed')
             self.lb_env_current_check_install_page_setting_env.setText(text)

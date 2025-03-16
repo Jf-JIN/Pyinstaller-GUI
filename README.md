@@ -101,6 +101,11 @@ GUI design using PyQt5
 
 ##### 版本说明   |   Version Descriptions: 
 
+* v4.0.1:
+
+  * Removed the built-in PyInstaller feature because it affectes the behavior of the command-line terminal when using an external environment, leading to missing built-in Python libraries in the generated *.exe file.
+  * Added error tracking for software startup. Currently, error logs are only saved in the log folder without displaying a dialog prompt.
+
 * v4.0:
   * Added support for *.spec, *.pyw, *.pyd, *.spec, and *.txt (command-line files)
   * Added functionality for reading/loading command-line files

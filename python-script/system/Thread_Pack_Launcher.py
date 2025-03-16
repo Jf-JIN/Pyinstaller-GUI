@@ -3,10 +3,11 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import subprocess
 import psutil
+from tools import *
 
 from const.Const_Parameter import *
 from system.Manager_Language import *
-import PyInstaller.__main__
+# import PyInstaller.__main__
 
 _log = Log.Threads
 
@@ -43,8 +44,21 @@ class ThreadPackLauncher(QThread):
             _log.exception()
 
     def set_cmd(self, cmd: str | list):
+        self.__command_line = ''
+        self.__command_list = []
+        self.__env = ''
         if isinstance(cmd, str):
-            self.__command_line = 'echo Y | ' + cmd.replace('\n', '&&')
+            cmd_list = cmd.split('&&')
+            self.__command_line = cmd_list[-1]
+            cmd_env = cmd_list[:-1]
+            temp_env = []
+            for env in cmd_env:
+                temp_env.append(split_path_from_env_config_line(env))
+            env = os.environ.copy()
+            sys_env = env['PATH']
+            temp_env_str = ';'.join(temp_env)
+            env['PATH'] = temp_env_str + f';{sys_env}' if temp_env_str else sys_env
+            self.__env = env
         else:
             self.__command_list = cmd
             self.__doUseBuiltin = True
@@ -77,6 +91,8 @@ class ThreadPackLauncher(QThread):
 
     def __cal_processbar_value(self, content: str):
         try:
+            if not content:
+                return
             if content[0].isdigit() and ': ' in content:
                 content = content.split(': ', 1)[1]
             if self.__progressbar_value < 99 and self.__progressbar_value < self.__limit_value:
@@ -143,19 +159,21 @@ class ThreadPackLauncher(QThread):
         self.signal_processbar_value.emit(self.__progressbar_value)
         try:
             if self.__doUseBuiltin:
-                Log.logging_output.remove_listen_logging()
-                PyInstaller.__main__.run(self.__command_list)
-                Log.logging_output.set_listen_logging('', Log.Log_level)
+                # Log.logging_output.remove_listen_logging()
+                # PyInstaller.__main__.run(self.__command_list)
+                # Log.logging_output.set_listen_logging('', Log.Log_level)
                 self.signal_thread_finished.emit(True)
             else:
                 self.__process = subprocess.Popen(
                     self.__command_line,
-                    shell=True,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
+                    shell=True,
                     text=True,
-                    encoding='gbk',
-                    errors='replace'
+                    env=self.__env,
+                    encoding='utf-8',
+                    errors='replace',
+                    cwd=os.getcwd()
                 )
                 self.__read_output()  # 直接调用, 无需额外线程
         except Exception as e:

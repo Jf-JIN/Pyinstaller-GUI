@@ -427,6 +427,7 @@ LANGUAGE_ENGLISH = {
         "completed_reset_all_parameters": "All parameters have been reset",
         "copied": "Copied",
         "copy_config_path": "Copy the configuration path",
+        "copy_path": "Copy path",
         "copy_python_path": "Copy python interpreter path",
         "copy_pyinstaller_path": "Copy pyinstaller path",
         "critical": "Critical",
@@ -632,9 +633,11 @@ LANGUAGE_ENGLISH = {
 
         "new_data_is": "The new data is",
         "no_pyinstaller_use_builtin": "The environment is not installed with PyInstaller\nclick 'Confirm' Use the built-in PyInstaller\nclick 'Cancel' to change the environment settings.",
+        "no_pyinstaller": "PyInstaller is not installed\nPlease check the Environment, install PyInstaller first and then try again\nLeft-double-click the red label to begin installation.",
         "not_add": "Don't add",
 
         "open_config_path": "Open the configuration path",
+        "open_file": "Open file",
         "open_folder": "Open folder",
         "output_folder_not_exist": "The output folder does not exist",
         "open_python_folder": "Open python folder",

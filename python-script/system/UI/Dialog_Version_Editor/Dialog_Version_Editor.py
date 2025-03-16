@@ -723,7 +723,7 @@ class VersionEditor(QDialog):
                 f.write(data)
         else:
             if not self.__version_file_path:
-                version_file_name = os.path.join(WORKSPACE_PATH, 'Version.txt')
+                version_file_name = os.path.join(os.getcwd(), 'Version.txt')
             else:
                 version_file_name = self.__version_file_path
             file_path = QFileDialog.getSaveFileName(self, 'Save File', version_file_name, 'Text Files (*.txt)')[0]

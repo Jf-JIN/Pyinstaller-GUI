@@ -213,6 +213,9 @@ class WidgetsStyle:
     def font_family(self) -> str:
         return self.__prepare_value_str('font_family', 'font-family', with_symbol=True)
 
+    def background(self) -> str:
+        return self.__prepare_value_str('background', 'background')
+
     def background_color(self) -> str:
         return self.__prepare_value_color('background_color', 'background-color')
 
@@ -420,6 +423,9 @@ class WidgetsStyle:
 
     def set_font_family(self, font_family: str) -> None:
         self.__set_value_str(font_family, 'font_family', self.font_family)
+
+    def set_background(self, background: str) -> None:
+        self.__set_value_str(background, 'background', self.background)
 
     def set_background_color(self, background_color: str) -> None:
         self.__set_value_color(background_color, 'background_color', self.background_color)
@@ -1073,7 +1079,7 @@ class StyleManager(metaclass=SingletonMeta):
         获取样式块(以 ~ 开头), 未填写参数, 则返回默认主样式块 `~__main__`
         """
         if name == StyleManager.__null:
-            block: StyleBlock = self.__dict_blocks['~__main__']
+            block: StyleBlock = self.__dict_blocks.get('~__main__', StyleBlock('~NULL'))
         elif name in self.__dict_blocks:
             block: StyleBlock = self.__dict_blocks[name]
         else:

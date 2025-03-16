@@ -3,3 +3,4 @@ DToolslib
 pygetwindow
 pycryptodome
 psutil
+pyinstaller

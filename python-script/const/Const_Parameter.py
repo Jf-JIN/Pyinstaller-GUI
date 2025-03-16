@@ -107,6 +107,14 @@ class App(StaticEnum):
             '--exclude-module', '--upx-exclude', '--icon', '-i', '--resource', '-r', '--add-data', '--add-binary'
         ]  # 包含两类 MultiInfoStruct, RelPathStruct 都是属于可以重复调用的
 
+    class MainPage(StaticEnum):
+        Home = 0
+        Operation = 1
+        Win_IOS = 2
+        Info = 3
+        Command = 4
+        Console = 5
+        Setting = 6
     APP_FOLDER_PATH: str = detemine_app_folder_path()
     OS: str = detect_system()
     DEFAULT_INSTALLER_COMMANDLINE: str = '--onefile --console --clean'

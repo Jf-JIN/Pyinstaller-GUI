@@ -288,11 +288,11 @@ class SheetStyle(StaticEnum):
             'QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover': {
                 'background_color': '#ff0000',
             },
-            'QScrollBar::sub_line:vertical, QScrollBar::add_line:vertical, QScrollBar::sub_line:horizontal, QScrollBar::add_line:horizontal': {
-                'background_color': 'transparent',
+            'QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal': {
+                'background': 'transparent',
             },
-            'QScrollBar::add_page:vertical, QScrollBar::sub_page:vertical, QScrollBar::add_page:horizontal, QScrollBar::sub_page:horizontal': {
-                'background_color': 'transparent',
+            'QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal': {
+                'background': 'transparent',
             },
         }
     }
@@ -528,10 +528,10 @@ class SheetStyle(StaticEnum):
             'QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover': {
                 'background_color': '#ff0000',
             },
-            'QScrollBar::sub_line:vertical, QScrollBar::add_line:vertical, QScrollBar::sub_line:horizontal, QScrollBar::add_line:horizontal': {
+            'QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal': {
                 'background_color': 'transparent',
             },
-            'QScrollBar::add_page:vertical, QScrollBar::sub_page:vertical, QScrollBar::add_page:horizontal, QScrollBar::sub_page:horizontal': {
+            'QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal': {
                 'background_color': 'transparent',
             },
         }
