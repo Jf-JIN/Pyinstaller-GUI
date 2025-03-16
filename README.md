@@ -63,9 +63,8 @@ The software may still be in the process of refinement, and there might be bugs.
      Choose between `pyinstaller.exe` or `python.exe` to run commands.
 
    * *Environment Settings*:
-     * Configure the environment under `Settings -> Environment`. By default, the built-in PyInstaller is used. The program detects Conda and system-installed Python versions.
+     * Configure the environment under `Settings -> Environment`. The program detects Conda and system-installed Python versions. Other environments can be specified manually via path selection.
      * You can also use `Env. setting` to turn to the setting page
-     * If PyInstaller is not installed, the built-in version will be used by default. Other environments can be specified manually via path selection.
      * The currently used environment is displayed on both the Home and Settings pages
      * Double-clicking the **"PyInstaller not installed"** will install PyInstaller. If it is already installed, this action will update it.
    * *Style Settings*:
