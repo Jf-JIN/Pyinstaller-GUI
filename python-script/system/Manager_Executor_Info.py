@@ -399,6 +399,8 @@ class ExecutorInfoManager(QObject):
             if len(env_str_list) != 2:
                 continue
             env_name, env_path = env_str_list[0], env_str_list[1]
+            if not os.path.exists(env_path):
+                continue
             struct = ExecutorInfoStruct(name=env_name, path=env_path)
             struct.signal_data_changed_EIS.connect(self.__schedule_signal_data_changed_EIM)
             self.__conda_struct_dict[env_name] = struct
