@@ -1,8 +1,8 @@
 from DToolslib import StaticEnum
 
 
-class VersionEnum(StaticEnum):
-    class FileFlags(StaticEnum):
+class VersionEnum(StaticEnum, enable_member_attribute=True):
+    class FileFlags(StaticEnum, enable_member_attribute=True):
         VS_FF_DEBUG = 0x00000001  # 该文件包含调试信息, 或者在启用调试功能的情况下进行编译.
         VS_FF_INFOINFERRED = 0x00000010  # 文件的版本结构是动态创建的;因此, 此结构中的某些成员可能为空或不正确.  切勿在文件的 VS_VERSIONINFO 数据中设置此标志.
         VS_FF_PRERELEASE = 0x00000002  # 该文件是开发版本, 而不是商业发布的产品.
@@ -11,7 +11,7 @@ class VersionEnum(StaticEnum):
         VS_FF_SPECIALBUILD = 0x00000020  # 该文件由原始公司使用标准发布过程生成, 但是相同版本号的正常文件的变体.  如果设置了此标志,  StringFileInfo 结构应包含 SpecialBuild 条目.
         VS_FF_UNKNOWN = 0x00000000  # 未指定标志.
 
-    class FileOS(StaticEnum):
+    class FileOS(StaticEnum, enable_member_attribute=True):
         VOS_DOS = 0x00010000  # 该文件是为 MS-DOS 设计的.
         VOS_NT = 0x00040000  # 该文件是为 Windows NT 设计的.
         VOS__WINDOWS16 = 0x00000001  # 该文件专为 16 位 Windows 设计.
@@ -22,7 +22,7 @@ class VersionEnum(StaticEnum):
         VOS__PM32 = 0x00000003  # 该文件专为 32 位演示文稿管理器设计.
         VOS_UNKNOWN = 0x00000000  # 系统不知道为其设计文件的操作系统.
 
-    class FileType(StaticEnum):
+    class FileType(StaticEnum, enable_member_attribute=True):
         VFT_UNKNOWN = 0x00000000  # 系统不知道文件类型.
         VFT_APP = 0x00000001  # 文件包含一个应用程序.
         VFT_DLL = 0x00000002  # 文件包含 DLL.
@@ -31,7 +31,7 @@ class VersionEnum(StaticEnum):
         VFT_VXD = 0x00000005  # 该文件包含一个虚拟设备.
         VFT_STATIC_LIB = 0x00000007  # 文件包含静态链接库.
 
-    class FileSubtype(StaticEnum):
+    class FileSubtype(StaticEnum, enable_member_attribute=True):
         VFT2_UNKNOWN = 0x00000000  # 系统未知驱动程序类型.
         VFT2_DRV_PRINTER = 0x00000001  # 文件包含打印机驱动程序.
         VFT2_DRV_KEYBOARD = 0x00000002  # 文件包含键盘驱动程序.
@@ -45,13 +45,13 @@ class VersionEnum(StaticEnum):
         VFT2_DRV_COMM = 0x0000000A  # 文件包含通信驱动程序.
         VFT2_DRV_VERSIONED_PRINTER = 0x0000000C  # 文件包含版本控制打印机驱动程序.
 
-    class FileFont(StaticEnum):
+    class FileFont(StaticEnum, enable_member_attribute=True):
         VFT2_UNKNOWN = 0x00000000  # 系统未知字体类型.
         VFT2_FONT_RASTER = 0x00000001  # 文件包含光栅字体.
         VFT2_FONT_VECTOR = 0x00000002  # 文件包含矢量字体.
         VFT2_FONT_TRUETYPE = 0x00000003  # 文件包含 TrueType 字体.
 
-    class ResourceType(StaticEnum):
+    class ResourceType(StaticEnum, enable_member_attribute=True):
         RT_ACCELERATOR = 9
         RT_ANICURSOR = 21
         RT_ANIICON = 22
@@ -74,7 +74,7 @@ class VersionEnum(StaticEnum):
         RT_VERSION = 16
         RT_VXD = 20
 
-    class LangID(StaticEnum):
+    class LangID(StaticEnum, enable_member_attribute=True):
         Albanian = 0x041C  # 阿尔巴尼亚语
         Arabic = 0x0401  # 阿拉伯语
         Bahasa = 0x0421  # 印尼语
@@ -121,7 +121,7 @@ class VersionEnum(StaticEnum):
         Turkish = 0x041F  # 土耳其语
         Urdu = 0x0420  # 乌尔都语
 
-    class CharsetID(StaticEnum):
+    class CharsetID(StaticEnum, enable_member_attribute=True):
         ANSI = 0x0000  # 7 位 ASCII
         Arabic = 0x04E8  # 阿拉伯语
         Big5 = 0x03B6  # 台湾 (Big5)

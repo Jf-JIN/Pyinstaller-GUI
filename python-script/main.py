@@ -20,7 +20,7 @@ isIntialized = False
 
 
 def write_to_log(error_message: str):
-    """ 在完成初始化前，程序出现错误时的输出 """
+    """ 在完成初始化前, 程序出现错误时的输出 """
     log_file_path = os.path.join(App.APP_FOLDER_PATH, 'Logs', 'critical.log')
     with open(log_file_path, 'w', encoding='utf-8') as f:
         f.write(error_message)

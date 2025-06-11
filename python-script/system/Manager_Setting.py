@@ -5,10 +5,10 @@ import json
 import copy
 import logging
 import traceback
+import threading
 import os
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
-from DToolslib import SingletonMeta
 from const.Const_Parameter import *
 
 _log = Log.SettingManager
@@ -17,7 +17,7 @@ AES_KEY = b"This\x00is\x18ein\x20Versuch\x7fvon\x07Cytrotxt"
 AES_IV = b"This-is-Versuch1"
 
 
-class SettingManager(metaclass=SingletonMeta):
+class SettingManager():
     """
     设置管理器(单例模式)
 
@@ -34,18 +34,21 @@ class SettingManager(metaclass=SingletonMeta):
     - open_file_to_json(file_path: str) -> None | dict: 打开文件并将其转换为JSON格式
     - write_file_to_json(content: dict, file_path: str = None) -> None: 将字典内容写入文件并以JSON格式保存. 如果未指定文件路径, 则使用默认设置文件路径. 
     """
-    __instance = None
+    __instance__ = None
+    __lock__ = threading.Lock()
 
     def __new__(cls, *args, **kwargs):
-        if not cls.__instance:
-            cls.__instance = super().__new__(cls)
-            cls.__instance.__isInitialized = False
-        return cls.__instance
+        if not cls.__instance__:
+            with cls.__lock__:
+                if not cls.__instance__:
+                    cls.__instance__ = super().__new__(cls)
+                    cls.__instance__.__isInitialized__ = False
+        return cls.__instance__
 
     def __init__(self, exe_folder_path: str = '', default_setting_dict: dict = {}, default_setting_name: str = '', isEncrypted=True) -> None:
-        if self.__isInitialized:
+        if self.__isInitialized__:
             return
-        self.__isInitialized = True
+        self.__isInitialized__ = True
         self.__isEncrypted: bool = isEncrypted
         self.__exe_folder_path: str = exe_folder_path
         self.__default_setting_dict: dict = default_setting_dict or {}

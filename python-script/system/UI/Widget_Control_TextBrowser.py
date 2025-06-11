@@ -126,7 +126,7 @@ class ControlTextBrowser(QWidget):
             sys.stdout.write(f'\n[Error-ConsoleTextBrowser]-[append_text]\t{traceback.format_exc()}\n')
             raise ValueError(traceback.format_exc())
 
-    def append_html_text(self, text_on_textbrowser: str) -> None:
+    def append_html_text(self, loglevel, text_on_textbrowser: str) -> None:
         """ 添加 HTML 文本 """
         if not isinstance(text_on_textbrowser, str):
             sys.stdout.write('\n[Error-ConsoleTextBrowser]-[append_text]\ttext_on_textbrowser 必须为 <str> 类型\t当前为{type(text_on_textbrowser)}\n')
@@ -514,7 +514,6 @@ class ControlTextBrowser(QWidget):
             self.__text_browser.insertPlainText(str(e) + "\n")
             self.__text_browser.moveCursor(QTextCursor.MoveOperation.End)
             sys.stdout.write(traceback.format_exc())
-
 
     def __set_pb_hover_icon(self, ori_icon: str):
         """

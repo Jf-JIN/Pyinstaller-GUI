@@ -53,7 +53,7 @@ class BasicStruct(object):
     - _add_args(para:str):  添加命令行参数, 在原有基础添加
     - _clear_args():  清空命令行参数
     """
-    signal_data_changed = EventSignal()
+    signal_data_changed = EventSignal(...)
 
     def __init__(self, name: str, cmd_option: str | list, isRepeatable: bool = False):
         super().__init__()
@@ -427,7 +427,7 @@ class PyinstallerStruct(object):
     - clear(): 清空结构数据
     - copy(): 复制当前结构, 深复制
     """
-    signal_data_changed = EventSignal()
+    signal_data_changed = EventSignal(...)
 
     def reset(self):
         self.clear()
@@ -561,6 +561,13 @@ class PyinstallerStruct(object):
     def copy(self):
         """ 深拷贝结构 """
         new_obj = copy.deepcopy(self)
+        # new_obj = PyinstallerStruct()
+        # for attr, value in self.__dict__.items():
+        #     if not attr.startswith('_PyinstallerStruct__sequence'):  # 可选跳过不可变结构
+        #         try:
+        #             setattr(new_obj, attr, copy.deepcopy(value))
+        #         except:
+        #             print(f'Error: {attr} {value}')
         self.__set_connections(new_obj)
         return new_obj
 

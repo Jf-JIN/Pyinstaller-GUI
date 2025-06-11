@@ -1,5 +1,5 @@
 from __future__ import annotations
-from DToolslib.Logger import Logger
+from DToolslib import Logger
 from PyQt5.QtCore import pyqtSignal, QObject, QEvent, Qt, QTimer
 from PyQt5.QtWidgets import QLabel
 

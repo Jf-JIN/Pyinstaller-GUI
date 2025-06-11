@@ -1,5 +1,5 @@
 
-from DToolslib import SingletonMeta, EventSignal
+from DToolslib import EventSignal
 from const.Const_Parameter import *
 from system.Manager_Setting import *
 import threading
@@ -917,7 +917,7 @@ class SingleStyleValue:
         self.signal_style_update.emit()
 
 
-class StyleManager(metaclass=SingletonMeta):
+class StyleManager():
     """
     样式管理器(单例模式)
 
@@ -962,7 +962,21 @@ class StyleManager(metaclass=SingletonMeta):
             return 'StyleManager.__null'
     __null = __null()
 
+    __instance__ = None
+    __lock__ = threading.Lock()
+
+    def __new__(cls, *args, **kwargs):
+        if cls.__instance__ is None:
+            with cls.__lock__:
+                if cls.__instance__ is None:
+                    cls.__instance__ = super().__new__(cls)
+                    cls.__isInitialized__ = False
+        return cls.__instance__
+
     def __init__(self, default_style_dict: dict = {}, applied_style_dict: dict = {}) -> None:
+        if self.__isInitialized__:
+            return
+        self.__isInitialized__ = True
         self.__default_style_dict = default_style_dict
         self.__applied_style_dict = applied_style_dict
         self.__dict_blocks: dict = {}

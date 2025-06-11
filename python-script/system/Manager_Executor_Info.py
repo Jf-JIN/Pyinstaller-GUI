@@ -395,7 +395,10 @@ class ExecutorInfoManager(QObject):
             env: str
             if env.startswith('#'):
                 continue
-            env_name, env_path = env.split()
+            env_str_list: list = env.split()
+            if len(env_str_list) != 2:
+                continue
+            env_name, env_path = env_str_list[0], env_str_list[1]
             struct = ExecutorInfoStruct(name=env_name, path=env_path)
             struct.signal_data_changed_EIS.connect(self.__schedule_signal_data_changed_EIM)
             self.__conda_struct_dict[env_name] = struct

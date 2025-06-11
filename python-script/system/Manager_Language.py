@@ -1,9 +1,9 @@
 import os
 import json
 import locale
+import threading
 
 from typing import Callable, TypeAlias
-from DToolslib import SingletonMeta
 from PyQt5.QtWidgets import QWidget, QAbstractButton, QLabel, QGroupBox, QTabWidget, QComboBox
 from const.Const_Parameter import *
 
@@ -107,7 +107,7 @@ class _OtherLanguageItem:
         self.__connections.clear()
 
 
-class LanguageManager(metaclass=SingletonMeta):
+class LanguageManager():
     """
     语言管理器
 
@@ -121,6 +121,16 @@ class LanguageManager(metaclass=SingletonMeta):
     方法:
     - open_language_package: 打开语言包
     """
+    __instance__ = None
+    __lock__ = threading.Lock()
+
+    def __new__(cls, *args, **kwargs):
+        if cls.__instance__ is None:
+            with cls.__lock__:
+                if cls.__instance__ is None:
+                    cls.__instance__ = super().__new__(cls)
+                    cls.__instance__.__isInitialized__ = False
+        return cls.__instance__
 
     def __init__(
         self,
@@ -137,6 +147,9 @@ class LanguageManager(metaclass=SingletonMeta):
         suffix_language_package: str = '.lpkg',
         display_tooltip: bool = True,
     ) -> None:
+        if self.__isInitialized__:
+            return
+        self.__isInitialized__ = True
         self.__exe_folder_path: str = exe_folder_path
         """ 可执行文件所在文件夹路径 """
         self.__language_package_name: str = language_package_name

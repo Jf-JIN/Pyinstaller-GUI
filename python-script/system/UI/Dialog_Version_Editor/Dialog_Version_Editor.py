@@ -336,13 +336,13 @@ class VersionEditor(QDialog):
         char_text = ''
         for idx, item in enumerate(lang_list):
             if idx % 2 == 0:  # 语言
-                lang_item = VersionEnum.LangID.getItem(item)
+                lang_item = VersionEnum.LangID.getItemByValue(item)
                 if lang_item:
                     lang_text = lang_item.name
             else:  # 编码
                 if not lang_text:
                     continue
-                char_item = VersionEnum.CharsetID.getItem(item)
+                char_item = VersionEnum.CharsetID.getItemByValue(item)
                 if char_item:
                     char_text = char_item.name
                     display_lang_text = LM.getWord('lang_'+lang_text)
@@ -509,7 +509,7 @@ class VersionEditor(QDialog):
             if value & item:
                 temp.append(name)
         if not temp:
-            enum_item = VersionEnum.FileFlags.getItem(value)
+            enum_item = VersionEnum.FileFlags.getItemByValue(value)
             if enum_item is not None:
                 text = enum_item.name
             else:
@@ -530,8 +530,8 @@ class VersionEditor(QDialog):
         temp = []
         main_os = 0xffff0000 & value
         sub_os = 0x0000ffff & value
-        main_item = VersionEnum.FileOS.getItem(main_os)
-        sub_item = VersionEnum.FileOS.getItem(sub_os)
+        main_item = VersionEnum.FileOS.getItemByValue(main_os)
+        sub_item = VersionEnum.FileOS.getItemByValue(sub_os)
         if main_item is not None and main_item != VersionEnum.FileOS.VOS_UNKNOWN:
             temp.append(main_item.name)
         if sub_item is not None and sub_item != VersionEnum.FileOS.VOS_UNKNOWN:
@@ -637,8 +637,8 @@ class VersionEditor(QDialog):
         value = self.__version_struct.ffi.os
         main_os = value & 0xffff0000
         sub_os = value & 0x0000ffff
-        main_item = VersionEnum.FileOS.getItem(main_os)
-        sub_item = VersionEnum.FileOS.getItem(sub_os)
+        main_item = VersionEnum.FileOS.getItemByValue(main_os)
+        sub_item = VersionEnum.FileOS.getItemByValue(sub_os)
         for item in VersionEnum.FileOS:
             name = item.name
             enum_value = item.value
@@ -661,7 +661,7 @@ class VersionEditor(QDialog):
         """
         content_dict = {}
         value = self.__version_struct.ffi.file_type
-        enum_item = VersionEnum.FileType.getItem(value)
+        enum_item = VersionEnum.FileType.getItemByValue(value)
         for item in VersionEnum.FileType:
             name = item.name
             enum_value = item.value
@@ -683,7 +683,7 @@ class VersionEditor(QDialog):
         """
         content_dict = {}
         value = self.__version_struct.ffi.sub_type
-        enum_item = VersionEnum.FileSubtype.getItem(value)
+        enum_item = VersionEnum.FileSubtype.getItemByValue(value)
         for item in VersionEnum.FileSubtype:
             name = item.name
             enum_value = item.value

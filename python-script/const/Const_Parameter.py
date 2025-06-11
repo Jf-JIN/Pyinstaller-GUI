@@ -4,7 +4,7 @@ import os
 import sys
 import platform
 from DToolslib.Enum_Static import StaticEnum
-from DToolslib.Logger import *
+from DToolslib import *
 
 
 class OsType(StaticEnum):
@@ -124,17 +124,17 @@ class App(StaticEnum):
 
 class Log(StaticEnum):
     Log_level = LogLevel.INFO
-    logging_output = Logger('logging_output', App.APP_FOLDER_PATH, log_level=Log_level)
-    CRITICAL = Logger('CRITICAL', App.APP_FOLDER_PATH, log_level=Log_level)
-    DataManager = Logger('DataManager', App.APP_FOLDER_PATH, log_level=Log_level)
-    StyleManager = Logger('StyleManager', App.APP_FOLDER_PATH, log_level=Log_level)
-    LanguageManager = Logger('LanguageManager', App.APP_FOLDER_PATH, log_level=Log_level)
-    SettingManager = Logger('SettingManager', App.APP_FOLDER_PATH, log_level=Log_level)
-    ExecutorInfoManager = Logger('ExecutorInfoManager', App.APP_FOLDER_PATH, log_level=Log_level)
-    UI = Logger('UI', App.APP_FOLDER_PATH, log_level=Log_level,  highlight_type=LogHighlightType.HTML)
-    Threads = Logger('Threads', App.APP_FOLDER_PATH, log_level=Log_level)
-    Tools = Logger('Tools', App.APP_FOLDER_PATH, log_level=Log_level)
-    LogGroup = LoggerGroup(App.APP_FOLDER_PATH, exclude_logs=[CRITICAL], limit_files_count=5, enableFileOutput=False)
+    logging_output = JFLogger('logging_output', App.APP_FOLDER_PATH, log_level=Log_level)
+    CRITICAL = JFLogger('CRITICAL', App.APP_FOLDER_PATH, log_level=Log_level)
+    DataManager = JFLogger('DataManager', App.APP_FOLDER_PATH, log_level=Log_level)
+    StyleManager = JFLogger('StyleManager', App.APP_FOLDER_PATH, log_level=Log_level)
+    LanguageManager = JFLogger('LanguageManager', App.APP_FOLDER_PATH, log_level=Log_level)
+    SettingManager = JFLogger('SettingManager', App.APP_FOLDER_PATH, log_level=Log_level)
+    ExecutorInfoManager = JFLogger('ExecutorInfoManager', App.APP_FOLDER_PATH, log_level=Log_level)
+    UI = JFLogger('UI', App.APP_FOLDER_PATH, log_level=Log_level,  highlight_type=LogHighlightType.HTML)
+    Threads = JFLogger('Threads', App.APP_FOLDER_PATH, log_level=Log_level)
+    Tools = JFLogger('Tools', App.APP_FOLDER_PATH, log_level=Log_level)
+    LogGroup = JFLoggerGroup(App.APP_FOLDER_PATH, exclude_logs=[CRITICAL], limit_files_count=5, enableFileOutput=False)
 
 
 for logger in [Log.logging_output, Log.CRITICAL, Log.DataManager, Log.StyleManager, Log.LanguageManager, Log.SettingManager, Log.ExecutorInfoManager, Log.UI, Log.Threads]:
@@ -142,8 +142,8 @@ for logger in [Log.logging_output, Log.CRITICAL, Log.DataManager, Log.StyleManag
     logger.set_exclude_funcs(['get_item', 'set_config', 'setConfig',])
     logger.set_exclude_classes([])
     logger.set_highlight_type(LogHighlightType.HTML)
-    logger.setEnableFileOutput(False)
-    logger.setEnableConsoleOutput(False)
+    logger.set_enable_file_output(False)
+    logger.set_enable_console_output(False)
 
-Log.CRITICAL.setEnableFileOutput(True)
+Log.CRITICAL.set_enable_file_output(True)
 Log.logging_output.set_listen_logging('', Log.Log_level)

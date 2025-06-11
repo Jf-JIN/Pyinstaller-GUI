@@ -3,6 +3,8 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import subprocess
 import psutil
+import traceback
+import functools
 from tools import *
 
 from const.Const_Parameter import *
@@ -34,14 +36,17 @@ class ThreadPackLauncher(QThread):
             self.__logger = Logger('PyInstaller', App.APP_FOLDER_PATH, log_level=LogLevel.INFO)
             self.__logger.set_listen_logging('PyInstaller', LogLevel.INFO)
             Log.LogGroup.remove_log(self.__logger)
-            self.__logger.setEnableFileOutput(False)
-            self.__logger.setEnableConsoleOutput(False)
+            self.__logger.set_enable_file_output(False)
+            self.__logger.set_enable_console_output(False)
             self.__logger.set_file_count_limit(1)
-            self.__logger.signal_all_message.connect(self.__cal_processbar_value)
-            self.__logger.signal_all_message.connect(self.signal_cmd_text.emit)
+            self.__logger.signal_colorized.connect(self.__cal_processbar_value)
+            self.__logger.signal_colorized.connect(self.__send_log)
             self.signal_thread_finished.connect(self.__init_parameter)
         except Exception as e:
             _log.exception()
+
+    def __send_log(self, loglevel, log: str):
+        self.signal_cmd_text.emit(log)
 
     def set_cmd(self, cmd: str | list):
         self.__command_line = ''
@@ -79,7 +84,7 @@ class ThreadPackLauncher(QThread):
                     break
                 if output:
                     text = output.strip()
-                    self.__cal_processbar_value(text)
+                    self.__cal_processbar_value(None, text)
                     self.signal_cmd_text.emit(text)
         except Exception as e:
             self.signal_cmd_text.emit(traceback.format_exc())
@@ -89,7 +94,7 @@ class ThreadPackLauncher(QThread):
             else:
                 self.signal_thread_finished.emit(False)
 
-    def __cal_processbar_value(self, content: str):
+    def __cal_processbar_value(self, loglevel, content: str):
         try:
             if not content:
                 return

@@ -376,7 +376,7 @@ class PyToExeUI(Ui_MainWindow, QMainWindow):
 
     def init_signal_connections(self) -> None:
         # ===================================================== [软件基础] =====================================================
-        Log.LogGroup.signal_all_color.connect(self.tb_console.append_html_text)
+        Log.LogGroup.signal_colorized.connect(self.tb_console.append_html_text)
         # Log.LogGroup.signal_all_color.connect(print)
         self.executor_info_manager.signal_data_changed_EIM.connect(self.set_execute_env_path_info)
         self.executor_info_manager.signal_specified_env.connect(self.set_current_env_path)
